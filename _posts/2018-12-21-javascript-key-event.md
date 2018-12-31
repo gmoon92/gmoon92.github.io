@@ -24,7 +24,7 @@ input의 값을 숫자 자릿수까지 체크하여 입력 제한하는 라이�
 
 `digitNumber` 전체 소스 코드는 [github](https://github.com/gmun/digit-number-javascript-key-event/blob/master/digitNumber.js)에서 확인할 수 있다.
 
-### Version
+### Version 
 
 - JQuery 3.3.1
 

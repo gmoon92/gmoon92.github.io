@@ -22,7 +22,9 @@ priority: 1.0
 
 input의 값을 숫자 자릿수까지 체크하여 입력 제한하는 라이브러리를 찾던 중 마땅한 것이 없어 직접 개발하게 되었다.
 
-`digitNumber` 전체 소스 코드는 [github](https://github.com/gmun/digit-number-javascript-key-event/blob/master/digitNumber.js)에서 확인할 수 있다.
+먼저 `digitNumber.js` 라이브러리를 해당 html에 임포트하자.
+
+- `digitNumber.js` 전체 소스 코드는 [github](https://github.com/gmun/digit-number/blob/master/digitNumber.js)에서 확인할 수 있다.
 
 ### Version
 

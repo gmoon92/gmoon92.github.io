@@ -52,7 +52,7 @@ input의 값을 숫자 자릿수까지 체크하여 입력 제한하는 라이�
 
 #### 2. 라이브러리 적용
 
-자바스크립트에서 `$(해당 table의 id).digitNumber();`로 라이브러리를 호출한다.
+자바스크립트에서 `$(해당 table의 id).digitNumber();`로 `digitNumber` 라이브러리의 함수를 호출한다.
 
 - `$("#default").digitNumber();`
 
@@ -67,7 +67,7 @@ $(document).ready(function(){
 자릿수를 제한할 input 태그의 클래스 명을 `digitLimit`로 지정한다.
 
 - `.`을 기준으로 제한할 자릿수가 결정된다.
-- 앞자리가 0인 경우엔 앞자리에 0 이외의 다른 숫자를 입력을 제한한다.
+- `0.`인 경우엔 앞자리에 0 이외의 다른 숫자 입력이 제한된다.
 
 ```
 <input type="text" class="digitLimit1.2">
@@ -118,9 +118,9 @@ $(document).ready(function(){
     ...
     <tr>
       <td> <input type="text" > </td>
-       <!-- 제외 .notSelect -->
+      <!-- 제외 .notSelect -->
       <td> <input type="text" class="notSelect"> </td>
-       <!-- 제외  #notId -->
+      <!-- 제외  #notId -->
       <td> <input type="text" id="notId"> </td>
     </tr>
 </table>
@@ -173,7 +173,7 @@ $(document).ready(function(){
 
 #### 특정 콤마 제거
 
-특정 input에 콤마를 제거하고 싶다면 `nComma` 클래스를 추가하면된다.
+특정 input에 콤마를 제거하고 싶다면, 해당 클래스 명에 `nComma`를 추가하면된다.
 
 ``` javascript
 $(document).ready(function(){

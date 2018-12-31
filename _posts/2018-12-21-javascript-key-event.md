@@ -68,7 +68,7 @@ $(document).ready(function(){
 - 앞자리가 0인 경우엔 앞자리에 0 이외의 다른 숫자를 입력을 제한한다.
 
 ```
-<input type="text"  class="digitLimit1.2">
+<input type="text" class="digitLimit1.2">
 <input type="text" class="digitLimit1">
 <input type="text" class="digitLimit0.2">
 <input type="text" class="digitLimit.2">
@@ -104,7 +104,8 @@ $(document).ready(function(){
 ``` javascript
 $(document).ready(function(){
   var options = {
-    notSelectors:".notSelect, #notId" // 기능 적용을 제외할 특정 seletors
+    // 기능 적용을 제외할 특정 seletors
+    notSelectors:".notSelect, #notId"
   };
   $("#notSelect").digitNumber(options);
 });
@@ -115,8 +116,10 @@ $(document).ready(function(){
     ...
     <tr>
       <td> <input type="text" > </td>
-      <td> <input type="text" class="notSelect"> </td> <!-- 제외 .notSelect -->
-      <td> <input type="text" id="notId"> </td> <!-- 제외  #notId -->
+       <!-- 제외 .notSelect -->
+      <td> <input type="text" class="notSelect"> </td>
+       <!-- 제외  #notId -->
+      <td> <input type="text" id="notId"> </td>
     </tr>
 </table>
 ```
@@ -143,9 +146,11 @@ $(document).ready(function(){
 ``` javascript
 $(document).ready(function(){
   var options = {
-    comma : false // 콤마 제거
+    // 콤마 제거
+    comma : false
   };
-  $("#notComma").digitNumber(options); // 전체 콤마 제거
+  // 전체 콤마 제거
+  $("#notComma").digitNumber(options);
 });
 ```
 
@@ -170,12 +175,14 @@ $(document).ready(function(){
 
 ``` javascript
 $(document).ready(function(){
-  $("#choiceNotComma").digitNumber(); // 특정 selector 콤마 제거
+  // 특정 selector 콤마 제거
+  $("#choiceNotComma").digitNumber();
 });
 ```
 
 ``` html
-<input type="text" value="" class="digitLimit4.4 nComma"> <!-- nComma 추가 -->
+<!-- nComma 추가 -->
+<input type="text" value="" class="digitLimit4.4 nComma">
 ```
 
 <div>

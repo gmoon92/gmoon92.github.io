@@ -22,13 +22,11 @@ priority: 1.0
 
 input의 값을 숫자 자릿수까지 체크하여 입력 제한하는 라이브러리를 찾던 중 마땅한 것이 없어 직접 개발하게 되었다.
 
-먼저 `digitNumber.js` 라이브러리를 해당 html에 임포트하자.
-
-> 전체 소스 코드는 [github](https://github.com/gmun/digit-number/blob/master/digitNumber.js)에서 확인할 수 있다.
-
 ### Version
 
-- JQuery 3.3.1
+JQuery 3.3.1 기준으로 개발하였다.
+
+- JQuery 3.3.1 CDN
 
 ``` javascript
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
@@ -37,6 +35,10 @@ input의 값을 숫자 자릿수까지 체크하여 입력 제한하는 라이�
 ---
 
 ### 사용법
+
+먼저 `digitNumber.js` 라이브러리를 해당 html에 임포트하자.
+
+> 전체 소스 코드는 [github](https://github.com/gmun/digit-number/blob/master/digitNumber.js)에서 확인할 수 있다.
 
 #### 1. 타겟 지정
 

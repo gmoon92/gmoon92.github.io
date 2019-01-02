@@ -3,7 +3,7 @@ layout: post
 title: "[JavaScript]  input 박스에 숫자만 입력 받기(자릿수 제한)"
 tags: [JavaScript, JQuery, keydown, keyup, keypress, blur, change, event]
 categories: [JavaScript]
-subtitle: "input box + 자릿수 제한하는 직접 만든 라이브러리"
+subtitle: " input 입력 숫자만 + 소수점 자릿수 제한 라이브러리"
 feature-img: "md/img/thumbnail/java-script-logo.png"
 thumbnail: "md/img/thumbnail/java-script-logo.png"
 excerpt_separator: <!--more-->

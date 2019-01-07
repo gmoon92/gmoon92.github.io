@@ -3,7 +3,7 @@ layout: post
 title: "UnitTest : Test Double"
 tags: [TDD, UnitTest, TestDouble, Mock, Stub, Fake]
 categories: [Test]
-feature-img: "md/img/thumbnail/test-double.jpg"   
+feature-img: "md/img/thumbnail/test-double.jpg"
 thumbnail: "md/img/thumbnail/test-double.jpg"
 subtitle: "위험에 대처하는 자세"
 excerpt_separator: <!--more-->
@@ -21,7 +21,7 @@ priority: 1.0
 ### Test double
 
  테스트 더블이라는 단어의 기원은 Stunt Double에서 비롯됐다.
- 
+
 스턴트 더블은 영화에서 사용되는 용어인데 이 용어를 테스트에서도 착안하여 사용하고 있는 이유는 무엇일까? 이 의문의 답은 스턴트 더블의 배경에 있다. 다음 상황을 살펴보자.
 
 _a trained professional who stands in for an actor in order to perform dangerous or physically demanding stunts._
@@ -39,16 +39,18 @@ _a trained professional who stands in for an actor in order to perform dangerous
 
 그렇다면 실제 객체를 통한 테스트는 신뢰할 수 없다는 것일까?
 
-물론 아니다. 상황에 따라 실제 객체를 대상으로 테스트를 수행하는 때도 있다. 하지만 일반적으로 테스트 시에 실제 객체를 직접 테스트하면 실제 객체와 관계가 형성된 객체 간의 상호관계에서 발생하는 예측 불가능한 위험이 발생할 수 있다. 예측 불가능한 위험은 프로그램뿐만 아니라 개발자에게도 치명적이다. 
+물론 아니다. 상황에 따라 실제 객체를 대상으로 테스트를 수행하는 때도 있다. 하지만 일반적으로 테스트 시에 실제 객체를 직접 테스트하면 실제 객체와 관계가 형성된 객체 간의 상호관계에서 발생하는 예측 불가능한 위험이 발생할 수 있다. 예측 불가능한 위험은 프로그램뿐만 아니라 개발자에게도 치명적이다.
 
-그 이유인즉슨 테스트 코드를 작성하는 이유 중 가장 큰 부분은 개발자에게 코드에 대한 신뢰를 준다는 점인데, 위험이 발생 확률을 떠나서 위험이 발생할 수 있다는 두려움은 테스트 코드 자체를 신뢰할 수 없게 만들뿐더러 더는 테스트 코드를 작성할 동기가 없어지게 된다. 이 두려움의 원천은 신뢰할 수 없는 객체와 관계가 형성된 테스트 객체를 검증해야 할 때 시작된다.  
+ 테스트 코드를 작성하는 이유 중 가장 큰 부분은 개발자에게 코드에 대한 신뢰를 준다는 점인데 예측 불가능한 위험의 발생 확률이 높든 낮든, 이 위험이 발생할 수 있다는 그 자체는 개발자에게 두려움을 심어준다.
+
+이 두려움은 개발자가 테스트 코드 자체를 신뢰할 수 없게 만든다. 결국, 테스트 검증 결과에 대한 확신을 떨어트리고 이에 따라 테스트 코드의 작성할 동기가 없어지게 된다. 이 결과의 대부분의 시발점은 신뢰할 수 없는 객체와 관계가 형성된 테스트 객체를 검증해야 할 때이다.
 
 <img src="/md/img/test-double/test-real-object.png">
 <em>Class Dependency Relationship</em>
 
 예를 들어 TestObject에 대한 테스트 코드를 작성한다고 가정하자. 여러 테스트 케이스를 적용하여 테스트 진행하던 중 Real Object에서 에러가 발생하였다. 이때 Real Object는 불완전한 상태라고 가정한다면 개발자는 Real Object와 관계가 형성된 객체들부터 검증한 다음에 테스트를 진행해야 비로소 TestObject를 검증할 수 있게 된다. 하지만 검증된 객체를 사용함에 부작용이 따른다. 그 이유인즉슨 테스트 시 실제 객체와 관계를 맺은 다른 객체들에 의해 값이 변경될 수 있기 때문이다.
- 
- 이러한 예측 불가능한 위험 때문에 해당 객체를 독립적인 객체로 대체하거나 코드를 수정하여 테스트를 진행한다. 이 행위는 많은 상황을 고려해야 하며, 실제 코드에 실제 기능과 무관한 테스트만을 위한 추가적인 코드를 작성하게 되어 코드가 복잡해진다. 
+
+ 이러한 예측 불가능한 위험 때문에 해당 객체를 독립적인 객체로 대체하거나 코드를 수정하여 테스트를 진행한다. 이 행위는 많은 상황을 고려해야 하며, 실제 코드에 실제 기능과 무관한 테스트만을 위한 추가적인 코드를 작성하게 되어 코드가 복잡해진다.
 
 이처럼 많은 관계가 형성된 객체를 테스트 코드로 작성하기는 쉽지 않다. 하지만 테스트 더블을 활용하여 테스트 코드를 작성한다면 이러한 어려움을 해결할 수 있다.
 
@@ -86,11 +88,11 @@ Test Stub은 사전에 정의된 데이터를 보유하고 특정 객체 호출�
 ``` java
 public class BankService {
    private final BankFactor bankFactor;
-    
+
    public BankService(BankFactor bankFactor){
       this.bankFactor = bankFactor;
    }
-    
+
    public double getAvgWage(HashMap<String, Object> params){
        return calAvgWage(bankFactor.selectUserAmt(params));
     }
@@ -125,15 +127,15 @@ public class BankServiceTest {
 	class StubDatas {
 	   public List<UserDAO> userDaoList() {
 	   	List<UserDAO> list = new ArrayList<>();
-	   
+
 	   	UserDAO user = new UserDAO();
 	   	user.setAmt(1000000);
 	   	user.setEmail("gmun0929@gmail.com");
-	   
+
 	   	for (int i = 0; i < 10; i++) {
 	   	   list.add(user);
 	   	}
-	   
+
 	   	return list;
 	   }
 	}
@@ -157,7 +159,7 @@ public class BankServiceTest {
 
 _used for verifying "indirect output" of the tested code, by first defining the expectations before the tested code is executed_
 
-Mock은 호출에 대한 기대하는 실행 결과를 사전에 정의한 객체다. 이 객체를 통해 기대하지 않은 결과를 예외 처리할 수 있으며 예상했던 모든 결과를 확인할 수도 있다. 
+Mock은 호출에 대한 기대하는 실행 결과를 사전에 정의한 객체다. 이 객체를 통해 기대하지 않은 결과를 예외 처리할 수 있으며 예상했던 모든 결과를 확인할 수도 있다.
 일반적으로 실제 코드를 호출하고 싶지 않거나 손쉬운 검증 방법이 없는 경우 의도된 코드가 실행되었음을 나타내기 위해 사용한다. 즉 Mock은 동작에 대한 검증으로 반환 값은 없다. 동작에 대한 검증은 테스트할 수 있지만, 동작하는 그 자체를 검증하는 것은 어렵다.
 
 <img src="/md/img/test-double/mock.png">
@@ -169,16 +171,16 @@ Mock은 호출에 대한 기대하는 실행 결과를 사전에 정의한 객�
 public class BankService {
    private final BankFactor bankFactor;
    private final MailService mailService;
-    
+
    public BankService(BankFactor bankFactor, MailServiceImple mailServiceImple){
       this.bankFactor = bankFactor;
       this.mailService = mailServiceImple;
    }
-    
+
    public double getAvgWage(HashMap<String, Object> params){
       List<UserDAO> users = bankFactor.selectUserAmt(params);
       double avgWage = calAvgWage(users);
-       
+
       mailService.sendResultAvgWageEmail(users, Double.toString(avgWage));
       return avgWage;
    }
@@ -195,22 +197,22 @@ public class BankService {
 public class BankServiceTest {
     private BankFactor bankFactor;
     private MailServiceImple mailServiceMock;
-    
+
     @Before
     public void setUp() throws Exception {
         bankFactor = mock(BankFactor.class);
         mailServiceMock = mock(MailServiceImple.class);
     }
-    
+
     @Test
     public void getAvgWage() throws Exception{
        List<UserDAO> data = new StubDatas().userDaoList();
-       
+
         when(bankFactor.selectUserAmt(new HashMap<String, Object>()))
            .thenReturn(data); //Stubbing bankFactor
-           
+
         double avgWage = new BankService(bankFactor, mailServiceMock).getAvgWage(new HashMap<String, Object>());
-        
+
         verify(mailServiceMock).sendResultAvgWageEmail(data, Double.toString(avgWage));
         assertThat(avgWage).isEqualTo(1000000.0);
     }
@@ -229,7 +231,7 @@ public class BankServiceTest {
 
 _used for verifying "indirect output" of the tested code, by asserting the expectations afterwards, without having defined the expectations before the tested code is executed. It helps in recording information about the indirect object created_
 
-Test Spy는 실제 객체의 메소드를 호출하고 반환 값이 있으면 해당 반환값도 반환해준다. 
+Test Spy는 실제 객체의 메소드를 호출하고 반환 값이 있으면 해당 반환값도 반환해준다.
 
 <img src="/md/img/test-double/spy.png">
 <em>Test Spy</em>
@@ -239,11 +241,11 @@ Test Spy는 실제 객체의 메소드를 호출하고 반환 값이 있으면 �
 ``` java
 @Test
 public void userBankCountTest() throws Exception {
-   List<UserDAO> bankList = bankFactor.selectFindByBankName("KR은행"); 
+   List<UserDAO> bankList = bankFactor.selectFindByBankName("KR은행");
    List<UserDAO> spy = spy(bankList);
-   
+
    when(spy.size()).thenReturn(5); //stubbing list size
-   
+
    spy.add(new UserDAO(1, "A"));
    spy.add(new UserDAO(2, "B"));
 
@@ -253,9 +255,9 @@ public void userBankCountTest() throws Exception {
    verify(spy).add(new UserDAO(1, "A"));
    verify(spy).add(new UserDAO(2, "B"));
 
-   
+
    when(spy.get(100))
-      .thenReturn(new UserDAO(1, "A")); // IndexOutOfBoundsException 
+      .thenReturn(new UserDAO(1, "A")); // IndexOutOfBoundsException
 }
 ```
 
@@ -268,24 +270,24 @@ public void userBankCountTest() throws Exception {
 ``` java
 public class MailServiceImpleTest {
    private SpyFileIO spy;
-   
+
    @Before
    public void setUp(){
       spy = spy(SpyFileIO.class);
    }
-   
+
    @Test
    public void sendTest(){
       MailServiceImple mailSvc = new MailServiceImple(spy);
-      
+
       mailSvc.send("gmun0929@gmail.com", "제목", "내용", null);
       verify(mailSvc).send(null, null, null, null);
       assertEquals(1, spy.callCount);
    }
-   
+
    public class SpyFileIO implements FileIO{
       public int callCount = 0;
-      
+
       @Override
       public StringBuilder read(String filePath){
          this.callCount++;
@@ -317,13 +319,13 @@ public class FakeBankRepository {
    private UserDAO user = new UserDAO();
    private BankDAO bank = new BankDAO();
    private Map<UserDAO, BankDAO> userAmts = new HashMap<>();
-    
+
    public FakeBankRepository(){
       this.user.setId(100L);
       this.bank.setBankName("KR은행");
       this.userAmts.put(user, bank);
    }
-     
+
    String getUserBankName(UserDAO user){
       return userAmts.get(user).getBankName();
    }
@@ -363,22 +365,22 @@ Dummy는 미국의 대표적인 코믹 영화 Dumb and Dumber(덤 앤 더머)와
 <em>Dummy Object</em>
 
  예를 들어 테스트 코드에 어느 한 객체가 매개변수가 있는 생성자를 포함하고 있다고 가정하자. 이때 매개 변수를 주입해야 하지만 해당 매개 변수는 테스트 시 해당 매개 변수를 사용하지 않는다면?
- 
+
  이 경우에 Dummy를 사용하여 해결해보자.
 
 ``` java
 public class MailServiceImple implements MailService{
    private final FileIO fileIO;
-    
+
    public MailServiceImple(FileIO fileIO){
       this.fileIO = fileIO;
    }
-    
+
    @Override
    public void send(String toEmail, String subject, String content, File attachFile){
       ...
    }
-    
+
    ...
 }
 ```
@@ -393,15 +395,15 @@ public class MailServiceImpleTest {
    public void setUp(){
       dummyFileIO = mock(DummyFileIO.class);
    }
-   
+
    @Test
    public void sendTest(){
       MailServiceImple mailSvc = new MailServiceImple(dummyFileIO);
-        
+
       mailSvc.send("gmun0929@gmail.com", "제목", "내용", null);
       verify(mailSvc).send(null, null, null, null);
    }
-    
+
    public class DummyFileIO implements FileIO{
       @Override
       public StringBuilder read(String filePath){
@@ -410,7 +412,7 @@ public class MailServiceImpleTest {
    }
 }
 ```
- 
+
  눈치를 챘는지 모르겠지만 다른 테스트 더블의 구현 방식과는 다르게 Dummy인 경우 내부 클래스로 작성했다. 일반적으로 Dummy는 테스트를 통해 변경되지 않기 때문에 내부 클래스를 만들고 모든 테스트에 재사용하는 것이 더 적합하기 때문이다.
 
 `MailServiceImple mailSvc = new MailServiceImple(null)`

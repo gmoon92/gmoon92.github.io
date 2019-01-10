@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Programming] Aspect Oriented Programming 개념"
+title: "[AOP] Aspect Oriented Programming 개념"
 tags: [AOP]
 categories: [Spring, AOP]
 subtitle: "Spring AOP를 들어가기전 AOP 용어와 개념"
@@ -35,23 +35,22 @@ priority: 1.0
 
  AOP(Aspect Oriented Programming)는 컴퓨터 프로그래밍의 패러다임의 일종이다.
 
-먼저 프로그래밍은 기존의 프로그래밍의 보안하고자 새롭게 제시된다.
+이러한 컴퓨터 프로그래밍들이 제시되어지는 근본적인 이유는 기존의 프로그래밍의 단점을 보완하고자 등장한다.  단편적인 예를들어 절차지향적 프로그래밍를 보완하고자 OOP를 나왔던 것처럼 말이다.
 
-  프로그래밍이 새롭게 제시된다는 의미는
+_절차적 프로그래밍 -> OOP -> AOP_
 
-생각을 해보자.
+본론으로 돌아와서 AOP는 OOP를 보완하고자 제시된 프로그래밍의 패러다임이다. 자바 개발자라면 완벽하게만 보였던 OOP가 도대체 어떤 한계가 있길래 AOP라는 새로운 프로그래밍이 등장했을까?
+
+#### OOP의 한계 - 극단적인 추상화의 한계
+
+ OOP(Object oriented Programming)은 객체와 클래스에 초점을 맞춘 프로그래밍 기법이다. 이를 토대로 정의된 객체를 재사용 또는 상속하거나 추상화로 유연한 기능 확장하여 프로그래밍을 빠르게 할 수 있다.
 
 
-먼저 새로운 프로그래밍이 등장한 이유는 간단하다. 이전의 프로그래밍을 보완하기 위해서 제시된다.
+ 하지만
 
- 이 프로그래밍은 OOP의 한계를 보완할 수 있는 프로그래밍의 패러다임이다.
 
-그렇다면 완벽하게만 보였던 OOP엔 어떤 한계가 있어서 AOP라는 새로운 프로그래밍의 패러다임이 등장하게 된것일까?
 
-#### OOP의 한계
-
-먼저 OOP(Object oriented Programming)은 객체와 클래스에 초점을 맞춘 프로그래밍 기법이다. 이를 토대로 객체를 재사용하거나 확장하여 프로그래밍을 빠르게 할 수 있다.
-
+#### Crosscuting Concerns
 
 
 
@@ -137,6 +136,10 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 
 ### 참고
 
+[AOP 슬라이드](https://slideplayer.com/slide/9380068/)
+
+
+[AOP 정부 프레임워크 DOC](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
 
 - 전반적인 개념
 [블로그](http://closer27.github.io/backend/2017/08/03/spring-aop/)

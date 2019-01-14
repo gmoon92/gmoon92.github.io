@@ -29,43 +29,43 @@ priority: 1.0
 2. AOP 개념과 용어
 3. 기존 자바에서 AOP 구현 방식
 
+### 관점 지향 프로그래밍
+
+  AOP(Aspect Oriented Programming)는 컴퓨터 프로그래밍의 패러다임의 일종이다.
+
+>[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+
+WikiPedia에 정의된 글을 보면 AOP는 "횡단 관심사(Crosscutting Concerns)를 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
+
+- 횡단 관심사(Crosscutting Concerns) 분리
+- 모듈성 증가
+
+이러한 AOP의 가장 큰 핵심은 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 해결할 수 있다는 점이다.
+
+>[It does so by adding additional behavior to existing code (an advice) without modifying the code itself](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+
+여기까지 AOP를 개념을 간략하게 훑어보았다. 횡단 관심사가 무엇인지, 어떻게 AOP를 구현하는지에 대한 좀 더 깊게 AOP를 학습하기 위해선 먼저 AOP가 왜 무엇 때문에 등장했는지에 대해 이해하는 과정이 선행되어야 한다.
+
 ### 등장배경
 
- AOP(Aspect Oriented Programming)는 컴퓨터 프로그래밍의 패러다임의 일종이다. 이러한 프로그래밍 패러다임을 이해하기 위해선 왜 무엇 때문에 등장했는지 이해하는 과정이 선행되어야 한다.
-
- 일반적으로 새로운 컴퓨터 프로그래밍들이 제시되는 근본적인 이유는 기존의 프로그래밍 단점을 보완하는 데에 있다. 예를 들어 절차 지향적 프로그래밍을 보완하고자 OOP가 등장했던 것처럼 말이다. 따라서 AOP는 어떤 프로그래밍 패러다임의 단점을 보완하는지 이해하는 단계가 필수적이다.
+ 일반적으로 새로운 컴퓨터 프로그래밍들이 제시되는 근본적인 이유는 기존의 프로그래밍 단점을 보완하는 데에 있다. 절차적 프로그래밍을 보완하고자 OOP가 등장했던 것처럼 말이다.
 
 _절차적 프로그래밍 -> 객체 지향 프로그래밍(OOP) -> 관점 지향 프로그래밍(AOP)_
 
-결론적으로 AOP는 OOP를 보완하고자 등장한 패러다임이다.
-
-하지만 OOP의 이점들을 많이 등장한 현재 우리는 많은 곳에서 OOP를 활용하여 프로그래밍을 하고 있다.
-
- 특히 Java를 사용하여 개발하고 있다면 OOP가 주는 많은 이점들을 느낄 수 있는데, 이처럼 완벽하게만 보였던 OOP가 도대체 어떤 한계가 있길래 AOP라는 새로운 프로그래밍이 등장했을까?
-
-
-
-
-이와 마찬가지로 AOP는 OOP를 보완하고자 제시된 프로그래밍의 패러다임이다.
+본론으로 돌아와서, AOP는 OOP를 보완하고자 등장한 패러다임이다. 이 점은 매우 흥미로웠다. 완벽하게만 보였던 OOP에 도대체 어떤 한계가 있었기에 AOP라는 새로운 패러다임이 등장했었을까?
 
 #### OOP의 한계 - 극단적인 추상화의 한계
 
  OOP(Object oriented Programming)은 객체와 클래스에 초점을 맞춘 프로그래밍 기법이다. 이를 토대로 정의된 객체를 재사용 또는 상속하거나 추상화로 유연한 기능 확장하여 프로그래밍을 빠르게 할 수 있다.
 
-
- 하지만
-
-
-
-#### Crosscuting Concerns
-
-
+#### Crosscutting Concerns
 
 - 다른 클래스들을 한번에 고치기 위해 추상화 또는 상속 방법으로 클래스 정의
 - 이에 따라 관리의 복잡성이 증가
 - 횡단 관심사(crosscutting concerns)를 모듈화
 
 ### 2. AOP의 개념과 용어정리
+
 - 용어
    - Aspect
    - Join point
@@ -143,27 +143,29 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 
 ### 참고
 
+[블로그 - Spring 횡단관심(Crosscutting Concerns), 핵심관심(Core Concerns) ](http://winmargo.tistory.com/89)
+
+[해외 - Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
 
 [AOP 슬라이드](https://slideplayer.com/slide/9380068/)
-
 
 [AOP 정부 프레임워크 DOC](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
 
 - 전반적인 개념
-[블로그](http://closer27.github.io/backend/2017/08/03/spring-aop/)
+[블로그 - 스프링 AOP(Aspect Oriented Programming)](http://closer27.github.io/backend/2017/08/03/spring-aop/)
 [AOP 구현 세가지 방법 비교](https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ)
 [AOP의 구조 + 어노테이션](https://hunit.tistory.com/188)
-[해외 블로그](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
+[해외 블로그 - Implementing AOP With Spring Boot and AspectJ](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
 [블로그 - 스프링이 제공하는 aop](https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/)
 
 - aspect
 [스프링 DOC - AOP aspect](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
 [스프링 블로그 - aspectj](https://www.baeldung.com/aspectj)
+[스프링 DOC - AOP](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
 
 - pointcut
 [스프링 블로그 - pointcut](https://www.baeldung.com/spring-aop-pointcut-tutorial)
-[블로그](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
-[블로그](http://closer27.github.io/backend/2017/08/03/spring-aop/)
+[블로그 - 3. 스프링 AOP (AspectJ의 Pointcut 표현식) ](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
 
 - adivce
 [해외 블로그 - @After](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)
@@ -171,6 +173,7 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 - 실제 사용법
 [스프링 부트에서 aspectJ 형식으로 코드 참고](http://jsonobject.tistory.com/247)
 
+---
 
 - 동영상
 
@@ -180,6 +183,8 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 [What is AOP - Aspect Oriented Programming](https://www.youtube.com/watch?v=DuFPj8MlAVo&index=8&list=WL&t=0s)
 [신입SW인력을 위한 실전 자바(Java) 스프링(Spring) 동영상과정 제 09강 AOP-I](https://www.youtube.com/watch?v=2F8K9BLgvjE&index=9&list=WL&t=0s)
 
+---
+블로그
 
 [Filter, Interceptor, AOP의 흐름](https://doublesprogramming.tistory.com/133)
 [Spring Filter, Interceptor AOP 차이 및 정리 ](http://goddaehee.tistory.com/154)

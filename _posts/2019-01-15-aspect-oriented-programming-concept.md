@@ -21,7 +21,7 @@ priority: 1.0
 
 ### 들어가기전
 
-  AOP는 Aspect Oriented Programming의 약자로 관점 지향 프로그래밍이라 불린다. 본 포스팅에선 AOP의 전반적인 기초적인 개념에 대해 상세히 다룰 예정이다.
+  AOP(Aspect Oriented Programming)는 컴퓨터 프로그래밍의 패러다임의 일종이다. 본 포스팅에선 AOP에 대한 기초적인 개념에 대해 상세히 다룰 예정이다.
 
 ### 학습목표
 
@@ -29,20 +29,46 @@ priority: 1.0
 2. AOP 개념과 용어
 3. 기존 자바에서 AOP 구현 방식
 
-### 관점 지향 프로그래밍
+### AOP
 
-  AOP(Aspect Oriented Programming)는 컴퓨터 프로그래밍의 패러다임의 일종이다.
+AOP는 Aspect Oriented Programming의 약자로 관점 지향 프로그래밍이라 불린다.
 
->[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+일반적으로 Asepect를 관점으로 해석하지만, 사전적 의미를 찾아보면 또 다른 의미를 발견할 수 있다.
 
-WikiPedia에 정의된 글을 보면 AOP는 "횡단 관심사(Crosscutting Concerns)를 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
+>- 문법 형식의 하나로써 반복(反復) 등을 나타내는 동사의 형태.
+>   - 반복을 나타내는 동사 → 반복된 코드
 
-- 횡단 관심사(Crosscutting Concerns) 분리
-- 모듈성 증가
+다음과 같은 의미를 빗대어 프로그램 측면에서 해석하자면 반복되는 코드가 이에 해당한다고 볼 수 있다. 이러한 코드를 횡단 관심사(Crosscutting Concerns)라 표현한다. Concerns에 대해 좀 더 깊게 들어가자면 프로그램에는 크게 핵심 관심사와 횡단 관심사로 나뉠 수 있다.
+
+#### 분류된 관심사
+
+- 핵심 관심사(Core Concerms)
+- 횡단 관심사(Crosscutting Concerns)
+
+핵심 관심사는 프로그램의 핵심 가치와 목적이 그대로 드러난 관심 영역을 뜻한다.  해당 프로그램의 비즈니스 로직이 그러하다.
+
+반면 횡단 관심사는 비즈니스 로직과는 다른 관심 영역을 뜻한다. 프로그램 관점에서의 대표적인 횡단 관심사는 다음과 같다.
+
+- Security
+- Profiling
+- Logging
+- Transaction Management
+
+정리하자면 횡단 관심사란 비즈니스 로직과는 별개의 영역으로 대다수 기능에서 발생하는 중복된 공통 로직을 의미한다.
+
+ 또 다른 측면으로 생각해보자면 핵심 관심사와 횡단 관심사로 분류할 수 있다는 의미는 횡단 관심사 또한 모듈화도 가능하다는 의미이다.
+
+#### AOP이란
+
+본론으로 돌아와서 AOP는 이러한 "횡단 관심사를 주로 프로그래밍한다."라고 짐작할 수 있다. AOP의 정확한 정의를 알기 위해 Wikipedia의 힘을 빌려보자.
+
+>[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. <br/>  ...  <br/>  It does so by adding additional behavior to existing code (an advice) without modifying the code itself <br/>  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+
+Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다. 따라서 AOP는 핵심 관심사와 횡단 관심사를 분리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다는 의미이다.
+
+_횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
 이러한 AOP의 가장 큰 핵심은 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 해결할 수 있다는 점이다.
-
->[It does so by adding additional behavior to existing code (an advice) without modifying the code itself](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
 여기까지 AOP를 개념을 간략하게 훑어보았다. 횡단 관심사가 무엇인지, 어떻게 AOP를 구현하는지에 대한 좀 더 깊게 AOP를 학습하기 위해선 먼저 AOP가 왜 무엇 때문에 등장했는지에 대해 이해하는 과정이 선행되어야 한다.
 
@@ -50,9 +76,9 @@ WikiPedia에 정의된 글을 보면 AOP는 "횡단 관심사(Crosscutting Conce
 
  일반적으로 새로운 컴퓨터 프로그래밍들이 제시되는 근본적인 이유는 기존의 프로그래밍 단점을 보완하는 데에 있다. 절차적 프로그래밍을 보완하고자 OOP가 등장했던 것처럼 말이다.
 
-_절차적 프로그래밍 -> 객체 지향 프로그래밍(OOP) -> 관점 지향 프로그래밍(AOP)_
+_절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지향 프로그래밍(AOP)_
 
-본론으로 돌아와서, AOP는 OOP를 보완하고자 등장한 패러다임이다. 이 점은 매우 흥미로웠다. 완벽하게만 보였던 OOP에 도대체 어떤 한계가 있었기에 AOP라는 새로운 패러다임이 등장했었을까?
+본론으로 돌아와서, AOP는 OOP를 보완하고자 등장한 패러다임이다.  이 점은 매우 흥미로웠다. 완벽하게만 보였던 OOP에 도대체 어떤 한계가 있었기에 AOP라는 새로운 패러다임이 등장했었을까?
 
 #### OOP의 한계 - 극단적인 추상화의 한계
 

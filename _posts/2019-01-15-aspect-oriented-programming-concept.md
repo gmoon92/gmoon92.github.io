@@ -4,8 +4,8 @@ title: "AOP : Aspect Oriented Programming 개념"
 tags: [AOP]
 categories: [Spring, AOP]
 subtitle: "Spring AOP를 들어가기전 AOP 용어와 개념"
-feature-img: "md/img/thumbnail/java-script-logo.png"
-thumbnail: "md/img/thumbnail/java-script-logo.png"
+feature-img: "md/img/thumbnail/aop.png"
+thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
 sitemap:
 display: "false"
@@ -70,7 +70,7 @@ _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
 여기까진 OOP에서도 추상화와 템플릿 메소드 패턴과 같은 디자인 패턴을 통해 횡단 관심사를 분리할 수 있다. 하지만 AOP의 가장 큰 핵심은 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리할 수 있다는 점이다.
 
- 여기까지 AOP를 전반적인 개념을 간략하게 훑어보았다. AOP를 좀 더 깊게 AOP를 학습하기 위해선 먼저 AOP 등장배경에 대해 이해하는 과정이 선행되어야 한다.
+ 여기까지 AOP를 전반적인 개념을 간략하게 훑어보았다. AOP를 좀 더 깊게 학습하기 위해선 먼저 AOP 등장배경에 대해 이해하는 과정이 선행되어야 한다.
 
 ### 등장배경
 

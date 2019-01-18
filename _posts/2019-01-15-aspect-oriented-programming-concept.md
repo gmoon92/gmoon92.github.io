@@ -56,21 +56,9 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 이처럼 보안, 프로파일링, 로그, 트랜잭션은 핵심 로직은 아니지만, 요구 상황에 따라서 다수의 핵심 로직에 포함할 수 있는 공통 로직들이다.
 
-정리하자면 횡단 관심사란 비즈니스 로직과는 별개의 영역으로 대다수 기능에서 발생하는 중복된 공통 로직을 의미한다. 또 다른 측면으로 생각해보자면 관심사로 분류한 그 자체는 횡단 관심사 또한 모듈화도 가능할 수 있다고 생각할 수 있다.
+정리하자면 횡단 관심사란 비즈니스 로직과는 별개의 영역으로 대다수 기능에서 발생하는 중복된 공통 로직을 의미한다.
 
-#### AOP의 목표와 방향성
-
-본론으로 돌아와서 AOP는 이러한 "횡단 관심사를 주로 프로그래밍한다."라고 짐작할 수 있다. AOP의 목표와 방향성을 알기 위해 Wikipedia의 힘을 빌려보자.
-
->[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. <br/>  ...  <br/>  It does so by adding additional behavior to existing code (an advice) without modifying the code itself <br/>  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
-
-Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.  따라서 AOP는 핵심 관심사와 횡단 관심사를 분리하여 관리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다.
-
-_횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
-
-여기까진 OOP에서도 추상화와 템플릿 메소드 패턴과 같은 디자인 패턴을 통해 횡단 관심사를 분리할 수 있다. 하지만 AOP의 가장 큰 핵심은 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리할 수 있다는 점이다.
-
- 여기까지 AOP를 전반적인 개념을 간략하게 훑어보았다. AOP를 좀 더 깊게 학습하기 위해선 먼저 AOP 등장배경에 대해 이해하는 과정이 선행되어야 한다.
+ 또 다른 측면으로 생각해보자면 OOP에서도 추상화와 템플릿 메소드 패턴과 같은 디자인 패턴을 통해 횡단 관심사를 분리할 수 있다. 그렇다면 굳이 OOP가 아닌 AOP라는 새로운 프로그래밍이 등장했을까?
 
 ### 등장배경
 
@@ -97,24 +85,28 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 이에 대응하기 위해선 이에 맞는 각기 다른 추상화 클래스가 필요하다. 결과적으로 추상화 클래스는 유연한 기능의 확장이라는 본질적인 장점과는 다르게 많은 추상화 클래스가 생기게 되고 오히려 이를 관리하는데 큰 비용이 든다.
 
-결과적으로 OOP로 관심사를 분리할 수 있지만 앞서 설명과 같이 극단적인 추상화 클래스들이 발생하고, 이를 관리해야 한다는 커다란 숙제가 남게 된다.
+결과적으로 OOP로 관심사를 분리할 수 있지만, OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 앞서 설명과 같이 극단적인 추상화 클래스들이 발생하고, 이를 관리해야 한다는 커다란 숙제가 남게 된다.
 
-#### AOP는 어떻게 적용하게 되나
+#### AOP의 등장 - 목표와 방향성
 
-AOP는 이러한 처치가 곤란한 횡단 관심사들을
+이러한 문제점들을 보안하고자 등장한게 바로 AOP이다.
 
+>[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... <br/> ... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
-이러한 관점에서
+Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.  따라서 AOP는 핵심 관심사와 횡단 관심사를 분리하여 관리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다.
 
+_횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
+무엇보다 AOP의 가장 큰 핵심은 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리할 수 있다는 점이다. 따라서 AOP가 준비된 개발자라면 공통 모듈을 개발할 때 수월하게 개발을 할 수 있게 된다.
 
-#### Crosscutting Concerns
+하지만 AOP를 학습하는 데 많은 어려움이 있다. 가장 근본적인 이유는 생소한 용어들이다.
 
-- 다른 클래스들을 한번에 고치기 위해 추상화 또는 상속 방법으로 클래스 정의
-- 이에 따라 관리의 복잡성이 증가
-- 횡단 관심사(crosscutting concerns)를 모듈화
+### 난해한 AOP의 개념과 용어
 
-### 2. AOP의 개념과 용어정리
+난해한 AOP의 용어는 AOP가 어떻게 동작하는지 그림과 함께 이해하면 많은 도움이 된다.
+
+- 그림으로 한번에 정리
+
 
 - 용어
    - Aspect
@@ -129,9 +121,6 @@ AOP는 이러한 처치가 곤란한 횡단 관심사들을
    - target
    - *AOP proxy
    - Weaving
-
-- 그림으로 한번에 정리
-
 
 ### 3 기존 자바의 AOP 구현 방식
 

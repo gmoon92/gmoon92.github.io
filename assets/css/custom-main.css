@@ -797,7 +797,8 @@ footer {
 	margin-bottom: 0;
 	font-size: 0.9em;
 	display: inline-block;
-	text-align: center
+	text-align: center;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 footer .meta, footer #post-nav p, #post-nav footer p {
@@ -925,7 +926,7 @@ article em {
 	margin-bottom: 0;
 	display: inline-block;
 	background-size: cover;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+	/* border-bottom: 1px solid rgba(0, 0, 0, 0.1) */
 }
 
 .posts .post-teaser img {
@@ -1018,8 +1019,9 @@ article em {
 	padding-bottom: 3%
 }
 
+.sidebar_subject{color:#005e84;}
 .categories-list {
-	font-size: 1.2em;
+	font-size: 1em;
 }
 
 .categories-list>div{

@@ -958,7 +958,10 @@ article em {
 }
 
 .posts .post-teaser .excerpt{
-	color : rgba(56, 56, 56, 0.5);	
+	color : rgba(56, 56, 56, 0.5);
+	text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .posts .excerpt {

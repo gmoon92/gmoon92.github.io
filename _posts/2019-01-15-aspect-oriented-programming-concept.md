@@ -72,13 +72,70 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 이 점은 매우 흥미로웠다. OOP는 상속과 추상화, 동시에 다양한 디자인 패턴을 통해 기능의 분리와 유연한 확장을 구현할 수 있다. 이를 통해 횡단 관심사 또한 분리할 수 있다. 이처럼 완벽하게만 보였던 OOP에 도대체 어떤 한계가 있었기에 AOP라는 새로운 패러다임이 등장했었을까?
 
-#### OOP의 극단적인 추상화의 한계
+#### OOP의 극단적인 추상화
 
- OOP(Object oriented Programming)는 객체와 클래스에 초점을 맞춘 프로그래밍 기법이다. 이러한 OOP의 가장 큰 장점은 추상화를 통해 기능의 분리를 하여 유연한 기능의 확장을 할 수 있다는 점이다.
+ OOP(Object oriented Programming)는 객체와 클래스에 초점을 맞춘 프로그래밍 기법이다. 이러한 OOP의 가장 큰 장점은 상속과 추상화를 통해 기능의 분리를 하여 유연한 기능의 확장을 할 수 있다는 점이다.
 
-따라서 횡단 관심사와 핵심 관심사를 하나의 로직에서 분리하고 각각의 독립적인 모듈로 관리하기 위해선 먼저 일반화(Generalization)를 통해 분리할 수 있다.
+먼저 횡단 관심사와 핵심 관심사를 하나의 로직에서 분리하고 각각의 독립적인 모듈로 관리하기 위해선 기존의 객체를 일반화(Generalization)하여 분리할 수 있다.
 
-그다음 유연한 확장을 하기 위해 원래 클래스는 추상화로 구현하고 추상화 클래스에 횡단 관심사가 적용해 이를 구현 객체를 사용한다.
+``` java
+public interface UserService{
+  void add user(User user);
+  void upgradeLevels();
+}
+
+public class UserServiceImple implements UserService{
+  UserDao userDao;
+
+  public void upgradeLevels(){
+    List<User> users = userDAO.getAll();
+    for(User user : users){
+      upgradeLevel(user);
+    }
+  }
+}
+
+public class UserServiceTx implements UserService{
+  UserService userService;
+  PlatformTransactionManager transactionManager;
+
+  //비즈니스 오브젝트를 DI 받는다.
+  UserServiceTx(UserService userService){
+    this.userService = userService;
+  }
+
+  //set 메소드 방식으로 DI 받는다.
+  public void setTransactionManager(
+         PlatformTransactionManager transactionManager){
+    this.transactionManager = transactionManager;
+  }
+
+  // 모든 기능을 구현 객체에 위임
+  public void add user(User user){
+    userService.add(user);
+  }
+  public void upgradeLevels(){
+    //트랜잭션 추가
+    TransactionStatus status = this.transactionManager
+                                    .getTransaction(new DefaultTransactionDefinition());
+    try{
+        userService.upgradeLevels();
+
+        this.transactionManager.commit(status);
+    }catch(RuntimeException e){
+      this.transactionManager.rollback(status);
+      throw e;
+    }
+
+  }
+
+}
+
+```
+
+그다음 공통 모듈에 적용할 핵심 모듈을 인스턴스화 하고 공통 모듈의 내부에서
+
+그다음 분리된 공통 모듈을 상속받아 구현한다. 공통 기능의 유연한 확장을 하기 위해 원래 클래스는 추상화로 구현하고 추상화 클래스에 횡단 관심사가 적용해 이를 구현 객체를 사용한다.
 
 여기까지 OOP를 활용하여 관심사를 분리와 적용을 완벽하게 구현하였다. 하지만 다음과 같은 상황이 닥친다면 어떻게 될까?
 
@@ -99,9 +156,9 @@ Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허�
 
 _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
-앞서 OOP는 객체를 통해 횡단 관심사의 분리를 허용했다면 AOP는 Aspect를 통해 횡단 관심사를 분리한다. Aspect는 여러 객체를 분리하고 적용하는 동작을 한다.
+앞서 OOP는 상속과 추상화를 통해 횡단 관심사의 분리를 허용했다면 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
 
- 결과적으로 AOP의 가장 큰 핵심은 Aspect를 통해 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리하거나 동시에 하나의 동작을 여러 객체에 교차로 적용할 수 있다.
+Aspect 모듈에는 공통 기능(횡단 관심사)을 내포하고 있으며 동시에 여러 객체를 분리하고 적용하는 동작을 한다. 결과적으로 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리하거나 동시에 하나의 동작을 여러 객체에 교차로 적용할 수 있다.
 
 이를 통해 Aspect가 동작을 어떻게 하는지 AOP가 준비된 개발자라면 공통 모듈을 개발할 때 수월하게 개발을 할 수 있게 된다.
 
@@ -110,6 +167,9 @@ _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 ### 난해한 AOP의 개념과 용어
 
 AOP의 용어는 AOP가 어떻게 동작하는지 그림과 함께 이해하면 많은 도움이 된다.
+
+Aspect
+
 
 - Aspect : 여러 객체를 가로 지르는 문제의 모듈화. 트랜잭션 관리는 J2EE 애플리케이션에서 교차하는 문제의 좋은 예입니다. Spring AOP에서 aspect는 정규 클래스 (스키마 기반 접근법) 또는 @Aspect 주석 ( @AspectJ 스타일)으로주석된 일반 클래스를 사용하여 구현된다.
 - Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.

@@ -38,9 +38,11 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 >- 문법 형식의 하나로써 반복(反復) 등을 나타내는 동사의 형태.
 >   - 반복을 나타내는 동사 → 반복된 코드
 
-다음과 같은 의미를 빗대어 프로그램 측면에서 해석하자면 반복되는 코드가 이에 해당한다고 볼 수 있다. 이러한 코드는 일반적으로 비즈니스 로직과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다. AOP에선 이러한 관심사(Concerns)를 기준으로 크게 핵심 관심사와 횡단 관심사로 분류하고 있다.
+다음과 같은 의미를 빗대어 프로그램 측면에서 해석하자면 반복되는 코드가 이에 해당한다고 볼 수 있다. 이러한 코드는 일반적으로 비즈니스 로직과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다.
 
-#### 분류된 관심사
+#### 관심 분리(Separation of Concerns)
+
+ AOP에선 이러한 관심사(Concerns)를 기준으로 크게 핵심 관심사와 횡단 관심사로 분류하고 있다.
 
 - 핵심 관심사(Core Concerms)
 - 횡단 관심사(Crosscutting Concerns)
@@ -87,7 +89,7 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 결과적으로 OOP로 관심사를 분리할 수 있지만, OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 앞서 설명과 같이 극단적인 추상화 클래스들이 발생하고, 이를 관리해야 한다는 커다란 숙제가 남게 된다.
 
-#### AOP의 등장 - 목표와 방향성
+#### AOP의 등장 그리고 목표와 방향성
 
 이러한 문제점들을 보안하고자 등장한게 바로 AOP이다.
 
@@ -97,7 +99,11 @@ Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허�
 
 _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
-무엇보다 AOP의 가장 큰 핵심은 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리할 수 있다는 점이다. 따라서 AOP가 준비된 개발자라면 공통 모듈을 개발할 때 수월하게 개발을 할 수 있게 된다.
+앞서 OOP는 객체를 통해 횡단 관심사의 분리를 허용했다면 AOP는 Aspect를 통해 횡단 관심사를 분리한다. Aspect는 여러 객체를 분리하고 적용하는 동작을 한다.
+
+ 결과적으로 AOP의 가장 큰 핵심은 Aspect를 통해 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리하거나 동시에 하나의 동작을 여러 객체에 교차로 적용할 수 있다.
+
+이를 통해 Aspect가 동작을 어떻게 하는지 AOP가 준비된 개발자라면 공통 모듈을 개발할 때 수월하게 개발을 할 수 있게 된다.
 
 하지만 AOP를 학습하는 데 많은 어려움이 있다. 가장 근본적인 이유는 생소한 용어들이다.
 
@@ -105,7 +111,26 @@ _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
 AOP의 용어는 AOP가 어떻게 동작하는지 그림과 함께 이해하면 많은 도움이 된다.
 
-- 그림으로 한번에 정리
+- Aspect : 여러 객체를 가로 지르는 문제의 모듈화. 트랜잭션 관리는 J2EE 애플리케이션에서 교차하는 문제의 좋은 예입니다. Spring AOP에서 aspect는 정규 클래스 (스키마 기반 접근법) 또는 @Aspect 주석 ( @AspectJ 스타일)으로주석된 일반 클래스를 사용하여 구현된다.
+- Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
+- Advice(interceptor method) : 특정 조인 포인트에서 한 측면에 의해 취해진 행동. 다양한 유형의 조언에는 "주변", "이전"및 "후"조언이 포함됩니다. 조언 유형은 아래에 설명되어 있습니다. Spring을 포함한 많은 AOP 프레임 워크는 인터셉터 로서 조언을 모델링하고 , 조인 포인트 주변의 인터셉터 체인을 유지합니다.
+- Pointcut : 조인 포인트와 일치하는 술어. 조언은 pointcut 표현식과 관련이 있으며 pointcut과 일치하는 조인 포인트에서 실행됩니다 (예 : 특정 이름의 메소드 실행). Pointcut 표현식과 일치하는 조인 포인트의 개념은 AOP의 핵심입니다 : Spring은 기본적으로 AspectJ pointcut 언어를 사용합니다.
+- Introduction(inter-type) : 유형을 대신하여 추가 메소드 또는 필드를 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 소개를 사용하여 Bean이 캐시를 단순화하기 위해 IsModified 인터페이스를구현하도록 할 수 있습니다.
+- Target Object : 하나 이상의 특성에 대해 조언을받는 개체입니다. 권고 된 객체라고도합니다. Spring AOP는 런타임 프록시를 사용하여 구현되기 때문에이 객체는 항상 프록시 객체입니다.
+- AOP proxy : 애스펙트 계약을 구현하기 위해 AOP 프레임 워크에 의해 생성 된 객체입니다 (메소드 실행 권고 등). Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
+- Weaving : 다른 응용 프로그램 유형 또는 개체와 측면을 연결하여 권고 된 개체를 만듭니다. 이것은 컴파일 타임 (예 : AspectJ 컴파일러 사용),로드 시간 또는 런타임에 수행 할 수 있습니다. Spring AOP는 다른 순수 자바 AOP 프레임 워크와 마찬가지로 런타임에 위빙을 수행한다.
+
+#### Advice
+
+Before advice : 조인 포인트 이전에 실행되지만 실행 흐름이 조인 포인트로 진행하지 못하도록하는 조언 (예외가 발생하지 않는 한).
+
+return advice : join point가 정상적으로 완료된 후 실행될 조언 : 예를 들어 메소드가 예외를 발생시키지 않고 리턴하는 경우.
+
+throwing advice : 예외를 throw하여 메소드가 종료 될 경우 실행될 조언.
+
+After (finally) advice : 조인 포인트가 종료되는 방법에 관계없이 실행될 조언 (정상 또는 예외적 복귀).
+
+around advice : 메소드 호출과 같은 조인 포인트를 둘러싼 조언. 이것은 가장 강력한 조언입니다. around advice는 메소드 호출 전과 후에 사용자 정의 동작을 수행 할 수 있습니다. 또한 조인 포인트로 진행할지 또는 자체 반환 값을 반환하거나 예외를 throw하여 권고 된 메소드 실행을 바로 가기할지 여부를 선택하는 작업도 담당합니다.
 
 
 - 용어
@@ -186,6 +211,8 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 
 [해외 - Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
 
+[해외 - the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
+
 [AOP 슬라이드](https://slideplayer.com/slide/9380068/)
 
 [AOP 정부 프레임워크 DOC](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
@@ -200,7 +227,7 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 - aspect
 [스프링 DOC - AOP aspect](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
 [스프링 블로그 - aspectj](https://www.baeldung.com/aspectj)
-[스프링 DOC - AOP](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
+[스프링 DOC - Spring을 이용한 Aspect 지향 프로그래밍](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
 
 - pointcut
 [스프링 블로그 - pointcut](https://www.baeldung.com/spring-aop-pointcut-tutorial)

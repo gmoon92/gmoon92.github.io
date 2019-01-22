@@ -38,29 +38,42 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 >- 문법 형식의 하나로써 반복(反復) 등을 나타내는 동사의 형태.
 >   - 반복을 나타내는 동사 → 반복된 코드
 
-다음과 같은 의미를 빗대어 프로그램 측면에서 해석하자면 반복되어 나타나는 중복된 코드가 이에 해당한다고 볼 수 있다.  일반적으로 이러한 코드는 비즈니스 로직과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다.
- 
+다음과 같은 의미를 빗대어 프로그램 측면에서 해석하자면 반복되어 나타나는 중복된 코드가 이에 해당한다고 볼 수 있다.  
+
+![img](/md/img/aop/cross-cut-concerns.png)
+
+일반적으로 이러한 코드는 비즈니스 로직과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다.
+
 #### 관심 분리(Separation of Concerns)
 
  AOP에선 프로그램을 관심사(Concerns) 기준으로 크게 핵심 관심사와 횡단 관심사로 분류하고 있다.
 
+![img](/md/img/aop/application-concerns.png)
+
 - 핵심 관심사(Core Concerns)
 - 횡단 관심사(Crosscutting Concerns)
 
-핵심 관심사는 프로그램의 핵심 가치와 목적이 그대로 드러난 관심 영역을 뜻한다.  해당 프로그램의 비즈니스 로직이 그러하다.
+핵심 관심사는 프로그램의 핵심 가치와 목적이 그대로 드러난 관심 영역을 뜻한다. 해당 프로그램의 비즈니스 로직이 그러하다. 반면 횡단 관심사는 비즈니스 로직과는 다른 관심 영역을 뜻한다.
 
-반면 횡단 관심사는 비즈니스 로직과는 다른 관심 영역을 뜻한다. 프로그램 관점에서의 대표적인 횡단 관심사는 다음과 같다.
+프로그램 관점에서의 대표적인 횡단 관심사는 다음과 같다.
 
 - Security
 - Profiling
 - Logging
 - Transaction Management
 
-이처럼 보안, 프로파일링, 로그, 트랜잭션은 핵심 로직은 아니지만, 요구 상황에 따라서 다수의 핵심 로직에 포함할 수 있는 공통 로직들이다.
+이처럼 보안, 프로파일링, 로그, 트랜잭션은 비즈니스 로직은 아니지만, 요구 상황에 따라서 다수의 비즈니스 로직에 포함되는 공통 로직들이다.
 
-정리하자면 횡단 관심사란 비즈니스 로직과는 별개의 영역으로 대다수 기능에서 발생하는 중복된 공통 로직을 의미한다.
+![img](/md/img/aop/cross-cut-concerns2.png)
 
- 또 다른 측면으로 생각해보자면 OOP에서도 추상화와 템플릿 메소드 패턴과 같은 디자인 패턴을 통해 횡단 관심사를 분리할 수 있다. 그렇다면 굳이 OOP가 아닌 AOP라는 새로운 프로그래밍이 등장했을까?
+횡단 관심사는 비즈니스 로직과는 별개의 영역이지만 필연적으로 대다수의 비즈니스 로직에 분포되어 있다.
+
+ 이러한 관계는 비즈니스 로직 상에서 많은 부분에 서로 엉켜져 있어 가독성을 떨어트리고 자칫 중복된 코드가 생겨날 가능성이 크다. 이는 비즈니스 로직의 모듈성을 감소시키는 가장 큰 요인이다.
+
+- 비즈니스 로직 모듈화 감소
+- 유지보수의 어려움
+
+결과적으로 횡단 관심사를 관리를 수월하기 위해 모듈화가 필요하고 동시에 AOP라는 새로운 프로그래밍이 등장했다고 추론할 수 있다.
 
 ### 등장배경
 
@@ -68,74 +81,28 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지향 프로그래밍(AOP)_
 
-본론으로 돌아와서, AOP는 OOP를 보완하고자 등장한 패러다임이다.
-
-이 점은 매우 흥미로웠다. OOP는 상속과 추상화, 동시에 다양한 디자인 패턴을 통해 기능의 분리와 유연한 확장을 구현할 수 있다. 이를 통해 횡단 관심사 또한 분리할 수 있다. 이처럼 완벽하게만 보였던 OOP에 도대체 어떤 한계가 있었기에 AOP라는 새로운 패러다임이 등장했었을까?
+본론으로 돌아와서, AOP는 OOP를 보완하고자 등장한 패러다임이다. 물론 OOP를 통해 횡단 관심사를 분리할 수 있지만, OOP는 횡단 관심사 모듈화의 한계가 있다.
 
 #### OOP의 극단적인 추상화
 
  OOP(Object oriented Programming)는 객체와 클래스에 초점을 맞춘 프로그래밍 기법이다. 이러한 OOP의 가장 큰 장점은 상속과 추상화를 통해 기능의 분리를 하여 유연한 기능의 확장을 할 수 있다는 점이다.
 
-먼저 횡단 관심사와 핵심 관심사를 하나의 로직에서 분리하고 각각의 독립적인 모듈로 관리하기 위해선 기존의 객체를 일반화(Generalization)하여 분리할 수 있다.
+따라서 추상화와 템플릿 메소드 패턴과 같은 디자인 패턴을 통해 횡단 관심사를 분리할 수 있다.
 
-``` java
-public interface UserService{
-  void add user(User user);
-  void upgradeLevels();
-}
+![img](/md/img/aop/oop-concerns-div1.png)
 
-public class UserServiceImple implements UserService{
-  UserDao userDao;
+UserService라는 서비스 클래스가 있다고 가정하자.
 
-  public void upgradeLevels(){
-    List<User> users = userDAO.getAll();
-    for(User user : users){
-      upgradeLevel(user);
-    }
-  }
-}
+![img](/md/img/aop/oop-concerns-div2.png)
 
-public class UserServiceTx implements UserService{
-  UserService userService;
-  PlatformTransactionManager transactionManager;
-
-  //비즈니스 오브젝트를 DI 받는다.
-  UserServiceTx(UserService userService){
-    this.userService = userService;
-  }
-
-  //set 메소드 방식으로 DI 받는다.
-  public void setTransactionManager(
-         PlatformTransactionManager transactionManager){
-    this.transactionManager = transactionManager;
-  }
-
-  // 모든 기능을 구현 객체에 위임
-  public void add user(User user){
-    userService.add(user);
-  }
-  public void upgradeLevels(){
-    //트랜잭션 추가
-    TransactionStatus status = this.transactionManager
-                                    .getTransaction(new DefaultTransactionDefinition());
-    try{
-        userService.upgradeLevels();
-
-        this.transactionManager.commit(status);
-    }catch(RuntimeException e){
-      this.transactionManager.rollback(status);
-      throw e;
-    }
-
-  }
-
-}
-
-```
-
-그다음 공통 모듈에 적용할 핵심 모듈을 인스턴스화 하고 공통 모듈의 내부에서
+먼저 횡단 관심사와 핵심 관심사를 하나의 로직에서 분리하고 각각의 독립적인 모듈로 관리하기 위해선 기존의 객체를 특수화(Specialization)하여 분리할 수 있다.
 
 그다음 분리된 공통 모듈을 상속받아 구현한다. 공통 기능의 유연한 확장을 하기 위해 원래 클래스는 추상화로 구현하고 추상화 클래스에 횡단 관심사가 적용해 이를 구현 객체를 사용한다.
+
+![img](/md/img/aop/oop-concerns-div3.png)
+
+![img](/md/img/aop/oop-concerns-div4.png)
+
 
 여기까지 OOP를 활용하여 관심사를 분리와 적용을 완벽하게 구현하였다. 하지만 다음과 같은 상황이 닥친다면 어떻게 될까?
 
@@ -152,7 +119,9 @@ public class UserServiceTx implements UserService{
 
 >[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... <br/> ... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
-Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.  따라서 AOP는 핵심 관심사와 횡단 관심사를 분리하여 관리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다.
+Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다. 따라서 AOP는 핵심 관심사와 횡단 관심사를 분리하여 관리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다.
+
+![img](/md/img/aop/concerns-relation.png)
 
 _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
@@ -164,19 +133,16 @@ Aspect 모듈에는 공통 기능(횡단 관심사)을 내포하고 있으며 �
 
 하지만 AOP를 학습하는 데 많은 어려움이 있다. 가장 근본적인 이유는 생소한 용어들이다.
 
-### 난해한 AOP의 개념과 용어
+### AOP의 개념과 용어
 
 AOP의 용어는 AOP가 어떻게 동작하는지 그림과 함께 이해하면 많은 도움이 된다.
 
-Aspect
-
-
-- Aspect : 여러 객체를 가로 지르는 문제의 모듈화. 트랜잭션 관리는 J2EE 애플리케이션에서 교차하는 문제의 좋은 예입니다. Spring AOP에서 aspect는 정규 클래스 (스키마 기반 접근법) 또는 @Aspect 주석 ( @AspectJ 스타일)으로주석된 일반 클래스를 사용하여 구현된다.
+- Aspect : 횡단 관심사의 모듈화이다. Spring AOP에서 aspect는 정규 클래스 (스키마 기반 접근법) 또는 @Aspect 주석 ( @AspectJ 스타일)으로주석된 일반 클래스를 사용하여 구현된다.
 - Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
 - Advice(interceptor method) : 특정 조인 포인트에서 한 측면에 의해 취해진 행동. 다양한 유형의 조언에는 "주변", "이전"및 "후"조언이 포함됩니다. 조언 유형은 아래에 설명되어 있습니다. Spring을 포함한 많은 AOP 프레임 워크는 인터셉터 로서 조언을 모델링하고 , 조인 포인트 주변의 인터셉터 체인을 유지합니다.
 - Pointcut : 조인 포인트와 일치하는 술어. 조언은 pointcut 표현식과 관련이 있으며 pointcut과 일치하는 조인 포인트에서 실행됩니다 (예 : 특정 이름의 메소드 실행). Pointcut 표현식과 일치하는 조인 포인트의 개념은 AOP의 핵심입니다 : Spring은 기본적으로 AspectJ pointcut 언어를 사용합니다.
-- Introduction(inter-type) : 유형을 대신하여 추가 메소드 또는 필드를 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 소개를 사용하여 Bean이 캐시를 단순화하기 위해 IsModified 인터페이스를구현하도록 할 수 있습니다.
-- Target Object : 하나 이상의 특성에 대해 조언을받는 개체입니다. 권고 된 객체라고도합니다. Spring AOP는 런타임 프록시를 사용하여 구현되기 때문에이 객체는 항상 프록시 객체입니다.
+- Introduction(inter-type) : Type을 대신에 메소드 또는 필드를 추가로 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
+- Target Object(Advised Object) : 하나 이상의 Aspects에 대해 Advice를 받는 Object다. Spring AOP에선 런타임 프록시를 사용하여 구현되기 때문에, Target Object는 항상 Proxy Object다.
 - AOP proxy : 애스펙트 계약을 구현하기 위해 AOP 프레임 워크에 의해 생성 된 객체입니다 (메소드 실행 권고 등). Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
 - Weaving : 다른 응용 프로그램 유형 또는 개체와 측면을 연결하여 권고 된 개체를 만듭니다. 이것은 컴파일 타임 (예 : AspectJ 컴파일러 사용),로드 시간 또는 런타임에 수행 할 수 있습니다. Spring AOP는 다른 순수 자바 AOP 프레임 워크와 마찬가지로 런타임에 위빙을 수행한다.
 

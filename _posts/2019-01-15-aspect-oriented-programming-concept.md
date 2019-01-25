@@ -57,6 +57,8 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 프로그램 관점에서의 대표적인 횡단 관심사는 다음과 같다.
 
+<img src="/md/img/aop/concerns-relation.png" style="max-height: 450px;" alt="img">
+
 - Security
 - Profiling
 - Logging
@@ -89,9 +91,7 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 따라서 횡단 관심사를 `추상화`와 `템플릿 메소드 패턴(디자인 패턴)`을 통해 기존 클래스에서 횡단 관심사와 핵심 관심사를 분리하고 각각의 독립적인 모듈로 분리하여 관리할 수 있다.
 
-예를 들어 트랜잭션 로직(횡단 관심사)과 비즈니스 로직(핵심 관심사)이 하나의 클래스에 공존하고 있는 UserService 클래스가 있다고 가정하자.
-
-이때 가장 우선으로 해야 할 작업은 기존 클래스를 특수화(Specialization)하여 횡단 관심사와 핵심 관심사를 분리하는 작업을 해야 한다.
+예를 들어 트랜잭션 로직(횡단 관심사)과 비즈니스 로직(핵심 관심사)이 하나의 클래스에 공존하고 있는 UserService 클래스가 있다고 가정하자. 이때 가장 우선으로 해야 할 작업은 기존 클래스를 특수화(Specialization)하여 횡단 관심사와 핵심 관심사를 분리하는 작업을 해야 한다.
 
 <img src="/md/img/aop/oop-concerns-div1.png" style="max-height: none;" alt="img">
 
@@ -99,11 +99,11 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 - UserServiceImple : 비즈니스 모듈
 - UserServiceTX : 트랜잭션 모듈
 
-설계적 측면으로 하나의 클래스에서 세 개의 클래스로 분리되었다.
+설계적 측면으로 하나의 인터페이스가 존재하고 이를 구현한 두 개의 클래스가 도출된다.
 
 <img src="/md/img/aop/oop-concerns-div2.png" style="max-height: none;" alt="img">
 
-이 과정에서 가장 먼저 시행해야할 점은 먼저 기존 UserService 클래스는 추상화 클래스로 정의하고 해당 추상화 메소드는 비즈니스 메소드로 정의한다.
+이 작업 과정에서 가장 먼저 시행해야할 점은 먼저 기존 UserService 클래스는 추상화 클래스로 정의하고. 해당 추상화 메소드는 비즈니스 메소드로 해야 한다.
 
 <img src="/md/img/aop/oop-concerns-div3.png" style="max-height: none;" alt="img">
 
@@ -113,13 +113,13 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 <img src="/md/img/aop/oop-concerns-div4.png" style="max-height: none;" alt="img">
 
-그다음 비즈니스 로직에 트랜잭션 로직을 적용하는 작업을 한다.
+마지막으로 비즈니스 로직에 트랜잭션 로직을 적용하는 작업을 해야 한다.
 
-다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 이 점은 기능의 유연한 확장을 위해 모든 비즈니스 로직은 UserService 인터페이스에 위임한다는 점이다.
+다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 또한, 모든 비즈니스 로직은 기능의 유연한 확장을 위해 UserService 인터페이스로 기능을 위임한다. 결과적으로 비즈니스 로직인 UserServiceImple를 주입해주면 된다.
 
-_UserServiceTX → UserService_
+_의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.class_
 
-마지막으로 UserService 인터페이스 클래스에 UserServiceTX 클래스를 DI 작업을 한다.
+따라서 UserService에 UserServiceTX를 의존성 주입(DI)을 하고 UserServiceTX엔 UserServiceImple을 DI를 해주어 의존성 관계를 형성해주면 된다.
 
 여기까지 OOP를 활용하여 관심사를 분리와 적용을 완벽하게 구현하였다. 하지만 다음과 같은 상황이 닥친다면 어떻게 될까?
 
@@ -128,7 +128,10 @@ _UserServiceTX → UserService_
 
 이에 대응하기 위해선 이에 맞는 각기 다른 추상화 클래스가 필요하다. 따라서 추상화의 본질적인 장점과는 다르게 많은 추상화 클래스가 생기게 되고 오히려 이를 관리하는데 큰 비용이 든다.
 
-결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 앞서 설명과 같이 극단적인 추상화 클래스들이 발생하고, 이를 관리해야 한다는 커다란 숙제가 남게 된다.
+결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 앞서 설명과 같이 극단적인 추상화 클래스들이 발생하고 이를 관리하는데 어려움이 따른다.
+
+- 추상화 클래스 관리의 어려움
+- 복잡한 의존 관계
 
 #### AOP의 등장 그리고 목표와 방향성
 
@@ -138,11 +141,9 @@ _UserServiceTX → UserService_
 
 Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다. 따라서 AOP는 핵심 관심사와 횡단 관심사를 분리하여 관리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다.
 
-![img](/md/img/aop/concerns-relation.png)
-
 _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
-앞서 OOP는 상속과 추상화를 통해 횡단 관심사의 분리를 허용했다면 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
+AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
 
 Aspect 모듈에는 공통 기능(횡단 관심사)을 내포하고 있으며 동시에 여러 객체를 분리하고 적용하는 동작을 한다. 결과적으로 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리하거나 동시에 하나의 동작을 여러 객체에 교차로 적용할 수 있다.
 

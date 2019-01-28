@@ -115,22 +115,24 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 마지막으로 비즈니스 로직에 트랜잭션 로직을 적용하는 작업을 해야 한다.
 
-다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 모든 비즈니스 로직은 기능의 유연한 확장을 위해 UserService 인터페이스로 기능을 위임한다.
+다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 모든 비즈니스 로직은 유연한 확장을 위해 UserService 인터페이스에 위임한다.
 
- 결과적으로 기존 프로세스에 따라 비즈니스 로직 호출할 시 트랜잭션 로직이 결합한 기능이 호출된다.
+`UserService.upgradeLevels()`는 구현 객체인 UserServiceImple 메소드에 위임해줘야 하므로 기존의 의존 관계를 다시 정의해줘야 한다.
 
 _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.class_
 
 따라서 UserService에 UserServiceTX를 의존성 주입(DI)을 하고 UserServiceTX엔 UserServiceImple을 DI를 해주어 의존성 관계를 형성해주면 된다.
 
-여기까지 OOP를 활용하여 관심사를 분리와 적용을 완벽하게 구현하였다. 하지만 다음과 같은 상황이 닥친다면 어떻게 될까?
+ 결과적으로 프로세스에 따라 비즈니스 로직 호출할 시 트랜잭션 로직이 결합한 기능이 호출된다. 여기까지 OOP를 활용하여 관심사를 분리와 적용을 구현했다.
+
+ 하지만 다음과 같은 상황이 닥친다면 문제가 발생한다.
 
  1. 특정 메소드만 적용
  2. 다른 횡단 관심사를 추가로 적용
 
 이에 대응하기 위해선 이에 맞는 각기 다른 추상화 클래스가 필요하다. 따라서 추상화의 본질적인 장점과는 다르게 많은 추상화 클래스가 생기게 되고 오히려 이를 관리하는데 큰 비용이 든다.
 
-결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 앞서 설명과 같이 극단적인 추상화 클래스들이 발생하고 이를 관리하는데 어려움이 따른다.
+결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 많은 추상화 클래스가 생성되고 이를 관리하는데 어려움이 따른다.
 
 - 추상화 클래스 관리의 어려움
 - 복잡한 의존 관계
@@ -141,7 +143,7 @@ _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.
 
 >[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... <br/> ... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
-Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다. 따라서 AOP는 핵심 관심사와 횡단 관심사를 분리하여 관리함으로써 비즈니스 로직의 모듈성을 증가할 수 있다.
+Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
 
 _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
@@ -149,17 +151,62 @@ AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어�
 
 Aspect 모듈에는 공통 기능(횡단 관심사)을 내포하고 있으며 동시에 여러 객체를 분리하고 적용하는 동작을 한다. 결과적으로 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리하거나 동시에 하나의 동작을 여러 객체에 교차로 적용할 수 있다.
 
-이를 통해 Aspect가 동작을 어떻게 하는지 AOP가 준비된 개발자라면 공통 모듈을 개발할 때 수월하게 개발을 할 수 있게 된다.
+또한, 자체적으로 Aspect 모듈에서 횡단 관심사를 기존 로직에 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 부가적인 공통 기능들을 효율적으로 관리할 수 있게 된다.
 
-하지만 AOP를 학습하는 데 많은 어려움이 있다. 가장 근본적인 이유는 생소한 용어들이다.
+무엇보다 공통 모듈을 보다 쉽게 관리하기 위해선 AOP가 어떻게 동작하는지 알아야한다. 하지만 AOP를 학습하는 데 많은 어려움이 있다. 가장 근본적인 이유는 생소한 용어들이다.
 
-### AOP의 개념과 용어
+### AOP 개념 - 용어와 동작
 
-AOP의 용어는 AOP가 어떻게 동작하는지 그림과 함께 이해하면 많은 도움이 된다.
+AOP에 입문자라면 다소 난해한 AOP 용어들 때문에 학습에 어려움을 느낀다. 하지만 AOP의 동작 방식과 접목해 AOP의 용어 대해 접근하면 더욱 쉽게 이해할 수 있다.
 
-- Aspect : 횡단 관심사의 모듈화이다. Spring AOP에서 aspect는 정규 클래스 (스키마 기반 접근법) 또는 @Aspect 주석 ( @AspectJ 스타일)으로주석된 일반 클래스를 사용하여 구현된다.
-- Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
+먼저 AOP의 용어엔 다음과 같이 나열할 수 있다.
+
+- Aspect
+- Advice
+- Introduction(inter-type)
+- Pointcut
+- Weaving
+- Target Object
+- Target
+- Joinpoint
+
+#### Aspect(Advisor)
+
+Aspect는 싱글톤 형태의 객체로 존재하는 횡단 관심사의 모듈화이다. Spring AOP에선 Advisor라 불린다.
+
+> Spring AOP에선 Aspect를 구현하는 두 가지 방식을 제시하고 있다.
+> 1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
+> 2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
+
+Aspect는 횡단 관심사 모듈화 그 자체이고 이를 구현하기 위해선 다음과 같은 용어들을 이해해야 한다.
+
+_Aspect(Advisor) = Advice + Pointcut_
+
+- Advice
+- Introduction(inter-type)
+- Pointcut
+
+#### Advice
+
+Aspect가 모듈화라면 Advice는 이를 구현한 실질적인 구현체라 정의할 수 있다. 따라서 실제적으로 적용시킬 횡단 로직을 구현한 메소드라 할 수 있다.
+
+AspectJ에선 다양한 시점에 횡단 로직을 교차할 수 있도록 Advice를 제공하고 있다.
+
+- Before
+- After returning
+- After throwing
+- After(finally)
+- Around
+
 - Advice(interceptor method) : 특정 조인 포인트에서 한 측면에 의해 취해진 행동. 다양한 유형의 조언에는 "주변", "이전"및 "후"조언이 포함됩니다. 조언 유형은 아래에 설명되어 있습니다. Spring을 포함한 많은 AOP 프레임 워크는 인터셉터 로서 조언을 모델링하고 , 조인 포인트 주변의 인터셉터 체인을 유지합니다.
+
+
+
+
+
+
+- Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
+
 - Pointcut : 조인 포인트와 일치하는 술어. 조언은 pointcut 표현식과 관련이 있으며 pointcut과 일치하는 조인 포인트에서 실행됩니다 (예 : 특정 이름의 메소드 실행). Pointcut 표현식과 일치하는 조인 포인트의 개념은 AOP의 핵심입니다 : Spring은 기본적으로 AspectJ pointcut 언어를 사용합니다.
 - Introduction(inter-type) : Type을 대신에 메소드 또는 필드를 추가로 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
 - Target Object(Advised Object) : 하나 이상의 Aspects에 대해 Advice를 받는 Object다. Spring AOP에선 런타임 프록시를 사용하여 구현되기 때문에, Target Object는 항상 Proxy Object다.

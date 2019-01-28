@@ -95,7 +95,7 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 <img src="/md/img/aop/oop-concerns-div1.png" style="max-height: none;" alt="img">
 
-- UserService : 비즈니스 모듈 추상화
+- UserService : 추상화 비즈니스 모듈
 - UserServiceImple : 비즈니스 모듈
 - UserServiceTX : 트랜잭션 모듈
 
@@ -103,11 +103,11 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 <img src="/md/img/aop/oop-concerns-div2.png" style="max-height: none;" alt="img">
 
-이 작업 과정에서 가장 먼저 시행해야할 점은 먼저 기존 UserService 클래스는 추상화 클래스로 정의하고. 해당 추상화 메소드는 비즈니스 메소드로 해야 한다.
+이 과정에서 기존 UserService 클래스는 추상화 클래스로 정의하고 핵심이 되는 비즈니스 메소드를 추상화 메소드로 정의한다.
 
 <img src="/md/img/aop/oop-concerns-div3.png" style="max-height: none;" alt="img">
 
-두 번째, UserServiceImple 클래스는 추상화 클래스(UserService)를 구현한 비즈니스 로직의 모듈이다.
+그다음 인터페이스(UserService)의 구현체인 `UserServiceImple` 클래스에서 비즈니스 로직을 구현한다.
 
 분리된 핵심 관심사를 UserServiceImple 클래스로 모듈화하여 관리하기 때문에 코드 베이스엔 비즈니스 로직만 남아 있어 코드가 직관적이며 동시에 유지보수가 쉬워진다.
 
@@ -115,7 +115,9 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 마지막으로 비즈니스 로직에 트랜잭션 로직을 적용하는 작업을 해야 한다.
 
-다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 또한, 모든 비즈니스 로직은 기능의 유연한 확장을 위해 UserService 인터페이스로 기능을 위임한다. 결과적으로 비즈니스 로직인 UserServiceImple를 주입해주면 된다.
+다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 모든 비즈니스 로직은 기능의 유연한 확장을 위해 UserService 인터페이스로 기능을 위임한다.
+
+ 결과적으로 기존 프로세스에 따라 비즈니스 로직 호출할 시 트랜잭션 로직이 결합한 기능이 호출된다.
 
 _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.class_
 

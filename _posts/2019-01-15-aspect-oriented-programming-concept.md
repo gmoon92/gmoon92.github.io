@@ -3,7 +3,7 @@ layout: post
 title: "AOP : Aspect Oriented Programming 개념"
 tags: [AOP]
 categories: [Spring, AOP]
-subtitle: "Spring AOP를 들어가기전 AOP 용어와 개념"
+subtitle: "Spring AOP를 들어가기전 AOP 개념 정리"
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
@@ -15,7 +15,7 @@ priority: 1.0
 
 <!--more-->
 
-# AOP의 이해와 원리
+# Spring AOP를 들어가기전 AOP 개념 정리
 
 ---
 

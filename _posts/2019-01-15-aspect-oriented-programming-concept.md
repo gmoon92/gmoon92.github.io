@@ -143,6 +143,8 @@ _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.
 
 #### AOP의 필요성
 
+<img src="/md/img/aop/aop-terms.png" style="max-height: none;" alt="img">
+
 앞서 보았던 OOP의 문제점들을 보안하고자 등장한게 바로 AOP이다.
 
 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
@@ -162,6 +164,7 @@ Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 �
 ### AOP 개념 - 용어와 동작
 
 #### AOP 용어
+
 
 - Aspect
 - Advice

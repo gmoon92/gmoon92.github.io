@@ -147,7 +147,7 @@ _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.
 
 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
 
-Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심 기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 부가 모듈을 효율적으로 관리할 수 있게 된다.
+Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심 기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 횡단 관심사 모듈을 효율적으로 관리할 수 있게 된다.
 
 - 횡단 관심사의 모듈화
 - 효율적인 횡단 모듈 관리
@@ -157,7 +157,7 @@ Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 �
 - OOP : 비즈니스의 모듈화
 - AOP : 인프라 혹은 횡단 관심사의 모듈화
 
-본격적으로 AOP의 개발에 앞서 AOP의 장점을 제대로 누리기 위해선 AOP가 어떻게 동작하는지 알아야한다. 하지만 AOP 입문자라면 다소 난해한 AOP 용어들 때문에 학습에 어려움을 느낀다.
+본론으로 들어와서 앞서 설명한 AOP의 장점을 제대로 누리기 위해선 무엇보다 AOP가 어떻게 동작하는지 알아야한다. 하지만 AOP 입문자라면 다소 난해한 AOP 용어들 때문에 이해에 어려움을 느낀다.
 
 ### AOP 개념 - 용어와 동작
 
@@ -195,32 +195,6 @@ Advice는 실제적으로 적용시킬 횡단 기능을 구현한 구현체라 �
 - After(finally)
 - Around
 
-Spring을 포함한 많은 AOP 프레임 워크는 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)로서 Advice을 모델링하고 , JoinPoit 주변의 인터셉터의 결합된 상태의 체인을 유지하고 실제 런타임 시 인터셉터 체인의 순서를 실행시킨다.
-
-> - [interceptors-sample-code](https://github.com/javaee-samples/javaee7-samples/tree/master/cdi/interceptors)
-> - [javaee.github.io](https://javaee.github.io/tutorial/interceptors.html)
-
-[spring-doc-org.springframework.aop.interceptor](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/aop/interceptor/ExposeInvocationInterceptor.html)
-
-#### JoinPoint
-
-메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
-
-#### Introduction(inter-type)
-
-[자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
-
-
-- Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
-
-- Pointcut : 조인 포인트와 일치하는 술어. 조언은 pointcut 표현식과 관련이 있으며 pointcut과 일치하는 조인 포인트에서 실행됩니다 (예 : 특정 이름의 메소드 실행). Pointcut 표현식과 일치하는 조인 포인트의 개념은 AOP의 핵심입니다 : Spring은 기본적으로 AspectJ pointcut 언어를 사용합니다.
-- Introduction(inter-type) : Type을 대신에 메소드 또는 필드를 추가로 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
-- Target Object(Advised Object) : 하나 이상의 Aspects에 대해 Advice를 받는 Object다. Spring AOP에선 런타임 프록시를 사용하여 구현되기 때문에, Target Object는 항상 Proxy Object다.
-- AOP proxy : 애스펙트 계약을 구현하기 위해 AOP 프레임 워크에 의해 생성 된 객체입니다 (메소드 실행 권고 등). Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
-- Weaving : 다른 응용 프로그램 유형 또는 개체와 측면을 연결하여 권고 된 개체를 만듭니다. 이것은 컴파일 타임 (예 : AspectJ 컴파일러 사용),로드 시간 또는 런타임에 수행 할 수 있습니다. Spring AOP는 다른 순수 자바 AOP 프레임 워크와 마찬가지로 런타임에 위빙을 수행한다.
-
-#### Advice
-
 Before advice : 조인 포인트 이전에 실행되지만 실행 흐름이 조인 포인트로 진행하지 못하도록하는 조언 (예외가 발생하지 않는 한).
 
 return advice : join point가 정상적으로 완료된 후 실행될 조언 : 예를 들어 메소드가 예외를 발생시키지 않고 리턴하는 경우.
@@ -232,72 +206,67 @@ After (finally) advice : 조인 포인트가 종료되는 방법에 관계없이
 around advice : 메소드 호출과 같은 조인 포인트를 둘러싼 조언. 이것은 가장 강력한 조언입니다. around advice는 메소드 호출 전과 후에 사용자 정의 동작을 수행 할 수 있습니다. 또한 조인 포인트로 진행할지 또는 자체 반환 값을 반환하거나 예외를 throw하여 권고 된 메소드 실행을 바로 가기할지 여부를 선택하는 작업도 담당합니다.
 
 
-- 용어
-   - Aspect
-   - Join point
-   - Advice(interceptor를 )
-       - Before
-       - After returning
-       - After throwing
-       - Around
-   - pointcut
-   - introduction
-   - target
-   - *AOP proxy
-   - Weaving
+Spring을 포함한 많은 AOP 프레임 워크는 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)로서 Advice을 모델링하고 , JoinPoit 주변의 인터셉터의 결합된 상태의 체인을 유지하고 실제 런타임 시 체인의 순서를 실행시킨다.
 
-### 3 기존 자바의 AOP 구현 방식
+> - [interceptors-sample-code](https://github.com/javaee-samples/javaee7-samples/tree/master/cdi/interceptors)
+> - [javaee.github.io](https://javaee.github.io/tutorial/interceptors.html)
+
+[spring-doc-org.springframework.aop.interceptor](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/aop/interceptor/ExposeInvocationInterceptor.html)
+
+#### JoinPoint
+
+메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
+
+- Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
+
+#### Introduction(inter-type)
+
+[자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
+
+- Introduction(inter-type) : Type을 대신에 메소드 또는 필드를 추가로 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
+
+#### PointCut
+
+- Pointcut : 조인 포인트와 일치하는 술어. 조언은 pointcut 표현식과 관련이 있으며 pointcut과 일치하는 조인 포인트에서 실행됩니다 (예 : 특정 이름의 메소드 실행). Pointcut 표현식과 일치하는 조인 포인트의 개념은 AOP의 핵심입니다 : Spring은 기본적으로 AspectJ pointcut 언어를 사용합니다.
+
+#### Target Object(Advised Object)
+
+- Target Object(Advised Object) : 하나 이상의 Aspects에 대해 Advice를 받는 Object다. Spring AOP에선 런타임 프록시를 사용하여 구현되기 때문에, Target Object는 항상 Proxy Object다.
+
+#### AOP proxy
+- AOP proxy : 애스펙트 계약을 구현하기 위해 AOP 프레임 워크에 의해 생성 된 객체입니다 (메소드 실행 권고 등). Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
+
+#### Weaving
+
+- Weaving : 다른 응용 프로그램 유형 또는 개체와 측면을 연결하여 권고 된 개체를 만듭니다. 이것은 컴파일 타임 (예 : AspectJ 컴파일러 사용),로드 시간 또는 런타임에 수행 할 수 있습니다. Spring AOP는 다른 순수 자바 AOP 프레임 워크와 마찬가지로 런타임에 위빙을 수행한다.
+
+### 기존 자바의 AOP 구현 방식
 
 - JDK Dynamic Proxy
 - CGLIB
 - AspectJ
 
+- Runtime(동적)      : Jdk Dynamic Proxy, CGLIB - 프록시 기반
+- Compile time(정적) : AspectJ    - 타깃 기반 (타깃 오브젝트를 직접 조작하는 방식)
 
-   - Runtime(동적)      : Jdk Dynamic Proxy, CGLIB - 프록시 기반
-   - Compile time(정적) : AspectJ    - 타깃 기반 (타깃 오브젝트를 직접 조작하는 방식)
+#### Jdk Dynamic Proxy (InvocationHandler)
 
-   Jdk Dynamic Proxy (InvocationHandler)
-       - 타겟 메소드가 호출될 때 Advice를 적용
+- 타겟 메소드가 호출될 때 Advice를 적용
 
-   CGLIB(MethodInterceptor)
-       - 메써드가 처음 호출 되었을때 동적으로 bytecode를 생성하여 이후 호출에서는 재사용
-       - 클래스에 대한 Proxy가 가능
+#### CGLIB(MethodInterceptor)
 
-   프록시 기반
-       기본은 인터페이스의 유무에 따라 나눠짐
+- 메써드가 처음 호출 되었을때 동적으로 bytecode를 생성하여 이후 호출에서는 재사용
+- 클래스에 대한 Proxy가 가능
 
-       y : jdk Dynamic Proxy
-       n : cglib
+#### Proxy 기반
+
+기본은 인터페이스의 유무에 따라 나눠짐
+y : jdk Dynamic Proxy
+n : cglib
 
 
 참고[https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ]
 
-
-4. 스프링 proxy
-
-https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
-6. 스프링은 어떤 방식으로 AOP를제공하고 있을까 ?
-
-   JDK Dynamic Proxy
-   CGLIB
-
-
-
-6-1. 스프링 AOP의 구현방식
-    - XML
-    - @AspectJ
-    - 비교 분석 장단점
-
-
-
-6-2. 스프링 포인트컷
-   - 기본
-   - 어노테이션
-
-6-3. 어드바이스 라이프 사이클
-
-
-6-4. weaving 3가지 방식
 
 ### 마무리
 

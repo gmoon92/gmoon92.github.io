@@ -21,7 +21,7 @@ priority: 1.0
 
 ### 들어가기전
 
- 본 포스팅에선 AOP의 학습에 앞서 기초적인 개념에 대해 상세히 다룰 예정이다. 따라서 AOP가 무엇인지 AOP와 관련된 용어에 대한 설명과 기존 자바에서 AOP의 구현 방식에 대해 작성할 예정이다.
+  본 포스팅에선 AOP의 학습에 앞서 기초적인 개념에 대해 상세히 다룰 예정이다. 따라서 AOP가 무엇인지 AOP와 관련된 용어에 대한 설명과 기존 자바에서 AOP의 구현 방식에 대해 작성할 예정이다.
 
 ### 학습목표
 
@@ -42,18 +42,18 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 ![img](/md/img/aop/cross-cut-concerns.png)
 
-일반적으로 이러한 코드는 비즈니스 로직과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다.
+일반적으로 이러한 코드는 비즈니스 기능과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다.
 
 #### 관심 분리(Separation of Concerns)
 
- AOP에선 프로그램을 관심사(Concerns) 기준으로 크게 핵심 관심사와 횡단 관심사로 분류하고 있다.
+ AOP의 메커니즘은 프로그램을 관심사(Concerns) 기준으로 크게 핵심 관심사와 횡단 관심사로 분류하고 있다.
 
 ![img](/md/img/aop/application-concerns.png)
 
 - 핵심 관심사(Core Concerns)
 - 횡단 관심사(Crosscutting Concerns)
 
-핵심 관심사는 프로그램의 핵심 가치와 목적이 그대로 드러난 관심 영역을 뜻한다. 해당 프로그램의 비즈니스 로직이 그러하다. 반면 횡단 관심사는 비즈니스 로직과는 다른 관심 영역을 뜻한다.
+핵심 관심사는 프로그램의 핵심 가치와 목적이 그대로 드러난 관심 영역을 뜻한다. 해당 프로그램의 비즈니스 기능이 그러하다. 반면 횡단 관심사는 비즈니스 기능과는 다른 관심 영역을 뜻한다.
 
 프로그램 관점에서의 대표적인 횡단 관심사는 다음과 같다.
 
@@ -64,20 +64,26 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 - Logging
 - Transaction Management
 
-이처럼 보안, 프로파일링, 로그, 트랜잭션은 비즈니스 로직은 아니지만, 요구 상황에 따라서 다수의 비즈니스 로직에 포함되는 공통 로직들이다.
+이처럼 보안, 프로파일링, 로그, 트랜잭션은 비즈니스 기능은 아니지만, 요구 상황에 따라서 다수의 비즈니스 기능에 포함되는 부가 기능들이다.
 
 ![img](/md/img/aop/cross-cut-concerns2.png)
 
-횡단 관심사는 비즈니스 로직과는 별개의 영역이지만 필연적으로 대다수의 비즈니스 로직에 분포되어 있다.
+횡단 관심사는 비즈니스 기능과는 별개의 영역이지만 필연적으로 대다수의 비즈니스 기능에 분포되어 있다.
 
- 이러한 관계는 비즈니스 로직 상에서 많은 부분에 서로 엉켜져 있어 가독성을 떨어트리고 자칫 중복된 코드가 생겨날 가능성이 크다. 이는 비즈니스 로직의 모듈성을 감소시키는 가장 큰 요인이다.
+ 이러한 관계는 비즈니스 기능 상에서 많은 부분에 서로 엉켜져 있어 가독성을 떨어트리고 자칫 중복된 코드가 생겨날 가능성이 크다. 이는 비즈니스 기능의 모듈성을 감소시키는 가장 큰 요인이다.
 
-- 비즈니스 로직 모듈화 감소
+- 비즈니스 기능 모듈화 감소
 - 유지보수의 어려움
-- 스파게티 코드
-- 코드 간 강한 결합
 
-결과적으로 횡단 관심사를 관리를 수월하기 위해 모듈화가 필요하고 동시에 AOP라는 새로운 프로그래밍이 등장했다고 추론할 수 있다.
+이러한 문제들은 Wikipedia에서도 찾아볼 수 있다.
+
+>[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... <br/> ... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+
+Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
+
+_횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
+
+정리하자면 횡단 관심사를 관리를 수월하기 위해 모듈화가 필요하고 동시에 AOP라는 새로운 프로그래밍이 등장했다고 추론할 수 있다.
 
 ### 등장배경
 
@@ -93,7 +99,7 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 따라서 횡단 관심사를 `추상화`와 `템플릿 메소드 패턴(디자인 패턴)`을 통해 기존 클래스에서 횡단 관심사와 핵심 관심사를 분리하고 각각의 독립적인 모듈로 분리하여 관리할 수 있다.
 
-예를 들어 트랜잭션 로직(횡단 관심사)과 비즈니스 로직(핵심 관심사)이 하나의 클래스에 공존하고 있는 UserService 클래스가 있다고 가정하자. 이때 가장 우선으로 해야 할 작업은 기존 클래스를 특수화(Specialization)하여 횡단 관심사와 핵심 관심사를 분리하는 작업을 해야 한다.
+예를 들어 트랜잭션 기능(횡단 관심사)과 비즈니스 기능(핵심 관심사)이 하나의 클래스에 공존하고 있는 UserService 클래스가 있다고 가정하자. 이때 가장 우선으로 해야 할 작업은 기존 클래스를 특수화(Specialization)하여 횡단 관심사와 핵심 관심사를 분리하는 작업을 해야 한다.
 
 <img src="/md/img/aop/oop-concerns-div1.png" style="max-height: none;" alt="img">
 
@@ -109,57 +115,53 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 <img src="/md/img/aop/oop-concerns-div3.png" style="max-height: none;" alt="img">
 
-그다음 인터페이스(UserService)의 구현체인 `UserServiceImple` 클래스에서 비즈니스 로직을 구현한다.
+그다음 인터페이스(UserService)의 구현체인 `UserServiceImple` 클래스에서 비즈니스 기능을 구현한다.
 
-분리된 핵심 관심사를 UserServiceImple 클래스로 모듈화하여 관리하기 때문에 코드 베이스엔 비즈니스 로직만 남아 있어 코드가 직관적이며 동시에 유지보수가 쉬워진다.
+분리된 핵심 관심사를 UserServiceImple 클래스로 모듈화하여 관리하기 때문에 코드 베이스엔 비즈니스 기능만 남아 있어 코드가 직관적이며 동시에 유지보수가 쉬워진다.
 
 <img src="/md/img/aop/oop-concerns-div4.png" style="max-height: none;" alt="img">
 
-마지막으로 비즈니스 로직에 트랜잭션 로직을 적용하는 작업을 해야 한다.
+마지막으로 비즈니스 기능에 트랜잭션 기능을 적용하는 작업을 해야 한다.
 
-다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 로직(횡단 관심사)을 적용할 비즈니스 로직(`upgradeLevels()`)에 트랜잭션 로직을 추가했다. 모든 비즈니스 로직은 유연한 확장을 위해 UserService 인터페이스에 위임한다.
+다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 기능(횡단 관심사)을 적용할 비즈니스 기능(`upgradeLevels()`)에 트랜잭션 기능을 추가했다. 모든 비즈니스 기능은 유연한 확장을 위해 UserService 인터페이스에 위임한다.
 
-`UserService.upgradeLevels()`는 구현 객체인 UserServiceImple 메소드에 위임해줘야 하므로 기존의 의존 관계를 다시 정의해줘야 한다.
+전반적인 기능을 담당하는 UserService 인터페이스의 메소드(`UserService.upgradeLevels()` )는 구현 객체인 UserServiceImple 메소드에 위임해줘야 하므로 기존의 의존 관계를 다시 정의해줘야 한다.
 
 _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.class_
 
-따라서 UserService에 UserServiceTX를 의존성 주입(DI)을 하고 UserServiceTX엔 UserServiceImple을 DI를 해주어 의존성 관계를 형성해주면 된다.
+따라서 UserService에 UserServiceTX를 의존성 주입(DI)을 하고 UserServiceTX엔 UserServiceImple을 DI를 해주어 의존성 관계를 형성해주면 된다. 의존 관계를 재정의함으로써 기존 프로세스에 따라 비즈니스 기능 호출할 시 트랜잭션 기능이 결합한 기능이 호출된다.
 
- 결과적으로 프로세스에 따라 비즈니스 로직 호출할 시 트랜잭션 로직이 결합한 기능이 호출된다. 여기까지 OOP를 활용하여 관심사를 분리와 적용을 구현했다.
-
- 하지만 다음과 같은 상황이 닥친다면 문제가 발생한다.
+하지만 다음과 같은 상황이 닥친다면 문제가 발생한다.
 
  1. 특정 메소드만 적용
  2. 다른 횡단 관심사를 추가로 적용
 
-이에 대응하기 위해선 이에 맞는 각기 다른 추상화 클래스가 필요하다. 따라서 추상화의 본질적인 장점과는 다르게 많은 추상화 클래스가 생기게 되고 오히려 이를 관리하는데 큰 비용이 든다.
-
-결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 많은 추상화 클래스가 생성되고 이를 관리하는데 어려움이 따른다.
+이에 대응하기 위해선 이에 맞는 각기 다른 추상화 클래스가 필요하다. 따라서 추상화의 본질적인 장점과는 다르게 많은 추상화 클래스가 생기게 되고 오히려 이를 관리하는데 큰 비용이 든다. 결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 많은 추상화 클래스가 생성되고 이를 관리하는데 어려움이 따른다.
 
 - 추상화 클래스 관리의 어려움
 - 복잡한 의존 관계
 
 #### AOP의 필요성
 
-이러한 문제점들을 보안하고자 등장한게 바로 AOP이다.
+앞서 보았던 OOP의 문제점들을 보안하고자 등장한게 바로 AOP이다.
 
->[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... <br/> ... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
 
-Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
+Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심 기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 부가 모듈을 효율적으로 관리할 수 있게 된다.
 
-_횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
+- 횡단 관심사의 모듈화
+- 효율적인 횡단 모듈 관리
 
-OOP와 달리 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
+여담이지만 OOP보다는 AOP가 좋은 프로그래밍이 아닌 서로 다른 프로그래밍이라는 것을 인지해야 한다. 따라서 개발자는 상황에 맞게 프로그래밍을 선택해야 한다.
 
-Aspect 모듈은 공통 기능(횡단 관심사)을 내포하고 있으며 동시에 여러 객체를 분리하고 적용하는 동작을 한다. 결과적으로 비즈니스 로직에 별도의 코드 추가 없이 횡단 관심사를 분리하거나 동시에 하나의 동작을 여러 객체에 교차로 적용할 수 있다.
+- OOP : 비즈니스의 모듈화
+- AOP : 인프라 혹은 횡단 관심사의 모듈화
 
-또한, 자체적으로 Aspect 모듈에서 횡단 관심사를 기존 로직에 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 부가적인 공통 기능들을 효율적으로 관리할 수 있게 된다.
-
-하지만 AOP 입문자라면 다소 난해한 AOP 용어들 때문에 개발에 어려움을 느낀다. AOP의 동작 방식과 접목해 AOP의 용어 대해 접근하면 많은 부분을 해결할 수 있을 것이다.
+본격적으로 AOP의 개발에 앞서 AOP의 장점을 제대로 누리기 위해선 AOP가 어떻게 동작하는지 알아야한다. 하지만 AOP 입문자라면 다소 난해한 AOP 용어들 때문에 학습에 어려움을 느낀다.
 
 ### AOP 개념 - 용어와 동작
 
-AOP의 용어엔 다음과 같다.
+#### AOP 용어
 
 - Aspect
 - Advice
@@ -169,18 +171,13 @@ AOP의 용어엔 다음과 같다.
 - Target Object
 - Target
 - Joinpoint
+- AOP proxy
 
-#### Aspect(Advisor)
+#### Aspect
 
-Aspect는 싱글톤 형태의 객체로 존재하는 횡단 관심사의 모듈화이다. Spring AOP에선 Advisor라 불린다.
+Aspect는 횡단 관심사의 모듈화이다.
 
-> Spring AOP에선 Aspect를 구현하는 두 가지 방식을 제시하고 있다.
-> 1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
-> 2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
-
-Aspect는 횡단 관심사 모듈화 그 자체이고 이를 구현하기 위해선 다음과 같은 용어들을 이해해야 한다.
-
-_Aspect(Advisor) = Advice + Pointcut_
+_Aspect = Advice + Introduction(inter-type) + Pointcut_
 
 - Advice
 - Introduction(inter-type)
@@ -188,9 +185,9 @@ _Aspect(Advisor) = Advice + Pointcut_
 
 #### Advice
 
-Aspect가 모듈화라면 Advice는 이를 구현한 실질적인 구현체라 정의할 수 있다. 따라서 실제적으로 Aspect가 횡단 로직을 구현한 메소드라 할 수 있다.
+Advice는 실제적으로 적용시킬 횡단 기능을 구현한 구현체라 할 수 있다.
 
-AspectJ에선 다양한 시점에 횡단 로직을 교차할 수 있도록 Advice를 제공하고 있다.
+이러한 Advice는 기존 핵심 기능에 횡단 기능의 각기 다른 결합점을 제어할 수 있도록 다양한 Advice를 제공하고 있다.
 
 - Before
 - After returning
@@ -198,11 +195,20 @@ AspectJ에선 다양한 시점에 횡단 로직을 교차할 수 있도록 Advic
 - After(finally)
 - Around
 
-- Advice(interceptor method) : 특정 조인 포인트에서 한 측면에 의해 취해진 행동. 다양한 유형의 조언에는 "주변", "이전"및 "후"조언이 포함됩니다. 조언 유형은 아래에 설명되어 있습니다. Spring을 포함한 많은 AOP 프레임 워크는 인터셉터 로서 조언을 모델링하고 , 조인 포인트 주변의 인터셉터 체인을 유지합니다.
+Spring을 포함한 많은 AOP 프레임 워크는 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)로서 Advice을 모델링하고 , JoinPoit 주변의 인터셉터의 결합된 상태의 체인을 유지하고 실제 런타임 시 인터셉터 체인의 순서를 실행시킨다.
 
+> - [interceptors-sample-code](https://github.com/javaee-samples/javaee7-samples/tree/master/cdi/interceptors)
+> - [javaee.github.io](https://javaee.github.io/tutorial/interceptors.html)
 
+[spring-doc-org.springframework.aop.interceptor](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/aop/interceptor/ExposeInvocationInterceptor.html)
 
+#### JoinPoint
 
+메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
+
+#### Introduction(inter-type)
+
+[자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
 
 
 - Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
@@ -300,51 +306,45 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 
 ### 참고
 
-[블로그 - Spring 횡단관심(Crosscutting Concerns), 핵심관심(Core Concerns) ](http://winmargo.tistory.com/89)
-
-[해외 - Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
-
-[해외 - the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
-
-[AOP 슬라이드](https://slideplayer.com/slide/9380068/)
-
-[AOP 정부 프레임워크 DOC](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
+  - [블로그 - Spring 횡단관심(Crosscutting Concerns), 핵심관심(Core Concerns) ](http://winmargo.tistory.com/89)
+  - [해외 - Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
+  - [해외 - the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
+  - [AOP 슬라이드](https://slideplayer.com/slide/9380068/)
+  - [AOP 정부 프레임워크 DOC](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
 
 - 전반적인 개념
-[블로그 - 스프링 AOP(Aspect Oriented Programming)](http://closer27.github.io/backend/2017/08/03/spring-aop/)
-[AOP 구현 세가지 방법 비교](https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ)
-[AOP의 구조 + 어노테이션](https://hunit.tistory.com/188)
-[해외 블로그 - Implementing AOP With Spring Boot and AspectJ](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
-[블로그 - 스프링이 제공하는 aop](https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/)
+  - [블로그 - 스프링 AOP(Aspect Oriented Programming)](http://closer27.github.io/backend/2017/08/03/spring-aop/)
+  - [AOP 구현 세가지 방법 비교](https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ)
+  - [AOP의 구조 + 어노테이션](https://hunit.tistory.com/188)
+  - [해외 블로그 - Implementing AOP With Spring Boot and AspectJ](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
+  - [블로그 - Spring-AOP, Proxy 란?](https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/)
 
 - aspect
-[스프링 DOC - AOP aspect](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
-[스프링 블로그 - aspectj](https://www.baeldung.com/aspectj)
-[스프링 DOC - Spring을 이용한 Aspect 지향 프로그래밍](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
+  - [스프링 DOC - AOP aspect](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
+  - [스프링 블로그 - aspectj](https://www.baeldung.com/aspectj)
+  - [스프링 DOC - Spring을 이용한 Aspect 지향 프로그래밍](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
 
 - pointcut
-[스프링 블로그 - pointcut](https://www.baeldung.com/spring-aop-pointcut-tutorial)
-[블로그 - 3. 스프링 AOP (AspectJ의 Pointcut 표현식) ](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
+  - [스프링 블로그 - pointcut](https://www.baeldung.com/spring-aop-pointcut-tutorial)
+  - [블로그 - 3. 스프링 AOP (AspectJ의 Pointcut 표현식) ](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
 
 - adivce
-[해외 블로그 - @After](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)
+  - [해외 블로그 - @After](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)
 
 - 실제 사용법
-[스프링 부트에서 aspectJ 형식으로 코드 참고](http://jsonobject.tistory.com/247)
+  - [스프링 부트에서 aspectJ 형식으로 코드 참고](http://jsonobject.tistory.com/247)
 
 ---
 
 - 동영상
-
-[스터디 스프링5 입문 - AOP 프로그래밍 1 #10](https://www.youtube.com/watch?v=wrHTMsKrKkA&index=6&list=WL&t=0s)
-[스터디 스프링5 입문 - AOP 프로그래밍 2 #11](https://www.youtube.com/watch?v=9Gdv6fhhaB0&index=5&list=WL&t=0s)
-[스터디 코드로배우는스프링 38 Spring의 AOP](https://www.youtube.com/watch?v=4-JcM7y1M_8&index=7&list=WL&t=0s)
-[What is AOP - Aspect Oriented Programming](https://www.youtube.com/watch?v=DuFPj8MlAVo&index=8&list=WL&t=0s)
-[신입SW인력을 위한 실전 자바(Java) 스프링(Spring) 동영상과정 제 09강 AOP-I](https://www.youtube.com/watch?v=2F8K9BLgvjE&index=9&list=WL&t=0s)
+  - [스터디 스프링5 입문 - AOP 프로그래밍 1 #10](https://www.youtube.com/watch?v=wrHTMsKrKkA&index=6&list=WL&t=0s)
+  - [스터디 스프링5 입문 - AOP 프로그래밍 2 #11](https://www.youtube.com/watch?v=9Gdv6fhhaB0&index=5&list=WL&t=0s)
+  - [스터디 코드로배우는스프링 38 Spring의 AOP](https://www.youtube.com/watch?v=4-JcM7y1M_8&index=7&list=WL&t=0s)
+  - [What is AOP - Aspect Oriented Programming](https://www.youtube.com/watch?v=DuFPj8MlAVo&index=8&list=WL&t=0s)
+  - [신입SW인력을 위한 실전 자바(Java) 스프링(Spring) 동영상과정 제 09강 AOP-I](https://www.youtube.com/watch?v=2F8K9BLgvjE&index=9&list=WL&t=0s)
 
 ---
-블로그
-
-[Filter, Interceptor, AOP의 흐름](https://doublesprogramming.tistory.com/133)
-[Spring Filter, Interceptor AOP 차이 및 정리 ](http://goddaehee.tistory.com/154)
-[filter, interceptor, aop의 차이와 그 목적](http://hayunstudy.tistory.com/53)
+- 블로그
+  - [Filter, Interceptor, AOP의 흐름](https://doublesprogramming.tistory.com/133)
+  - [Spring Filter, Interceptor AOP 차이 및 정리 ](http://goddaehee.tistory.com/154)
+  - [filter, interceptor, aop의 차이와 그 목적](http://hayunstudy.tistory.com/53)

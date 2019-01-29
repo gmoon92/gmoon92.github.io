@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "AOP : Aspect Oriented Programming 개념"
-tags: [AOP]
+title: "Spring AOP와 AspectJ"
+tags: [AOP, Spring]
 categories: [Spring, AOP]
-subtitle: "Spring AOP를 들어가기전 AOP 용어와 개념"
+subtitle: "Spring AOP와 AspectJ의 비교"
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
@@ -15,7 +15,7 @@ priority: 1.0
 
 <!--more-->
 
-# AOP의 이해와 원리
+# Spring AOP와 AspectJ의 비교
 
 ---
 
@@ -30,6 +30,17 @@ priority: 1.0
 3. 기존 자바에서 AOP 구현 방식
 
 ### Spring AOP
+
+#### Aspect(Advisor)
+
+_Aspect = Advice + Pointcut_
+
+Aspect는 싱글톤 형태의 객체로 존재하는 횡단 관심사의 모듈화이다.
+
+> Spring AOP에선 Aspect를 구현하는 두 가지 방식을 제시하고 있다.
+> 1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
+> 2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
+
 
 4. 스프링 proxy
 

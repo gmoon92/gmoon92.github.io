@@ -202,7 +202,11 @@ AOP의 용어엔 다음과 같다.
 
 Target Object(Advised Object)는 Advice를 받는 Object다. Spring AOP에선 Runtime Proxy를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
 
-#### 1.2 JoinPoint
+#### 1.2 Target
+
+Target은 횡단 관심을 적용할 대상을 뜻한다.
+
+#### 1.3 JoinPoint
 
 JoinPoint는 TargetObject안에 있는 여러 Target을 뜻한다. JoinPoint는 메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
 

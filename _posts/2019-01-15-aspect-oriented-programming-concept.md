@@ -3,7 +3,7 @@ layout: post
 title: "AOP : Aspect Oriented Programming 개념"
 tags: [AOP]
 categories: [Spring, AOP]
-subtitle: "Spring AOP를 들어가기전 AOP 개념 정리"
+subtitle: "Spring AOP를 학습하기 전 AOP 개념 정리"
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
@@ -15,19 +15,18 @@ priority: 1.0
 
 <!--more-->
 
-# Spring AOP를 들어가기전 AOP 개념 정리
+# Spring AOP를 학습하기 전 AOP 개념 정리
 
 ---
 
 ### 들어가기전
 
-  본 포스팅에선 AOP의 학습에 앞서 기초적인 개념에 대해 상세히 다룰 예정이다. 따라서 AOP가 무엇인지 AOP와 관련된 용어에 대한 설명과 기존 자바에서 AOP의 구현 방식에 대해 작성할 예정이다.
+  본 포스팅에선 AOP의 기초적인 개념에 대해 상세히 다룰 예정이다. 추후 Spring AOP를 하기 위함으로 기존 AOP의 개념과 덧붙여 Spring AOP의 개념을 간략히 정리하였다.
 
 ### 학습목표
 
 1. AOP 등장배경
 2. AOP 개념과 용어
-3. 기존 자바에서 AOP 구현 방식
 
 ### AOP이란
 
@@ -77,13 +76,13 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 이러한 문제들은 Wikipedia에서도 찾아볼 수 있다.
 
->[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... <br/> ... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+>[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
 Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
 
 _횡단 관심사와 핵심 관심사를 분리 → 모듈성 증가_
 
-정리하자면 횡단 관심사를 관리를 수월하기 위해 모듈화가 필요하고 동시에 AOP라는 새로운 프로그래밍이 등장했다고 추론할 수 있다.
+이러한 AOP의 목표에 대해 생각하자면 횡단 관심사를 관리를 수월하기 위해 모듈화가 필요하고 동시에 AOP라는 새로운 프로그래밍이 등장했다고 해석할 수 있다.
 
 ### 등장배경
 
@@ -143,13 +142,15 @@ _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.
 
 #### AOP의 필요성
 
-<img src="/md/img/aop/aop-terms.png" style="max-height: none;" alt="img">
-
 앞서 보았던 OOP의 문제점들을 보안하고자 등장한게 바로 AOP이다.
 
 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
 
 Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심 기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 횡단 관심사 모듈을 효율적으로 관리할 수 있게 된다.
+
+>[... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+
+무엇보다 Aspect 모듈의 가장 큰 장점은 핵심 기능에 부가 기능의 코드가 남아 있지 않아도 된다는 점이다. 이러한 이유엔 대부분의 AOP 프레임워크들이 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)를 통해 핵심 기능에 부가 기능을 결합하는 방식을 사용하기 때문이다.
 
 - 횡단 관심사의 모듈화
 - 효율적인 횡단 모듈 관리
@@ -159,26 +160,61 @@ Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 �
 - OOP : 비즈니스의 모듈화
 - AOP : 인프라 혹은 횡단 관심사의 모듈화
 
-본론으로 들어와서 앞서 설명한 AOP의 장점을 제대로 누리기 위해선 무엇보다 AOP가 어떻게 동작하는지 알아야한다. 하지만 AOP 입문자라면 다소 난해한 AOP 용어들 때문에 이해에 어려움을 느낀다.
+본론으로 들어와서, 앞서 설명한 AOP의 장점을 제대로 누리기 위해선 무엇보다 AOP가 어떻게 동작하는지 알아야 한다.
 
-### AOP 개념 - 용어와 동작
+### AOP 개념 - 동작과 용어
+
+AOP의 메커니즘은 프로그램을 핵심 관심사와 횡단 관심사로 분리하고 분류된 관심사는 각각의 모듈성을 가져야 한다는 게 AOP의 핵심이고 목표이다.
+
+따라서 AOP의 개발 방식은 핵심 관심사를 객체로 횡단 관심사는 aspect라는 모듈로 모듈화하여 각각의 다른 영역으로 개발한다.
+
+- 핵심 관심사 → Object로 모듈화 (*.class)
+- 횡단 관심사 → Aspect로 모듈화 (*.aj of AspectJ AOP)
+
+여기서 핵심은 서로 다른 모듈화 방식을 통해 도출된 각각의 모듈들이 최종적으로 어떻게 서로 교차하여 동작하는지 알아야 한다. 이러한 일련의 과정에서 다소 생소한 AOP의 용어들이 나온다.
+
+이러한 AOP 용어가 정리하지 못한 채 개발부터 하게 된다면 많은 어려움이 있다. 우선 용어들은 AOP의 동작 방식을 살펴보면서 하나하나 풀어가 보자.
 
 #### AOP 용어
 
+AOP의 용어엔 다음과 같다.
+
+<img src="/md/img/aop/aop-terms.png" style="max-height: 400px;" alt="img">
 
 - Aspect
 - Advice
 - Introduction(inter-type)
 - Pointcut
-- Weaving
 - Target Object
-- Target
-- Joinpoint
-- AOP proxy
+- Joinpoint(Target)
+- AOP Proxy
+- Weaving
 
-#### Aspect
+이 용어들은 Spring AOP에 국한되어진 용어가 아닌 AOP와 연관된 통상적인 용어들이다. 다음 용어들을 AOP가 동작하는 방식과 연관하여
+
+1. 핵심 관심사의 모듈화
+2. 횡단 관심사의 모듈화
+3. 관심사의 교차
+
+#### 핵심 관심사의 모듈화
+
+#### 1.1 Target Object(Advised Object)
+
+Target Object(Advised Object)는 Advice를 받는 Object다. Spring AOP에선 Runtime Proxy를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
+
+#### 1.2 JoinPoint
+
+JoinPoint는 TargetObject안에 있는 여러 Target을 뜻한다. JoinPoint는 메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
+
+Spring AOP에서 JoinPoint는 항상 메소드 실행을 나타낸다. `org.aspectj.lang.JoinPoint` Type의 매개 변수를 선언하여 JoinPoint 정보를 Advice에서 사용할 수 있다.
+
+### 횡단 관심사의 모듈화
+
+#### 1.1 Aspect
 
 Aspect는 횡단 관심사의 모듈화이다.
+
+횡단 모듈에 필요한 Advice,  Introduction, Pointcut이 내제되어 있다.
 
 _Aspect = Advice + Introduction(inter-type) + Pointcut_
 
@@ -186,90 +222,75 @@ _Aspect = Advice + Introduction(inter-type) + Pointcut_
 - Introduction(inter-type)
 - Pointcut
 
-#### Advice
+#### 1.2 Advice
 
 Advice는 실제적으로 적용시킬 횡단 기능을 구현한 구현체라 할 수 있다.
 
 이러한 Advice는 기존 핵심 기능에 횡단 기능의 각기 다른 결합점을 제어할 수 있도록 다양한 Advice를 제공하고 있다.
 
-- Before
-- After returning
-- After throwing
-- After(finally)
-- Around
-
-Before advice : 조인 포인트 이전에 실행되지만 실행 흐름이 조인 포인트로 진행하지 못하도록하는 조언 (예외가 발생하지 않는 한).
-
-return advice : join point가 정상적으로 완료된 후 실행될 조언 : 예를 들어 메소드가 예외를 발생시키지 않고 리턴하는 경우.
-
-throwing advice : 예외를 throw하여 메소드가 종료 될 경우 실행될 조언.
-
-After (finally) advice : 조인 포인트가 종료되는 방법에 관계없이 실행될 조언 (정상 또는 예외적 복귀).
-
-around advice : 메소드 호출과 같은 조인 포인트를 둘러싼 조언. 이것은 가장 강력한 조언입니다. around advice는 메소드 호출 전과 후에 사용자 정의 동작을 수행 할 수 있습니다. 또한 조인 포인트로 진행할지 또는 자체 반환 값을 반환하거나 예외를 throw하여 권고 된 메소드 실행을 바로 가기할지 여부를 선택하는 작업도 담당합니다.
-
-
 Spring을 포함한 많은 AOP 프레임 워크는 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)로서 Advice을 모델링하고 , JoinPoit 주변의 인터셉터의 결합된 상태의 체인을 유지하고 실제 런타임 시 체인의 순서를 실행시킨다.
+
+- Before : JoinPoint 이전에 실행
+  - 단 예외를 throw 하지 않는 한 실행 흐름이 JoinPoint로 진행되는 것을 방지하는 기능은 없다.
+- After returning : JoinPoint가 정상적으로 완료된 후 실행
+  - 예를 들어 메소드가 예외를 발생시키지 않고 리턴하는 경우
+- After throwing : Exception을 throw하여 메소드가 종료 된 경우 실행
+- After(finally) : JoinPoint의 상태(Exception, 정상)와 무관하고 JoinPoint가 실행된 후 실행
+- Around : Before와 After가 합쳐진 Advice
+  -  메소드 호출 전과 후에 실행 또한 JoinPoint로 진행할지 또는 자체 반환 값을 반환하거나 Exception를 throw하여 권고 된 메소드 실행을 바로 가기할지 여부를 선택하는 작업도 할 수 있다.
 
 > - [interceptors-sample-code](https://github.com/javaee-samples/javaee7-samples/tree/master/cdi/interceptors)
 > - [javaee.github.io](https://javaee.github.io/tutorial/interceptors.html)
+> - [spring-doc-org.springframework.aop.interceptor](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/aop/interceptor/ExposeInvocationInterceptor.html)
 
-[spring-doc-org.springframework.aop.interceptor](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/aop/interceptor/ExposeInvocationInterceptor.html)
+#### 1.3 Introduction(inter-type)
 
-#### JoinPoint
+ Introduction(inter-type)은 Aspect 모듈 내부의 선언된 메소드 또는 필드를 뜻한다.
 
-메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
+ ``` java
+ public aspect SampleAscpect{
+   private String attribute;
+   public void method1(){ .... }
+   ...
+ }
+ ```
+ Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있다.  예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
 
-- Joinpoint : 메소드 실행이나 예외 처리와 같은 프로그램 실행 중 포인트. Spring AOP에서 join point는 항상 메소드 실행을 나타낸다. org.aspectj.lang.JoinPoint 유형의 매개 변수를 선언하여 조인 포인트 정보를 조언 본문에서 사용할 수 있습니다.
+  > - [자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
 
-#### Introduction(inter-type)
+#### 1.4 Pointcut
 
-[자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
+Pointcut은 여러 JoinPoint 중 실제적으로 Advice할 지점이다.
 
-- Introduction(inter-type) : Type을 대신에 메소드 또는 필드를 추가로 선언합니다. Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있습니다. 예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
+따라서 Advice는 여러 JointPoint중에서 Pointcut의 표현식에 명시된 JointPoint에서 실행된다. 예를들어 여러 실행 포인트 중에서 특정 이름의 메소드에서 Advice를 하거나 제외하여 실행 시킬 수 있다.
 
-#### PointCut
+이러한 Pointcut 표현식과 일치하는 JoinPoint를 실행한다는 개념은 AOP의 핵심이다.
 
-- Pointcut : 조인 포인트와 일치하는 술어. 조언은 pointcut 표현식과 관련이 있으며 pointcut과 일치하는 조인 포인트에서 실행됩니다 (예 : 특정 이름의 메소드 실행). Pointcut 표현식과 일치하는 조인 포인트의 개념은 AOP의 핵심입니다 : Spring은 기본적으로 AspectJ pointcut 언어를 사용합니다.
+>Spring AOP은 기본적으로 AspectJ Pointcut 언어를 사용한다.
+> - [Join Points and Pointcuts of Ecplipse DOC](https://www.eclipse.org/aspectj/doc/next/progguide/language-joinPoints.html)
+> - [Pointcuts of Ecplipse DOC](https://www.eclipse.org/aspectj/doc/next/progguide/semantics-Pointcuts.html)
 
-#### Target Object(Advised Object)
+#### 관심사의 교차
 
-- Target Object(Advised Object) : 하나 이상의 Aspects에 대해 Advice를 받는 Object다. Spring AOP에선 런타임 프록시를 사용하여 구현되기 때문에, Target Object는 항상 Proxy Object다.
+#### 3.1 Weaving
 
-#### AOP proxy
-- AOP proxy : 애스펙트 계약을 구현하기 위해 AOP 프레임 워크에 의해 생성 된 객체입니다 (메소드 실행 권고 등). Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
+AOP는 특정 JoinPoint에 Advice하여 핵심 기능과 Aspect가 연결된 객체를 만든다. 이러한 일련의 과정을 Weaving이라 한다.
 
-#### Weaving
+Weaving은 수행 시점에 따라 Compile Weaving, Runtime Weaving으로 나뉜다.
 
-- Weaving : 다른 응용 프로그램 유형 또는 개체와 측면을 연결하여 권고 된 개체를 만듭니다. 이것은 컴파일 타임 (예 : AspectJ 컴파일러 사용),로드 시간 또는 런타임에 수행 할 수 있습니다. Spring AOP는 다른 순수 자바 AOP 프레임 워크와 마찬가지로 런타임에 위빙을 수행한다.
+- Compile Weaving : 예 AspectJ 컴파일러 사용
+- Runtime Weaving : Spring AOP, 순수 자바 AOP 프레임워크
 
-### 기존 자바의 AOP 구현 방식
+#### 3.2 AOP proxy
 
-- JDK Dynamic Proxy
-- CGLIB
-- AspectJ
+AOP proxy는 Aspect를 구현하기 위해 AOP 프레임워크에 의해 생성된 Object이다.
 
-- Runtime(동적)      : Jdk Dynamic Proxy, CGLIB - 프록시 기반
-- Compile time(정적) : AspectJ    - 타깃 기반 (타깃 오브젝트를 직접 조작하는 방식)
+Spring에선 다음과 같은 AOP proxy를 제공하고 있다.
 
-#### Jdk Dynamic Proxy (InvocationHandler)
+- JDK dynamic proxy
+- CGLIB proxy.
 
-- 타겟 메소드가 호출될 때 Advice를 적용
-
-#### CGLIB(MethodInterceptor)
-
-- 메써드가 처음 호출 되었을때 동적으로 bytecode를 생성하여 이후 호출에서는 재사용
-- 클래스에 대한 Proxy가 가능
-
-#### Proxy 기반
-
-기본은 인터페이스의 유무에 따라 나눠짐
-y : jdk Dynamic Proxy
-n : cglib
-
-
-참고[https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ]
-
+Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
 
 ### 마무리
 
@@ -278,45 +299,49 @@ n : cglib
 
 ### 참고
 
-  - [블로그 - Spring 횡단관심(Crosscutting Concerns), 핵심관심(Core Concerns) ](http://winmargo.tistory.com/89)
-  - [해외 - Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
-  - [해외 - the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
-  - [AOP 슬라이드](https://slideplayer.com/slide/9380068/)
-  - [AOP 정부 프레임워크 DOC](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
+- Reference
+  - [Spring-DOC : 11. Aspect Oriented Programming with Spring](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
+  - [Spring-DOC : Chapter 6. Aspect Oriented Programming with Spring](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
+  - [Baeldung : Intro to AspectJ](https://www.baeldung.com/aspectj)
+  - [Baeldung : Introduction to Pointcut](https://www.baeldung.com/spring-aop-Pointcut-tutorial)
+  - [egovframework : aop-aspect](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
+
+---
+
+- 해외
+  - [Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
+  - [the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
+  - [Spring AOP AspectJ @After Annotation Example](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)
+  - [Implementing AOP With Spring Boot and AspectJ](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
+
+---
 
 - 전반적인 개념
-  - [블로그 - 스프링 AOP(Aspect Oriented Programming)](http://closer27.github.io/backend/2017/08/03/spring-aop/)
-  - [AOP 구현 세가지 방법 비교](https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ)
+  - [AOP 개념](https://devjms.tistory.com/70)
+  - [AOP 웹공학](http://www.jidum.com/jidums/view.do?jidumId=312)
+  - [Day 2 - 스프링 AOP(Aspect Oriented Programming)](http://closer27.github.io/backend/2017/08/03/spring-aop/)
   - [AOP의 구조 + 어노테이션](https://hunit.tistory.com/188)
-  - [해외 블로그 - Implementing AOP With Spring Boot and AspectJ](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
-  - [블로그 - Spring-AOP, Proxy 란?](https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/)
-
-- aspect
-  - [스프링 DOC - AOP aspect](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
-  - [스프링 블로그 - aspectj](https://www.baeldung.com/aspectj)
-  - [스프링 DOC - Spring을 이용한 Aspect 지향 프로그래밍](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
-
-- pointcut
-  - [스프링 블로그 - pointcut](https://www.baeldung.com/spring-aop-pointcut-tutorial)
-  - [블로그 - 3. 스프링 AOP (AspectJ의 Pointcut 표현식) ](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
-
-- adivce
-  - [해외 블로그 - @After](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)
-
-- 실제 사용법
+  - [Spring-AOP, Proxy 란?](https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/)
+  - [3. 스프링 AOP (AspectJ의 Pointcut 표현식) ](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
   - [스프링 부트에서 aspectJ 형식으로 코드 참고](http://jsonobject.tistory.com/247)
 
 ---
 
 - 동영상
+  - [What is AOP - Aspect Oriented Programming](https://www.youtube.com/watch?v=DuFPj8MlAVo&index=8&list=WL&t=0s)
   - [스터디 스프링5 입문 - AOP 프로그래밍 1 #10](https://www.youtube.com/watch?v=wrHTMsKrKkA&index=6&list=WL&t=0s)
   - [스터디 스프링5 입문 - AOP 프로그래밍 2 #11](https://www.youtube.com/watch?v=9Gdv6fhhaB0&index=5&list=WL&t=0s)
   - [스터디 코드로배우는스프링 38 Spring의 AOP](https://www.youtube.com/watch?v=4-JcM7y1M_8&index=7&list=WL&t=0s)
-  - [What is AOP - Aspect Oriented Programming](https://www.youtube.com/watch?v=DuFPj8MlAVo&index=8&list=WL&t=0s)
   - [신입SW인력을 위한 실전 자바(Java) 스프링(Spring) 동영상과정 제 09강 AOP-I](https://www.youtube.com/watch?v=2F8K9BLgvjE&index=9&list=WL&t=0s)
 
 ---
-- 블로그
-  - [Filter, Interceptor, AOP의 흐름](https://doublesprogramming.tistory.com/133)
+
+- slideplayer
+  - [AOP 슬라이드](https://slideplayer.com/slide/9380068/)
+
+---
+
+- 그외
   - [Spring Filter, Interceptor AOP 차이 및 정리 ](http://goddaehee.tistory.com/154)
+  - [Filter, Interceptor, AOP의 흐름](https://doublesprogramming.tistory.com/133)
   - [filter, interceptor, aop의 차이와 그 목적](http://hayunstudy.tistory.com/53)

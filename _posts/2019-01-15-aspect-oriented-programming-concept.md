@@ -8,7 +8,7 @@ feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
 sitemap:
-display: "false"
+#display: "false"
 changefreq: daily
 priority: 1.0
 ---
@@ -39,9 +39,9 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 다음과 같은 의미를 빗대어 프로그램 측면에서 해석하자면 반복되어 나타나는 중복된 코드가 이에 해당한다고 볼 수 있다.
 
-![img](/md/img/aop/cross-cut-concerns.png)
+![img](/md/img/aop/cross-cutting-concerns.png)
 
-일반적으로 이러한 코드는 비즈니스 기능과 관계없는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Crosscutting Concerns)라 표현한다.
+일반적으로 이러한 코드는 비즈니스 기능과 관계없는 부가적으로 발생하는 중복된 코드일 가능성이 크고, 이 코드들을 횡단 관심사(Cross-cutting Concerns)라 표현한다.
 
 #### 관심 분리(Separation of Concerns)
 
@@ -50,7 +50,7 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 ![img](/md/img/aop/application-concerns.png)
 
 - 핵심 관심사(Core Concerns)
-- 횡단 관심사(Crosscutting Concerns)
+- 횡단 관심사(Cross-cutting Concerns)
 
 핵심 관심사는 프로그램의 핵심 가치와 목적이 그대로 드러난 관심 영역을 뜻한다. 해당 프로그램의 비즈니스 기능이 그러하다. 반면 횡단 관심사는 비즈니스 기능과는 다른 관심 영역을 뜻한다.
 
@@ -65,7 +65,7 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 이처럼 보안, 프로파일링, 로그, 트랜잭션은 비즈니스 기능은 아니지만, 요구 상황에 따라서 다수의 비즈니스 기능에 포함되는 부가 기능들이다.
 
-![img](/md/img/aop/cross-cut-concerns2.png)
+![img](/md/img/aop/cross-cutting-concerns2.png)
 
 횡단 관심사는 비즈니스 기능과는 별개의 영역이지만 필연적으로 대다수의 비즈니스 기능에 분포되어 있다.
 
@@ -76,7 +76,7 @@ AOP는 컴퓨터 패러다임의 일종으로 Aspect Oriented Programming의 약
 
 이러한 문제들은 Wikipedia에서도 찾아볼 수 있다.
 
->[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+>[In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cuttingting concerns. ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
 Wikipedia에 정의된 글을 보면 AOP는 "횡단 관심사의 분리를 허용함으로써 모듈성을 증가"라는 목표를 두고 있다.
 
@@ -124,6 +124,8 @@ _절차적 프로그래밍 → 객체 지향 프로그래밍(OOP) → 관점 지
 
 다음 그림의 빨간색 영역을 보면 횡단 트랜잭션 기능(횡단 관심사)을 적용할 비즈니스 기능(`upgradeLevels()`)에 트랜잭션 기능을 추가했다. 모든 비즈니스 기능은 유연한 확장을 위해 UserService 인터페이스에 위임한다.
 
+![img](/md/img/aop/oop-concerns-result1.png)
+
 전반적인 기능을 담당하는 UserService 인터페이스의 메소드(`UserService.upgradeLevels()` )는 구현 객체인 UserServiceImple 메소드에 위임해줘야 하므로 기존의 의존 관계를 다시 정의해줘야 한다.
 
 _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.class_
@@ -137,6 +139,8 @@ _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.
 
 이에 대응하기 위해선 이에 맞는 각기 다른 추상화 클래스가 필요하다. 따라서 추상화의 본질적인 장점과는 다르게 많은 추상화 클래스가 생기게 되고 오히려 이를 관리하는데 큰 비용이 든다. 결과적으로 OOP는 객체의 관점으로 횡단 관심사를 분리하기 때문에 많은 추상화 클래스가 생성되고 이를 관리하는데 어려움이 따른다.
 
+![img](/md/img/aop/oop-concerns-result2.png)
+
 - 추상화 클래스 관리의 어려움
 - 복잡한 의존 관계
 
@@ -148,6 +152,8 @@ AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어�
 
 Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심 기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 횡단 관심사 모듈을 효율적으로 관리할 수 있게 된다.
 
+<img src="/md/img/aop/aspect-modules.png" style="max-height: 500px;" alt="img">
+
 >[... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
 무엇보다 Aspect 모듈의 가장 큰 장점은 핵심 기능에 부가 기능의 코드가 남아 있지 않아도 된다는 점이다. 이러한 이유엔 대부분의 AOP 프레임워크들이 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)를 통해 핵심 기능에 부가 기능을 결합하는 방식을 사용하기 때문이다.
@@ -157,10 +163,10 @@ Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 �
 
 여담이지만 OOP보다는 AOP가 좋은 프로그래밍이 아닌 서로 다른 프로그래밍이라는 것을 인지해야 한다. 따라서 개발자는 상황에 맞게 프로그래밍을 선택해야 한다.
 
-- OOP : 비즈니스의 모듈화
+- OOP : 핵심 관심사의 모듈화
 - AOP : 인프라 혹은 횡단 관심사의 모듈화
 
-본론으로 들어와서, 앞서 설명한 AOP의 장점을 제대로 누리기 위해선 무엇보다 AOP가 어떻게 동작하는지 알아야 한다.
+본론으로 들어와서, 앞서 설명한 Aspect가 어떻게 핵심 기능에 적용되는지 알아야 한다.
 
 ### AOP 개념 - 동작과 용어
 
@@ -173,7 +179,7 @@ AOP의 메커니즘은 프로그램을 핵심 관심사와 횡단 관심사로 �
 
 여기서 핵심은 서로 다른 모듈화 방식을 통해 도출된 각각의 모듈들이 최종적으로 어떻게 서로 교차하여 동작하는지 알아야 한다. 이러한 일련의 과정에서 다소 생소한 AOP의 용어들이 나온다.
 
-이러한 AOP 용어가 정리하지 못한 채 개발부터 하게 된다면 많은 어려움이 있다. 우선 용어들은 AOP의 동작 방식을 살펴보면서 하나하나 풀어가 보자.
+이러한 AOP 용어가 정리하지 못한 채 개발부터 하게 된다면 많은 어려움이 있다.
 
 #### AOP 용어
 
@@ -186,35 +192,32 @@ AOP의 용어엔 다음과 같다.
 - Introduction(inter-type)
 - Pointcut
 - Target Object
-- Joinpoint(Target)
-- AOP Proxy
+- Joinpoint
 - Weaving
+- AOP Proxy
 
-이 용어들은 Spring AOP에 국한되어진 용어가 아닌 AOP와 연관된 통상적인 용어들이다. 다음 용어들을 AOP가 동작하는 방식과 연관하여
+이 용어들은 Spring AOP에 국한되어진 용어가 아닌 여러 AOP 프레임워크에서 쓰이는 통상적인 용어들이다. 우선 용어들은 AOP의 동작 방식을 살펴보면서 하나하나 풀어가 보자.
 
-1. 핵심 관심사의 모듈화
-2. 횡단 관심사의 모듈화
-3. 관심사의 교차
+<img src="/md/img/aop/aspect-cycle.png" style="max-height: 400px;" alt="img">
 
-#### 핵심 관심사의 모듈화
+먼저 그림에서 `핵심 관심사(Core Concerns)` 영역을 보면 다음 용어를 볼 수 있다.
 
-#### 1.1 Target Object(Advised Object)
+- Target Object
+- JoinPoint
 
-Target Object(Advised Object)는 Advice를 받는 Object다. Spring AOP에선 Runtime Proxy를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
+`Target Object`는 횡단 기능(`Advice`)이 적용될 객체(Object)를 뜻한다.
 
-#### 1.2 Target
+> Spring AOP에선 Adviced Object라 한다. Spring AOP에선 Runtime Proxy를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
 
-Target은 횡단 관심을 적용할 대상을 뜻한다.
+`JoinPoint`는 Target Object안에서 횡단 기능(`Advice`)이 적용될 수 있는 여러 시점을 뜻한다.
 
-#### 1.3 JoinPoint
+이 시점은 프로그램이 실행될 때 (1)예외가 발생되거나 (2)필드(attribute)가 수정되는 시점 또는 (3)객체가 생성(constructor)되는 시점 그리고 (4)메소드가 호출되는 시점 등 프로그램이 실행될때 발생할 수 있는 시점들은 횡단 기능이 적용될 수 있는 시점들이다.
 
-JoinPoint는 TargetObject안에 있는 여러 Target을 뜻한다. JoinPoint는 메서드 호출, 메서드 실행 자체, 클래스 초기화, 객체 생성시점 등이 있다.
+> Spring AOP에서 JoinPoint는 항상 메소드 실행을 나타낸다. `org.aspectj.lang.JoinPoint` Type의 매개 변수를 선언하여 JoinPoint 정보를 Advice에서 사용할 수 있다.
 
-Spring AOP에서 JoinPoint는 항상 메소드 실행을 나타낸다. `org.aspectj.lang.JoinPoint` Type의 매개 변수를 선언하여 JoinPoint 정보를 Advice에서 사용할 수 있다.
+#### 횡단 관심사(Cross-cutting Concerns)
 
-### 횡단 관심사의 모듈화
-
-#### 1.1 Aspect
+#### 1.1 Aspect(Advisor)
 
 Aspect는 횡단 관심사의 모듈화이다.
 
@@ -225,6 +228,12 @@ _Aspect = Advice + Introduction(inter-type) + Pointcut_
 - Advice
 - Introduction(inter-type)
 - Pointcut
+
+
+> Spring AOP에선 Aspect를 구현하는 두 가지 방식을 제시하고 있다.
+> 1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
+> 2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
+
 
 #### 1.2 Advice
 
@@ -260,7 +269,7 @@ Spring을 포함한 많은 AOP 프레임 워크는 [Interceptors](https://docs.o
  ```
  Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있다.  예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
 
-  > - [자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
+> - [자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
 
 #### 1.4 Pointcut
 
@@ -273,6 +282,9 @@ Pointcut은 여러 JoinPoint 중 실제적으로 Advice할 지점이다.
 >Spring AOP은 기본적으로 AspectJ Pointcut 언어를 사용한다.
 > - [Join Points and Pointcuts of Ecplipse DOC](https://www.eclipse.org/aspectj/doc/next/progguide/language-joinPoints.html)
 > - [Pointcuts of Ecplipse DOC](https://www.eclipse.org/aspectj/doc/next/progguide/semantics-Pointcuts.html)
+
+
+
 
 #### 관심사의 교차
 
@@ -309,10 +321,11 @@ Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB
   - [Baeldung : Intro to AspectJ](https://www.baeldung.com/aspectj)
   - [Baeldung : Introduction to Pointcut](https://www.baeldung.com/spring-aop-Pointcut-tutorial)
   - [egovframework : aop-aspect](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
-
+  - [stackoverflow : ](https://stackoverflow.com/questions/29650355/why-in-spring-aop-the-object-are-wrapped-into-a-jdk-proxy-that-implements-interf)
 ---
 
 - 해외
+  - [spring-3-part-6-spring-aop](http://ojitha.blogspot.com/2013/03/spring-3-part-6-spring-aop.html)
   - [Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
   - [the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
   - [Spring AOP AspectJ @After Annotation Example](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)

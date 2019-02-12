@@ -168,24 +168,18 @@ Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 �
 
 본론으로 들어와서, 앞서 설명한 Aspect가 어떻게 핵심 기능에 적용되는지 알아야 한다.
 
-### AOP 개념 - 동작과 용어
+### AOP 개념 - 용어와 동작
 
 AOP의 메커니즘은 프로그램을 핵심 관심사와 횡단 관심사로 분리하고 분류된 관심사는 각각의 모듈성을 가져야 한다는 게 AOP의 핵심이고 목표이다.
 
 따라서 AOP의 개발 방식은 핵심 관심사를 객체로 횡단 관심사는 aspect라는 모듈로 모듈화하여 각각의 다른 영역으로 개발한다.
 
-- 핵심 관심사 → Object로 모듈화 (*.class)
-- 횡단 관심사 → Aspect로 모듈화 (*.aj of AspectJ AOP)
+- 핵심 관심사 → Object 기반으로 모듈화
+- 횡단 관심사 → Aspect 기반으로 모듈화
 
 여기서 핵심은 서로 다른 모듈화 방식을 통해 도출된 각각의 모듈들이 최종적으로 어떻게 서로 교차하여 동작하는지 알아야 한다. 이러한 일련의 과정에서 다소 생소한 AOP의 용어들이 나온다.
 
-이러한 AOP 용어가 정리하지 못한 채 개발부터 하게 된다면 많은 어려움이 있다.
-
-#### AOP 용어
-
-AOP의 용어엔 다음과 같다.
-
-<img src="/md/img/aop/aop-terms.png" style="max-height: 400px;" alt="img">
+![img](/md/img/aop/aop-terms.png)
 
 - Aspect
 - Advice
@@ -193,120 +187,164 @@ AOP의 용어엔 다음과 같다.
 - Pointcut
 - Target Object
 - Joinpoint
-- Weaving
 - AOP Proxy
+- Weaving
 
-이 용어들은 Spring AOP에 국한되어진 용어가 아닌 여러 AOP 프레임워크에서 쓰이는 통상적인 용어들이다. 우선 용어들은 AOP의 동작 방식을 살펴보면서 하나하나 풀어가 보자.
+이러한 AOP의 용어들은 Spring AOP에 국한되어진 용어가 아닌 여러 AOP 프레임워크에서 쓰이는 통상적인 용어들이다. 따라서 AOP 용어가 정리하지 못한 채 개발부터 하게 된다면 많은 어려움이 있다.
 
-<img src="/md/img/aop/aspect-cycle.png" style="max-height: 400px;" alt="img">
+#### AOP 용어
 
-먼저 그림에서 `핵심 관심사(Core Concerns)` 영역을 보면 다음 용어를 볼 수 있다.
+먼저 AOP 용어들은 다음과 같다.
+
+<img src="/md/img/aop/aop-terms-explanation.png" style="max-height: 620px; margin: 0; padding: 0;" alt="img">
+
+아무래도 이 용어들을 단번에 이해하기엔 부족하다. 이 용어들을 관심사를 기준으로 하나하나 풀어가 보자.
+
+#### AOP 용어 - 핵심 관심사 영역
+
+다음 그림은 `핵심 관심사(Core Concerns)` 영역이다.
+
+<img src="/md/img/aop/module-of-core.png" style="max-height: 400px;" alt="img">
 
 - Target Object
 - JoinPoint
 
-`Target Object`는 횡단 기능(`Advice`)이 적용될 객체(Object)를 뜻한다.
+##### Target Object
 
-> Spring AOP에선 Adviced Object라 한다. Spring AOP에선 Runtime Proxy를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
+먼저 `Target Object`는 횡단 기능(`Advice`)이 적용될 객체(Object)를 뜻한다. 이 객체는 핵심 모듈(비즈니스 클래스)이라 할 수 있다. Spring AOP에선 Advice를 받는 객체라 하여 `Adviced Object`라는 용어로 쓰이기도 한다.
 
-`JoinPoint`는 Target Object안에서 횡단 기능(`Advice`)이 적용될 수 있는 여러 시점을 뜻한다.
+Spring AOP에선 실제 적용할 객체 대신 `Runtime Proxy`를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
 
-이 시점은 프로그램이 실행될 때 (1)예외가 발생되거나 (2)필드(attribute)가 수정되는 시점 또는 (3)객체가 생성(constructor)되는 시점 그리고 (4)메소드가 호출되는 시점 등 프로그램이 실행될때 발생할 수 있는 시점들은 횡단 기능이 적용될 수 있는 시점들이다.
+##### JoinPoint
 
-> Spring AOP에서 JoinPoint는 항상 메소드 실행을 나타낸다. `org.aspectj.lang.JoinPoint` Type의 매개 변수를 선언하여 JoinPoint 정보를 Advice에서 사용할 수 있다.
+`JoinPoint`는 Target Object안에서 횡단 기능(`Advice`)이 적용될 수 있는 여러 위치를 뜻한다.
 
-#### 횡단 관심사(Cross-cutting Concerns)
+![img](/md/img/aop/joinpoint.png)
 
-#### 1.1 Aspect(Advisor)
+이 위치는 프로그램이 실행될 때 (1) 예외가 발생하거나 (2) 필드(attribute)가 수정되는 시점 또는 (3) 객체가 생성(constructor)되는 시점 그리고 (4) 메소드가 호출되는 시점 등 그 외 프로그램이 실행될 때 발생할 수 있는 모든 시점은 횡단 기능이 적용될 수 있는 위치들이다.
 
-Aspect는 횡단 관심사의 모듈화이다.
+일반적으로 AspectJ는 모든 JoinPoint에 접근이 가능하지만 Spring AOP는 기본적으로 메소드 interceptor를 기반으로 하고 있어서 JoinPoint는 항상 메소드 단위다.
 
-횡단 모듈에 필요한 Advice,  Introduction, Pointcut이 내제되어 있다.
+#### AOP 용어 - 횡단 관심사 영역
 
-_Aspect = Advice + Introduction(inter-type) + Pointcut_
+##### Aspect
+
+횡단 관심사 영역에서 가장 먼저 살펴볼 용어는 `Aspect`이다.
+
+AOP는 횡단 관심사를 Aspect라는 독특한 모듈을 기반으로 모듈화를 한다. 이러한 횡단 관심사 모듈화를 `Aspect`라 한다. Java에선 사실상 표준으로 가장 널리 사용되는 `AspectJ`이라는 확장 기능을 통해 Aspect를 구현할 수 있다.
+
+>AsepctJ의 모듈은 `*.aj`라는 확장자를 가진 독특한 파일로 구현된다. (참고 - [Eclipse AspectJ](https://www.eclipse.org/aspectj/))
+
+AspectJ는 기본적으로 이클립스에서 확장 기능을 추가하고 그 외 별도의 설정을 해야 한다. 또한, aj는 기존 Java 문법과 비슷하면서도 사뭇 달라서 별도의 학습이 필요하다. (참고 - [Starting-AspectJ](https://www.eclipse.org/aspectj/doc/next/progguide/starting-aspectj.html), [[개발] 자바 AOP - AspectJ를 알아보자. - Java AOP #5](https://busy.org/@nhj12311/aop-aspectj-java-aop-5))
+
+반면 Spring AOP에서 제공하는 어노테이션(@AspectJ)을 통한 구현 방식은 AspectJ 보다 쉬운 설정과 기본적으로 클래스로 구현하기 때문에 쉽게 접근할 수 있다는 장점이 있다.
+
+Spring AOP에선 기본적으로 두 가지 방식을 통해 Aspect를 구현할 수 있다.
+
+1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
+2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
+
+이 Aspect 모듈은 핵심 모듈에 횡단 코드를 적용하기 위한 최종 목적을 띄고, 횡단 모듈의 관리 유용성을 증가시키기 위한 횡단 관심사의 집합체다. 이 때문에 Aspect에는 횡단 코드와 이 코드가 어디서 언제 적용할지 구현해야 한다.
+
+<img src="/md/img/aop/module-of-aspect.png" style="max-height: 400px;" alt="img">
+
+_Aspect = Advice + Pointcut + Introduction(inter-type)_
 
 - Advice
-- Introduction(inter-type)
 - Pointcut
+- Introduction(Inter-type)
 
+##### Advice
 
-> Spring AOP에선 Aspect를 구현하는 두 가지 방식을 제시하고 있다.
-> 1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
-> 2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
+`Advice`는 JoinPoint에 적용할 `횡단 코드`를 의미한다.
 
+![img](/md/img/aop/advice.png)
 
-#### 1.2 Advice
+Spring을 포함한 많은 AOP 프레임워크는 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)로서 Advice을 모델링하고 , JoinPoit 주변의 인터셉터의 결합된 상태의 체인을 유지하고 실제 런타임 시 결합된 코드가 실행된다.
 
-Advice는 실제적으로 적용시킬 횡단 기능을 구현한 구현체라 할 수 있다.
-
-이러한 Advice는 기존 핵심 기능에 횡단 기능의 각기 다른 결합점을 제어할 수 있도록 다양한 Advice를 제공하고 있다.
-
-Spring을 포함한 많은 AOP 프레임 워크는 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)로서 Advice을 모델링하고 , JoinPoit 주변의 인터셉터의 결합된 상태의 체인을 유지하고 실제 런타임 시 체인의 순서를 실행시킨다.
-
-- Before : JoinPoint 이전에 실행
-  - 단 예외를 throw 하지 않는 한 실행 흐름이 JoinPoint로 진행되는 것을 방지하는 기능은 없다.
-- After returning : JoinPoint가 정상적으로 완료된 후 실행
-  - 예를 들어 메소드가 예외를 발생시키지 않고 리턴하는 경우
-- After throwing : Exception을 throw하여 메소드가 종료 된 경우 실행
-- After(finally) : JoinPoint의 상태(Exception, 정상)와 무관하고 JoinPoint가 실행된 후 실행
-- Around : Before와 After가 합쳐진 Advice
-  -  메소드 호출 전과 후에 실행 또한 JoinPoint로 진행할지 또는 자체 반환 값을 반환하거나 Exception를 throw하여 권고 된 메소드 실행을 바로 가기할지 여부를 선택하는 작업도 할 수 있다.
+Spring AOP에서 JoinPoint는 항상 메소드 실행을 바라보기 때문에 `org.aspectj.lang.JoinPoint` Type의 매개 변수를 선언하여 JoinPoint 정보를 Advice에서 사용할 수 있다.
 
 > - [interceptors-sample-code](https://github.com/javaee-samples/javaee7-samples/tree/master/cdi/interceptors)
 > - [javaee.github.io](https://javaee.github.io/tutorial/interceptors.html)
 > - [spring-doc-org.springframework.aop.interceptor](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/aop/interceptor/ExposeInvocationInterceptor.html)
 
-#### 1.3 Introduction(inter-type)
+또한, Spring AOP의 Advice는 JoinPoint와 횡단 코드의 각기 다른 결합점을 제어할 수 있도록 다양한 Advice를 제공하고 있다.
 
- Introduction(inter-type)은 Aspect 모듈 내부의 선언된 메소드 또는 필드를 뜻한다.
+<img src="/md/img/aop/spring-aop-advice.png" style="max-height: 500px;" alt="img">
 
- ``` java
- public aspect SampleAscpect{
-   private String attribute;
-   public void method1(){ .... }
-   ...
- }
- ```
- Spring AOP를 사용하면 프록시 된 객체에 새로운 인터페이스 (및 해당 구현)를 도입 할 수 있다.  예를 들어 Introduction를 사용한다면 bean이 IsModified 인터페이스를 구현하도록 쉽게 캐싱할 수 있다.
+- @Before : JoinPoint 이전에 실행
+  - 단 Exception을 throw 하지 않는 한 실행 흐름이 JoinPoint로 진행되는 것을 방지하는 기능은 없다.
+- @AfterReturning : JoinPoint가 정상적으로 완료된 후 실행
+  - 예를 들어 메소드가 Exception을 발생시키지 않고 리턴하는 경우
+- @AfterThrowing : Exception을 throw하여 메소드가 종료된 경우 실행
+- @After(finally) : JoinPoint의 상태(Exception, 정상)와 무관하고 JoinPoint가 실행된 후 실행
+- @Around : Before와 After가 합쳐진 Advice
+  -  메소드 호출 전과 후에 실행 또한 JoinPoint로 진행할지 또는 자체 반환 값을 반환하거나 Exception를 throw하여 특정 메소드를 호출할 수 있다.
 
-> - [자바지기-Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)
+##### Pointcut
 
-#### 1.4 Pointcut
+Pointcut은 여러 JoinPoint 중 실제적으로 Advice할 JoinPoint이다.
 
-Pointcut은 여러 JoinPoint 중 실제적으로 Advice할 지점이다.
+![img](/md/img/aop/joinpoint-pointcut.png)
 
-따라서 Advice는 여러 JointPoint중에서 Pointcut의 표현식에 명시된 JointPoint에서 실행된다. 예를들어 여러 실행 포인트 중에서 특정 이름의 메소드에서 Advice를 하거나 제외하여 실행 시킬 수 있다.
+따라서 Advice는 여러 JoinPoint중에서 Pointcut의 표현식에 명시된 JoinPoint에서 실행된다. 예를 들어 여러 실행 포인트 중에서 특정 이름의 메소드에서 Advice를 하거나 제외하여 실행시킬 수 있다.
 
-이러한 Pointcut 표현식과 일치하는 JoinPoint를 실행한다는 개념은 AOP의 핵심이다.
+이러한 Pointcut 표현식과 일치하는 JoinPoint를 실행한다는 개념은 AOP의 핵심이다. 또한, Spring AOP에선 Pointcut과 Advice를 합쳐 `Advisor`라 불린다. Spring AOP은 기본적으로 AspectJ Pointcut 언어를 사용한다.
 
->Spring AOP은 기본적으로 AspectJ Pointcut 언어를 사용한다.
 > - [Join Points and Pointcuts of Ecplipse DOC](https://www.eclipse.org/aspectj/doc/next/progguide/language-joinPoints.html)
 > - [Pointcuts of Ecplipse DOC](https://www.eclipse.org/aspectj/doc/next/progguide/semantics-Pointcuts.html)
 
+##### Introduction(inter-type)
+
+Introduction(inter-type)은 Aspect 모듈 내부의 선언된 클래스 또는 인터페이스, 메소드 그 외 모든 필드를 뜻한다. 이 Introduction의 주된 목적은 기존 클래스에 새로운 인터페이스(및 해당 구현 객체)를 추가하기 위함이다.
+
+이는 OOP에서 말하는 상속이나 확장과는 다른 방식으로 Advice 또는 Aspect를 이용해서 기존 클래스에 없는 인터페이스를 동적으로 추가할 수 있다.
+
+특히 Spring AOP를 사용하면 Proxy된 객체에 새로운 인터페이스를 도입할 수 있다. 또한, bean이 이 인터페이스를 구현하도록 쉽게 캐싱할 수 있다. 이 예제는 [박재성(자바지기)님의 Introduction](http://www.javajigi.net/pages/viewpage.action?pageId=1084)를 참고하자.
+
+##### AOP Proxy
+
+Proxy는 "대신 일을 하는 사람"이라는 사전적 의미를 가지고 있다.
+
+이와 마찬가지로 AOP Proxy는 Aspect를 대신 수행하기 위해 AOP 프레임워크에 의해 생성된 객체(Object)이다.
+
+직접적인 Aspect 코드를 수행하는 대신 Proxy를 대체하여 사용하는 이유는 크게 두가지의 목적을 띈다.
+
+- 부가 기능의 탈부착이 용이
+- 핵심 관심 코드의 수정 작업이 필요 없게 됨
+
+보조 업무의 탈 부착이 쉬워지고, 그리하여 주 업무 코드는 보조 업무 코드의 변경으로 인해서 발생하는 코드 수정 작업이 필요 없게 됨.
 
 
 
-#### 관심사의 교차
+일반적으로 동적 Proxy는 Java에서 제공해주는 `java.lang.reflect.Proxy`을 사용하여 생성되어진다.
 
-#### 3.1 Weaving
+Spring에선 다음과 같은 AOP Proxy를 제공하고 있다.
 
-AOP는 특정 JoinPoint에 Advice하여 핵심 기능과 Aspect가 연결된 객체를 만든다. 이러한 일련의 과정을 Weaving이라 한다.
+- JDK Dynamic Proxy
+- CGLIB Proxy
 
-Weaving은 수행 시점에 따라 Compile Weaving, Runtime Weaving으로 나뉜다.
+#### AOP의 용어 - 관심사의 교차
 
-- Compile Weaving : 예 AspectJ 컴파일러 사용
-- Runtime Weaving : Spring AOP, 순수 자바 AOP 프레임워크
+AOP는 특정 JoinPoint에 Advice하여 핵심 기능과 횡단 기능이 교차된 객체를 만든다.
 
-#### 3.2 AOP proxy
+<img src="/md/img/aop/aspect-cycle.png" style="max-height: 400px;" alt="img">
 
-AOP proxy는 Aspect를 구현하기 위해 AOP 프레임워크에 의해 생성된 Object이다.
+##### Weaving
 
-Spring에선 다음과 같은 AOP proxy를 제공하고 있다.
+이러한 일련의 과정을 Weaving이라 한다.
 
-- JDK dynamic proxy
-- CGLIB proxy.
+Weaving은 수행 시점에 따라 CTW(Compile-Time Weaving), LTW(Load-Time Weaving), RTW(Run-Time Weaving)으로 나뉜다.
 
-Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB 프록시가 될 것이다. 프록시 생성은 Spring 2.0에서 소개 된 aspect 선언의 스키마 기반 및 @AspectJ 스타일의 사용자에게는 투명합니다.
+일반적을 Spring AOP는 Proxy를 통해 Aspect를 수행한다. 반면 AspectJ는 바이트 코드 기반으로 기존 클래스 코드를 조작하여 Aspect를 수행한다는 점에서 출발한다.
+
+우선 AspectJ는 Spring과 독립적이다. 그것은 봄 전에 발명되었고 어떤 프레임 워크도 필요하지 않습니다. 어쩌면 스프링 AOP (동적 프록시 기반)와 AspectJ (바이트 코드 계측을 기반으로 함) 간의 차이점을 알지 못했을 수도 있습니다. 기본적으로 Spring에서는 CTW 나 LTW를 사용하지 않고 Spring AOP만을 사용합니다. 이 "AOP lite"접근 방식이 충분히 강력하지 않은 경우에만 Spring 사용 여부에 관계없이 AspectJ의 모든 기능을 사용할 수 있습니다.
+
+- CTW : AspectJ Compiler(AJC)
+- LTW : AspectJ Compiler(AJC)
+- RTW : Spring AOP
+
+[성능비교](https://www.nurkiewicz.com/2009/10/yesterday-i-had-pleasure-to-participate.html)
 
 ### 마무리
 
@@ -321,7 +359,7 @@ Spring 프레임 워크에서 AOP 프록시는 JDK 동적 프록시 또는 CGLIB
   - [Baeldung : Intro to AspectJ](https://www.baeldung.com/aspectj)
   - [Baeldung : Introduction to Pointcut](https://www.baeldung.com/spring-aop-Pointcut-tutorial)
   - [egovframework : aop-aspect](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
-  - [stackoverflow : ](https://stackoverflow.com/questions/29650355/why-in-spring-aop-the-object-are-wrapped-into-a-jdk-proxy-that-implements-interf)
+  - [stackoverflow](https://stackoverflow.com/questions/29650355/why-in-spring-aop-the-object-are-wrapped-into-a-jdk-proxy-that-implements-interf)
 ---
 
 - 해외

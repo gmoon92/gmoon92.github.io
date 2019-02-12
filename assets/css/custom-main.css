@@ -241,7 +241,7 @@ div.highlighter-rouge>pre, div.highlighter-rouge pre.highlight, figure.highlight
 
 .highlight code{display: table-cell!important; white-space: pre!important;}
 .highlight pre>code>span{white-space: nowrap!important;}
-	
+
 .highlight .hll {
 	background-color: #eff
 }
@@ -605,14 +605,18 @@ h4 {
 	font-size: 1.3em
 }
 
+h5 {
+	font-size: 1.15em
+}
+
 blockquote {
-	border-top: 2px solid #00000021;
-    border-bottom: 2px solid #00000021;
+		border-top: 2px solid rgba(101, 108, 122, 0.38);
+    border-bottom: 2px solid rgba(101, 108, 122, 0.38);
     margin: 1em 1em;
     padding: 0.75em 1em;
     background-color: #fff;
     color: #a6a6a6;
-    box-shadow: 2px 0px 0px 0px rgba(0.1, 0, 0, 0);
+    /*box-shadow: 2px 0px 0px 0px rgba(0.1, 0, 0, 0);*/
 }
 
 blockquote p:last-child, footer p:last-child {
@@ -967,7 +971,7 @@ article em {
 
 .posts .excerpt {
 	margin-top: 1em;
-	
+
 }
 
 .posts .post-tags {
@@ -999,7 +1003,7 @@ article em {
 	text-shadow: 1px 1px 2px #3f3f3f
 }
 
-.posts .post-area{    
+.posts .post-area{
 	border-bottom: 1px solid #bbb;
     margin: 10px 0;
     padding: 10px;
@@ -1033,7 +1037,7 @@ article em {
 }
 
 
-	
+
 
 .tag-list div.meta {
 	margin-right: 0.5em;
@@ -1272,8 +1276,8 @@ article em {
 	color: #383838;
 }
 
-.site-header nav a#pull{display: inline-block; 
-						outline: none; 
+.site-header nav a#pull{display: inline-block;
+						outline: none;
 						-webkit-appearance:none;}
 .site-header nav a#pull i {
 	padding: 13px;
@@ -1290,7 +1294,7 @@ article em {
 
 .clear:before, .clear:after {
 	clear: both;
- 	content: " "; 
+ 	content: " ";
 	display: none;
 }
 
@@ -1446,32 +1450,33 @@ ul.share-buttons .sr-only {
 	#post-nav a{font-size: 15px;}
 	.posts .post-tags{ margin: 0px; }
 	.posts .post-tags footer .tag-list { display: none; }
-    
+
 	.postsArea{width: 100%;}
 	.cateArea{display:none;}
-	
+
 	h1 { font-size: 1.9em }
 	h2 { font-size: 1.6em }
 	h3 { font-size: 1.3em }
-	h4 { font-size: 1em }
+	h4 { font-size: 1.1em }
+	h5 { font-size: 1.5em }
 	p, li { font-size: 0.8em }
-	
+
 	.posts>.post-area>.tag-posts>.tag-title>.meta{display: none;}
 	#main p{font-size: 0.5em;}
 	.feature-image header { padding: 4% 4% }
 	.posts .post-teaser .post-img { max-height: 150px }
-	
+
 	table{white-space: nowrap;}
-	
+
 	.post-teaser h1{font-size: 1.5em;}
 	.excerpt{font-size: 0.8em;}
-	
+
 	.site-header img.avatar { margin-top: -7px }
 	.site-header .site-title { margin-top: 7px }
-	
+
 	/* .site-header nav a#pull{ opacity: 0; clear: both;} */
 	.site-header nav a#pull i{display: block;}
-	
+
 	nav { height: auto }
 	nav .separator { display: none !important }
 	nav.clear { float: right; }
@@ -1482,7 +1487,7 @@ ul.share-buttons .sr-only {
 	ul.block.header-default-background{
 		background: rgba(0, 0, 0, 0.8);
 	}
-	
+
 	nav ul {
 		    width: 100%;
 		    overflow: hidden;
@@ -1495,7 +1500,7 @@ ul.share-buttons .sr-only {
 		    /* transition: font-size 0.15, margin 0.15s, padding 0.15s, opacity 0.15s 0.15s; */
 	}
 	nav ul.hide { display: none; }
-	/* 
+	/*
 	nav ul.hide li {
 		width: 0px;
     	height: 0px;
@@ -1503,12 +1508,12 @@ ul.share-buttons .sr-only {
 	nav ul.hide a {
 		width: 0px;
     	height: 0px;
-	} 
+	}
 	*/
 	nav li {
 		width: 100%;
-		/* 
-		float: left; 
+		/*
+		float: left;
 		float: right;
 		width: max-content;
    		background: #0000000d;
@@ -1523,25 +1528,25 @@ ul.share-buttons .sr-only {
 		outline: 0;
 		border: 0;
 	}
-	/* 
+	/*
 	nav a#pull {
 		margin-top: 13px;
 		display: block;
 		width: 100%;
 		position: relative
-	}  
+	}
 	*/
-	
-	/* 
+
+	/*
 	nav a#pull:after {
 		content: "";
 		display: inline-block;
 		position: absolute;
 		right: 15px;
 		top: 10px
-	} 
+	}
 	*/
-	
+
 }
 
 
@@ -1561,7 +1566,7 @@ ul.share-buttons .sr-only {
 
 @media ( max-width : 1000px) {
 	#post-nav { padding: 3% 3% }
-	
+
 	article, .comments, .feature-image .post-content, .feature-image footer,
 		.call-out, .posts .post-teaser, .site-footer {
 		/*padding: 6% 12.5%*/

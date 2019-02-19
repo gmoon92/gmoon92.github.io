@@ -235,7 +235,7 @@ AOP는 횡단 관심사를 Aspect라는 독특한 모듈을 기반으로 모듈�
 
 >AsepctJ의 모듈은 `*.aj`라는 확장자를 가진 독특한 파일로 구현된다. (참고 - [Eclipse AspectJ](https://www.eclipse.org/aspectj/))
 
-AspectJ는 기본적으로 이클립스에서 확장 기능을 추가하고 그 외 별도의 설정을 해야 한다. 또한, aj는 기존 Java 문법과 비슷하면서도 사뭇 달라서 별도의 학습이 필요하다. (참고 - [Starting-AspectJ](https://www.eclipse.org/aspectj/doc/next/progguide/starting-aspectj.html), [[개발] 자바 AOP - AspectJ를 알아보자. - Java AOP #5](https://busy.org/@nhj12311/aop-aspectj-java-aop-5))
+AspectJ는 기본적으로 이클립스에서 확장 기능을 추가하고 그 외 별도의 설정을 해야 한다. 또한, aj는 기존 Java 문법과 비슷하면서도 사뭇 달라서 별도의 학습이 필요하다. (참고 - [Eclipse DOC - Starting-AspectJ](https://www.eclipse.org/aspectj/doc/next/progguide/starting-aspectj.html), [블로그 - Eclipse에서 AspectJ 시작하기](https://busy.org/@nhj12311/aop-aspectj-java-aop-5))
 
 반면 Spring AOP에서 제공하는 어노테이션(@AspectJ)을 통한 구현 방식은 AspectJ 보다 쉬운 설정과 기본적으로 클래스로 구현하기 때문에 쉽게 접근할 수 있다는 장점이 있다.
 
@@ -306,23 +306,23 @@ Introduction(inter-type)은 Aspect 모듈 내부의 선언된 클래스 또는 �
 
 Proxy는 "대신 일을 하는 사람"이라는 사전적 의미를 가지고 있다.
 
+![img](/md/img/aop/proxy1.png)
+
 이와 마찬가지로 AOP Proxy는 Aspect를 대신 수행하기 위해 AOP 프레임워크에 의해 생성된 객체(Object)이다.
 
-직접적인 Aspect 코드를 수행하는 대신 Proxy를 대체하여 사용하는 이유는 크게 두가지의 목적을 띈다.
+이처럼 핵심 관심 코드에 직접적인 Aspect를 하지 않고 Proxy를 사용하여 Aspect를 하기 때문에 횡단 관심 코드와 핵심 관심 코드 사이의 느슨한 결합도 구조를 만든다. 이를 통해  Proxy를 사용하여 Advice를 하기 때문에 핵심 관심 코드와 결합도를 낮춰지는 필요 여부에 따라 부가 기능을 탈 부착하기 용이하다.
 
-- 부가 기능의 탈부착이 용이
-- 핵심 관심 코드의 수정 작업이 필요 없게 됨
+- 직접적인 참조가 아닌 Proxy를 사용하여 동적 기능 가능
+- 결과적으로 부가 기능의 탈부착이 용이
 
-보조 업무의 탈 부착이 쉬워지고, 그리하여 주 업무 코드는 보조 업무 코드의 변경으로 인해서 발생하는 코드 수정 작업이 필요 없게 됨.
+일반적으로 Spring을 포함한 많은 AOP 프레임워크에선 Proxy를 사용하여 동적으로 Advice하기 위해 Java에서 제공해주는 `java.lang.reflect.Proxy`을 사용하여 구현돼있다.
 
-
-
-일반적으로 동적 Proxy는 Java에서 제공해주는 `java.lang.reflect.Proxy`을 사용하여 생성되어진다.
-
-Spring에선 다음과 같은 AOP Proxy를 제공하고 있다.
+Spring AOP에선 `JDK Dynamic Proxy`, `CGLIB Proxy` 구현 방식을 제공하고 있다.
 
 - JDK Dynamic Proxy
 - CGLIB Proxy
+
+이 둘의 차이점은
 
 #### AOP의 용어 - 관심사의 교차
 

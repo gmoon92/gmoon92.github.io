@@ -200,7 +200,7 @@ AOP의 메커니즘은 프로그램을 핵심 관심사와 횡단 관심사로 �
 
 아무래도 이 용어들을 단번에 이해하기엔 부족하다. 이 용어들을 관심사를 기준으로 하나하나 풀어가 보자.
 
-#### AOP 용어 - 핵심 관심사 영역
+#### 용어와 동작 - 핵심 관심사 영역
 
 다음 그림은 `핵심 관심사(Core Concerns)` 영역이다.
 
@@ -225,7 +225,7 @@ Spring AOP에선 실제 적용할 객체 대신 `Runtime Proxy`를 사용하여 
 
 일반적으로 AspectJ는 모든 JoinPoint에 접근이 가능하지만 Spring AOP는 기본적으로 메소드 interceptor를 기반으로 하고 있어서 JoinPoint는 항상 메소드 단위다.
 
-#### AOP 용어 - 횡단 관심사 영역
+#### 용어와 동작 - 횡단 관심사 영역
 
 ##### Aspect
 
@@ -308,95 +308,78 @@ Proxy는 "대신 일을 하는 사람"이라는 사전적 의미를 가지고 �
 
 ![img](/md/img/aop/proxy1.png)
 
-AOP 프레임워크에 의해 생성된 Proxy Object는 실제 Object의 기능을
+일반적으로 Spring을 포함한 많은 AOP 프레임워크에선 핵심 관심 코드에 직접적인 Aspect를 하지 않고 `Proxy Object`를 활용하여 Aspect를 한다.
 
-이처럼 핵심 관심 코드에 직접적인 Aspect를 하지 않고 Proxy를 사용하여 Aspect를 하기 때문에 횡단 관심 코드와 핵심 관심 코드 사이의 느슨한 결합도 구조를 만든다. 이를 통해  Proxy를 사용하여 Advice를 하기 때문에 핵심 관심 코드와 결합도를 낮춰지는 필요 여부에 따라 부가 기능을 탈 부착하기 용이하다.
+결과적으로 횡단 관심 객체와 핵심 관심 객체의 느슨한 결합 구조를 만들고, 필요 여부에 따라 부가 기능을 탈 부착하기 용이하게 해준다.
 
-- 직접적인 참조가 아닌 Proxy를 사용하여 동적 기능 가능
-- 결과적으로 부가 기능의 탈부착이 용이
+- 직접적인 참조가 아닌 Proxy를 사용하여 동적으로 참조
+- 부가 기능의 탈부착이 용이
 
-일반적으로 Spring을 포함한 많은 AOP 프레임워크에선 Proxy를 사용하여 동적으로 Advice하기 위해 Java에서 제공해주는 `java.lang.reflect.Proxy`을 사용하여 구현돼있다.
+Spring을 포함하여 대부분 AOP 프레임워크에서 Proxy를 사용하여 동적으로 Advice하기 위해 Java에서 제공해주는 `java.lang.reflect.Proxy`을 사용하여 Proxy 객체를 동적으로 생성해준다.
 
-Spring AOP에선 `JDK Dynamic Proxy`, `CGLIB Proxy` 구현 방식을 제공하고 있다.
+![img](/md/img/aop/proxy2.png)
+
+구체적으로 `JDK Dynamic Proxy`와 `CGLIB Proxy`의 방식이 존재한다. 물론 Spring AOP에선 두 가지 구현 방식을 제공하고 있다.
 
 - JDK Dynamic Proxy
 - CGLIB Proxy
 
-이 둘의 차이점은
+ 이 둘의 차이점은 추후 자세하게 포스팅할 예정이다.
 
-#### AOP의 용어 - 관심사의 교차
+#### 용어와 동작 - 관심사의 교차
 
-AOP는 특정 JoinPoint에 Advice하여 핵심 기능과 횡단 기능이 교차된 객체를 만든다.
-
-<img src="/md/img/aop/aspect-cycle.png" style="max-height: 400px;" alt="img">
+AOP는 특정 JoinPoint에 Advice하여 핵심 기능과 횡단 기능이 교차하여 새롭게 생성된 객체를 프로세스에 적용하는 일련의 모든 과정을 `Weaving`라 한다.
 
 ##### Weaving
 
-이러한 일련의 과정을 Weaving이라 한다.
+이 Weaving은 수행 시점에 따라 CTW, LTW, RTW으로 분류할 수 있다.
 
-Weaving은 수행 시점에 따라 CTW(Compile-Time Weaving), LTW(Load-Time Weaving), RTW(Run-Time Weaving)으로 나뉜다.
+- CTW : Compile-Time Weaving (AspectJ Compiler)
+- LTW : Load-Time Weaving (AspectJ Compiler)
+- RTW : Run-Time Weaving (Spring AOP)
 
-일반적을 Spring AOP는 Proxy를 통해 Aspect를 수행한다. 반면 AspectJ는 바이트 코드 기반으로 기존 클래스 코드를 조작하여 Aspect를 수행한다는 점에서 출발한다.
+특히 Java 환경에서 AOP를 한다면 가장 먼저 AspectJ와 Spring AOP를 떠올릴 수 있는데, 이 둘은 서로 독립적인 대상이므로 항상 비교가 되고 Weaving에서도 그 차이를 알 수 있다.
 
-우선 AspectJ는 Spring과 독립적이다. 그것은 봄 전에 발명되었고 어떤 프레임 워크도 필요하지 않습니다. 어쩌면 스프링 AOP (동적 프록시 기반)와 AspectJ (바이트 코드 계측을 기반으로 함) 간의 차이점을 알지 못했을 수도 있습니다. 기본적으로 Spring에서는 CTW 나 LTW를 사용하지 않고 Spring AOP만을 사용합니다. 이 "AOP lite"접근 방식이 충분히 강력하지 않은 경우에만 Spring 사용 여부에 관계없이 AspectJ의 모든 기능을 사용할 수 있습니다.
+먼저 AspectJ는 바이트 코드 기반으로 기존 클래스 코드를 조작하여 AspectJ Compiler(ACJ)에 의해 Aspect를 Weaving하는 방식을 취하고 있다.
 
-- CTW : AspectJ Compiler(AJC)
-- LTW : AspectJ Compiler(AJC)
-- RTW : Spring AOP
+<img src="/md/img/aop/aspect-cycle.png" style="max-height: 400px;" alt="img">
 
-[성능비교](https://www.nurkiewicz.com/2009/10/yesterday-i-had-pleasure-to-participate.html)
+따라서 CTW, LTW 방식을 기본적으로 사용하고 있다.
+
+반면 Spring AOP는 Dynamic Proxy 기반으로 기본적으로 CTW, LTW를 사용하지 않고 RTW를 사용한다. Spring AOP의 Weaving의 방식은 AspectJ에 비해 가볍지만, 대부분 기능을 구현할 수 있다.
+
+![img](/md/img/aop/proxy3.png)
+
+이는 프로그램의 퍼포먼스에도 차이가 있다. 이를 입증하듯 성능 비교를 한 글들이 많이 있는데 단편적으로 다음 [링크](https://www.nurkiewicz.com/2009/10/yesterday-i-had-pleasure-to-participate.html)에서도 확인할 수 있다.
 
 ### 마무리
 
+여기까지 AOP의 개념적인 부분과 Spring AOP에 대한 부분도 간략히 포스팅 해보았다.
+
+AOP의 용어적인 부분은 나름대로 관심사의 영역을 나눠 작성했지만, 아무래도 처음에 접한 분들이라면 햇갈릴 수 있다고 생각한다.
+
+또한, 본 포스팅은 간략한 개념적인 부분이라 실제적으로 코드에 대한 부분이 부족했다. 다음 포스팅에선 이를 해소시킬 예시 코드와 부분적으로 자세히 풀어갈 예정이다.
 
 ---
 
 ### 참고
 
-- Reference
+- Blog
   - [Spring-DOC : 11. Aspect Oriented Programming with Spring](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html)
   - [Spring-DOC : Chapter 6. Aspect Oriented Programming with Spring](https://docs.spring.io/spring/docs/2.0.x/reference/aop.html)
   - [Baeldung : Intro to AspectJ](https://www.baeldung.com/aspectj)
   - [Baeldung : Introduction to Pointcut](https://www.baeldung.com/spring-aop-Pointcut-tutorial)
   - [egovframework : aop-aspect](http://www.egovframe.go.kr/wiki/doku.php?id=egovframework:rte:fdl:aop:aspectj)
   - [stackoverflow](https://stackoverflow.com/questions/29650355/why-in-spring-aop-the-object-are-wrapped-into-a-jdk-proxy-that-implements-interf)
----
-
-- 해외
   - [spring-3-part-6-spring-aop](http://ojitha.blogspot.com/2013/03/spring-3-part-6-spring-aop.html)
   - [Aspect-Oriented Programming vs. Object-Oriented Programming](https://study.com/academy/lesson/aspect-oriented-programming-vs-object-oriented-programming.html)
   - [the-basics-of-aop](https://blog.jayway.com/2015/09/07/the-basics-of-aop/)
   - [Spring AOP AspectJ @After Annotation Example](https://howtodoinjava.com/spring-aop/aspectj-after-annotation-example/)
   - [Implementing AOP With Spring Boot and AspectJ](https://dzone.com/articles/implementing-aop-with-spring-boot-and-aspectj)
-
----
-
-- 전반적인 개념
-  - [AOP 개념](https://devjms.tistory.com/70)
-  - [AOP 웹공학](http://www.jidum.com/jidums/view.do?jidumId=312)
-  - [Day 2 - 스프링 AOP(Aspect Oriented Programming)](http://closer27.github.io/backend/2017/08/03/spring-aop/)
-  - [AOP의 구조 + 어노테이션](https://hunit.tistory.com/188)
-  - [Spring-AOP, Proxy 란?](https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/)
-  - [3. 스프링 AOP (AspectJ의 Pointcut 표현식) ](http://blog.naver.com/PostView.nhn?blogId=chocolleto&logNo=30086024618&categoryNo=29&viewDate=&currentPage=1&listtype=0)
   - [스프링 부트에서 aspectJ 형식으로 코드 참고](http://jsonobject.tistory.com/247)
-
----
-
-- 동영상
-  - [What is AOP - Aspect Oriented Programming](https://www.youtube.com/watch?v=DuFPj8MlAVo&index=8&list=WL&t=0s)
-  - [스터디 스프링5 입문 - AOP 프로그래밍 1 #10](https://www.youtube.com/watch?v=wrHTMsKrKkA&index=6&list=WL&t=0s)
-  - [스터디 스프링5 입문 - AOP 프로그래밍 2 #11](https://www.youtube.com/watch?v=9Gdv6fhhaB0&index=5&list=WL&t=0s)
-  - [스터디 코드로배우는스프링 38 Spring의 AOP](https://www.youtube.com/watch?v=4-JcM7y1M_8&index=7&list=WL&t=0s)
-  - [신입SW인력을 위한 실전 자바(Java) 스프링(Spring) 동영상과정 제 09강 AOP-I](https://www.youtube.com/watch?v=2F8K9BLgvjE&index=9&list=WL&t=0s)
-
----
-
-- slideplayer
   - [AOP 슬라이드](https://slideplayer.com/slide/9380068/)
 
----
-
-- 그외
+- 그 외
   - [Spring Filter, Interceptor AOP 차이 및 정리 ](http://goddaehee.tistory.com/154)
   - [Filter, Interceptor, AOP의 흐름](https://doublesprogramming.tistory.com/133)
   - [filter, interceptor, aop의 차이와 그 목적](http://hayunstudy.tistory.com/53)

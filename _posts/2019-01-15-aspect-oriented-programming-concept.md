@@ -8,7 +8,6 @@ feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
 sitemap:
-display: "false"
 changefreq: daily
 priority: 1.0
 ---

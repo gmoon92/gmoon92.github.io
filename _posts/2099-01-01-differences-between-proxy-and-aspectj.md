@@ -30,35 +30,6 @@ priority: 1.0
 3. CGLIB의 이해
 4. AspectJ의 이해
 
-### Spring AOP의 구현방식
-
-Spring AOP에선 기본적으로 두 가지 방식을 통해 Aspect를 구현할 수 있다.
-
-1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
-2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
-
-#### XML스키마 기반
-
-먼저 XML 기반의 형식을 선호한다면 Spring이 제공하는  `aop`라는 Namespace 태그를  사용하여 aspect를 정의할 수 있다. (단. aspect와 advisor는 반드시 `<aop:config>` 요소 내부에 정의되어야 한다.)
-
-``` xml
-<bean  id="loginProfiler"  class="..." > <!-- bean def -->
-  ...
-</bean>
-
-<aop:config>
-  <aop:aspect  id="aspectHandler"  ref="loginProfiler" > <!-- aspect 정의 -->
-      ...
-  </aop:aspect>
-</aop:config>
-```
-
-일반적으로 `<aop:config>` 태그를 사
-
-#### @AspectJ
-
-
-
 ### AspectJ, JDK Dynamic Proxy, CGLIB
 
 - AspectJ

@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Java에서 다양한 AOP 구현 방법"
+title: "Spring AOP 구현 방법과 적용하는 방식들"
 tags: [AOP]
 categories: [Spring, AOP]
-subtitle: "JDK Dynamic Proxy, CGLIB, AspectJ 비교 분석"
+subtitle: "JDK Dynamic Proxy & CGLIB Proxy & AspectJ"
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
@@ -15,25 +15,56 @@ priority: 1.0
 
 <!--more-->
 
-# JDK Dynamic Proxy, CGLIB Proxy, AspectJ 비교 분석
+# JDK Dynamic Proxy & CGLIB Proxy & AspectJ
 
 ---
 
 ### 들어가기전
 
-  본 포스팅에선 Java에서 AOP를 구현할 수 있는 JDK Dynamic Proxy, CGLIB, AspectJ의 방식에 대해 작성할 예정이다.
+  본 포스팅에선 Spring AOP에서 적용하는 방식에 따라 JDK Dynamic Proxy, CGLIB, AspectJ로 분류할 수 있는데, 이 방식들에 대해 알아보고 비교해보자.
 
 ### 학습목표
 
-1. AOP 등장배경
-2. AOP 개념과 용어
-3. 기존 자바에서 AOP 구현 방식
+1. Spring AOP의 구현방식
+2. JDK Dynamic Proxy의 이해
+3. CGLIB의 이해
+4. AspectJ의 이해
 
-### JDK Dynamic Proxy, CGLIB, AspectJ
+### Spring AOP의 구현방식
 
-- JDK Dynamic Proxy
-- CGLIB
+Spring AOP에선 기본적으로 두 가지 방식을 통해 Aspect를 구현할 수 있다.
+
+1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
+2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
+
+#### XML스키마 기반
+
+먼저 XML 기반의 형식을 선호한다면 Spring이 제공하는  `aop`라는 Namespace 태그를  사용하여 aspect를 정의할 수 있다. (단. aspect와 advisor는 반드시 `<aop:config>` 요소 내부에 정의되어야 한다.)
+
+``` xml
+<bean  id="loginProfiler"  class="..." > <!-- bean def -->
+  ...
+</bean>
+
+<aop:config>
+  <aop:aspect  id="aspectHandler"  ref="loginProfiler" > <!-- aspect 정의 -->
+      ...
+  </aop:aspect>
+</aop:config>
+```
+
+일반적으로 `<aop:config>` 태그를 사
+
+#### @AspectJ
+
+
+
+### AspectJ, JDK Dynamic Proxy, CGLIB
+
 - AspectJ
+- JDK Dynamic Proxy
+- CGLIB(Code Generator Library)
+
 
 Runtime(동적) : JDK Dynamic Proxy, CGLIB - 프록시 기반
 

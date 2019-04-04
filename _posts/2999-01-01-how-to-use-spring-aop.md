@@ -27,11 +27,29 @@ _**사용자 서비스에 실행 시간을 측정해서 알려주세요.**_
 
 본 포스팅에선 Spring AOP에서 지원하는 Aspect 구현 방식과 이 과정에서 간단하게 메소드 실행 시간을 측정하는 Profiling 목적을 띈 클래스를 구현하는 과정을 학습해보는 시간을 가지려 한다.
 
+> [XML 예제 코드](https://github.com/gmun/spring-aop-simple-profiling-in-xml-config)
+
 ### 학습목표
 
 1. XML스키마 기반 방식의 이해
 2. @AspectJ 어노테이션 방식의 이해
 3. AspectJ 방식의 이해
+
+### Spring AOP dependencies 설정
+
+Spring AOP는 aspectj 라이브러리가 필요하기 때문
+
+ pom.xml에 아래 코드를 추가하자.
+
+ [메이븐 - AspectJ](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver)
+
+``` xml
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.2</version>
+</dependency>
+```
 
 ### 비즈니스 로직 구현
 
@@ -160,6 +178,32 @@ Spring AOP에선 기본적으로 두 가지 방식을 통해 Aspect를 구현할
 </bean>
 ```
 
+``` xml
+
+	<!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+	<context:component-scan base-package="com.learning.business" />
+	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+	<context:annotation-config />
+
+	<!-- AOP Configuration for profiling -->
+	<!-- Our profiler class that we want to use to measure process time of service methods. -->
+	<bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
+
+	<!-- Spring AOP -->
+	<aop:config>
+		<aop:aspect ref="simplePerformanceMonitor">
+			<!-- pointcut 정의 : Advice가 적용될 JoinPoint를 정한다.  -->
+			<aop:pointcut id="businessMethods" expression="execution(* com.learning.business.*.*(..))" />
+
+			<!--
+				Around의 pointcut-ref 속성을 사용하여 미리 정의한 "businessMethods"을 참조한다.
+				aspect가 참조하는 빈의 부가기능 메소드를 method 속성을 통해 정의한다.
+			-->
+			<aop:around pointcut-ref="businessMethods" method="monitor" />
+		</aop:aspect>
+	</aop:config>
+
+```
 aspect는 `<aop:aspect>` 태그를 사용하여 선언하고, Spring에 등록된 부가 기능 빈을 `ref` 속성을 사용하여 참조하면 된다. `ref`가 참조하는 bean은 부가 기능을 지원하는 bean은 물론 기존에 사용된 Spring bean처럼 구성되고 DI 할 수 있다.
 
 

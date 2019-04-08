@@ -136,11 +136,11 @@ ProceedingJoinPoint를 사용한 이유는 JoinPoint를 확장한 클래스로�
 
 실행 시간을 측정은 `org.springframework.util.StopWatch` 클래스를 통해 기능을 구현하였다.
 
-### AOP 방식 선택
+### Spring AOP 방식 선택
 
 부가 기능까지 구현했다면 Spring AOP를 통해 서비스 메소드의 프로세스 시간을 측정하는 데 사용하려는 `SimplePerformanceMonitor` Aspect 클래스와 `Business` 클래스에 접목시켜야한다.
 
-일반적으로 JDK Dynamic Proxy를 구현하기 위해 `ProxyFactoryBean` 또는 `FactoryBean`을 사용하여 직접적으로 Aspect 구현할 수 있지만, Spring은 Auto Proxy bean 정의를 쉽게 사용할 수 있도록 두 가지 방식을 제공하고 있다.
+일반적으로 JDK Dynamic Proxy를 구현하기 위해 `ProxyFactoryBean` 또는 `FactoryBean`을 사용하여 직접적으로 Aspect 구현할 수 있지만, Spring은 간편하게 AOP를 설정할 수 있도록 두 가지 방식을 제공하고 있다.
 
 1. [XML(스키마 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
 2. [@AspectJ(어노테이션 기반 접근)](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
@@ -158,7 +158,7 @@ ProceedingJoinPoint를 사용한 이유는 JoinPoint를 확장한 클래스로�
 </aop:config>
 ```
 
-Spring에서 Aspect는 애플리케이션 컨텍스트에서 bean으로 정의된 일반 Java Object일 뿐이다. 따라서 XML 설정에서 apect를 선언하기 앞서 `SimplePerformanceMonitor` Aspect 클래스를 bean으로 등록해줘야 한다.
+일반적으로 Spring AOP는 Spring IoC 컨테이너와 함께 사용된다. 따라서 Spring에서 Aspect는 애플리케이션 컨텍스트에서 bean으로 정의된 일반 Java Object일 뿐이다. 따라서 XML 설정에서 apect를 선언하기 앞서 `SimplePerformanceMonitor` Aspect 클래스를 bean으로 등록해줘야 한다.
 
 ```xml
 <bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
@@ -277,65 +277,28 @@ public void monitoringTest() throws Exception {
 }
 ```
 
-``` reulst
+``` console
 execution(Business.doAction()) : 501 ms
 execution(Business.doAction()) : 501 ms
 execution(Business.doAction()) : 500 ms
 execution(Business.doRuntimeException()) : 0 ms , ERROR > 에러가 발생하였습니다.
 ```
 
-다음 결과를 통해 XML 설정으로 간단히 Proxy Object가 생성되고, 기존 Business 클래스를 별도의 수정 작업 없이 Aspect가 적용되었다는 걸 확인할 수 있었다.
+다음 결과를 통해 XML 설정으로 기존 Business 클래스를 별도의 수정 작업 없이 Aspect가 적용되었다는 걸 확인할 수 있었다.
 
-하지만 XML스키마 방식에 대한 몇 가지 단점들을 살펴볼 수 있다.
-
-#### XML스카마 방식의 단점
-
-1. Encapsulate
-2. 표현의 제한
-
-첫 번째 문제는 `Encapsulate`의 문제이다.
-
-``` xml
-<!-- Aspect bean XML -->
-<bean id="aspectBean" class="..." />
-
-<!-- AOP 설정 XML-->
-<aop:config>
-  <aop:aspect id="aspectA" ref="aspectBean">
-      ...
-  </aop:asepct>
-</aop:config>
-```
-
-다음과 같이 XML스키마 방식은 Aspect 클래스를 bean으로 정의하고 `<aop:aspect>` 태그를 사용해서 빈을 참조하는 방식으로 구현되었다.
-
-- Aspect bean + AOP 설정
-
-이처럼 XML 방식을 사용할 때 aspect 기반의 bean 클래스의 선언과 설정파일의 XML에 나누어져 하나의 설정으로 관리하지 못한다는 단점이 생긴다. 이는 DRY 원리에 위
-
-> DRY 원리 : 특정 정보와 기능이 하나의 원천으로 존재한다는 것을 강조하는 개발 원리로써, 단순히 중복 코드를 방지를 넘어 하나의 정보로 명확하고 신뢰할 수 있는 코드를 지향하여 최종적으로 Clean Code까지 달성할 수 있는 개발 원리이다.
-
-
-
-
-
- 또한 XML 방식에서는 "싱글톤" 관점 인스턴스화 모델만 지원하고 XML에서 선언한 이름이 붙은 포인트컷을 결합할 수 없다.
-
-Spring Boot과 같이 XML 설정을 할 수 없다면, @AspectJ 어노테이션을 활용하는 방법을 선택해야 한다.
+마지막으로 @AspectJ 방식에 대해 알아보자.
 
 ### @AspectJ
 
-Spring AOP는 기존 Java Object에 @AspectJ 어노테이션을 선언하면 AspectJ에서 제공하는 다양한 Aspect 기능을 Java Object에서 동작하도록 해당 어노테이션을 제공하고 있다. 물론 AspectJ 처럼 동작한다고 해서 @AspectJ로 작성한 모듈이 AspectJ의 Compiler 혹은 weaver를 의존하고 있지는 않다.
+@AspectJ 방식은 AspectJ 5 라이브러리의 어노테이션들을 사용하여 Aspect를 Java Object로 구현하는 방식을 의미한다. 이 Aspect는 Spring에 의해 자동으로 감지되며 Spring AOP에 의해 실행된다. @AspectJ 방식은 AspectJ의 Compiler/Weaver과는 무관하며 Spring에서 AspectJ의 방식을 사용하고 싶다면 다음 [링크](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-using-aspectj)를 참고하자.
 
->Spring 환경에서 AspectJ의 방식을 사용하고 싶다면 이 [링크](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-using-aspectj)를 참고하자.
+Spring에서 @AspectJ 방식을 사용하기 위해선 Spring AOP의 자동 프록싱(`autoproxying`) 설정이 필요하다.
 
-@AspectJ는 Spring AOP에 의해 동작한다. XML 설정에서 보았듯이 @AspectJ 방식도 `Auto Proxying`을 지원하고 있다. @AspectJ 방식의 Auto Proxying은 Spring이 하나 이상의 Aspect에 의해 조언을 받았다고 판단하면 자동으로 메소드 호출을 가로채고 필요에 따라 advice가 실행되도록 bean을 위한 Proxy를 자동으로 생성한다.
-
-Auto Proxying을 하기 위해선 @AspectJ 어노테이션을 활성화해줘야 한다.
+> `autoproxying`는 Spring은 bean이 하나 이상의 Aspect에 의해 advice을 받았다고 판단하면 자동으로 메소드 호출을 가로채고 advice가 실행이 보장되도록  해당 bean이 Proxy Object가 자동으로 생성되는 개념을 뜻한다.
 
 #### @AspectJ 어노테이션 활성화
 
-Spring AOP에선 두 가지 방법을 통해 @AspectJ 어노테이션을 활성화할 수 있다.
+Spring AOP에선 두 가지 방법을 통해 자동 프록싱 설정을 할 수 있다.
 
 1. `@Configuration`, `@EnableAspectJAutoProxy`
 2. `<aop:aspectj-autoproxy />`
@@ -381,6 +344,60 @@ public class SimplePerformanceMonitor {
 
 제일 먼저 @AspectJ를 활용한다면 해당 @Pointcut, @Around 등 어노테이션을 사용해야한다.
 
+
+하지만 XML스키마 방식에 대한 몇 가지 단점들을 살펴볼 수 있다.
+
+#### XML스키마 방식의 단점
+
+1. Encapsulate
+2. 표현의 제한
+
+첫 번째 단점은 `Encapsulate`이다.
+
+``` xml
+<!-- Aspect bean XML -->
+<bean id="aspectBean" class="..." />
+
+<!-- AOP 설정 XML-->
+<aop:config>
+  <aop:aspect id="aspectA" ref="aspectBean">
+      ...
+  </aop:aspect>
+</aop:config>
+```
+
+다음과 같이 XML스키마 방식은 Aspect 클래스를 bean으로 정의하고 `<aop:aspect>` 태그를 사용해서 빈을 참조하는 방식으로 구현한다.
+
+- Aspect bean + AOP 설정
+
+이는 DRY 원리에 위배 되는 사항이다. XML 방식을 사용할 때 aspect 기반의 bean 클래스의 선언과 설정파일의 XML에 나누어져 하나의 설정으로 관리하지 못한다는 단점이 생긴다.
+
+> DRY 원리 : 특정 정보와 기능이 하나의 원천으로 존재한다는 것을 강조하는 개발 원리로써, 단순히 중복 코드를 방지를 넘어 하나의 정보로 명확하고 신뢰할 수 있는 코드를 지향하여 최종적으로 Clean Code까지 달성할 수 있는 개발 원리이다.
+
+ 반면 @AspectJ 방식을 사용하는 경우엔 하나의 모듈로 관리할 수 있다.
+
+``` java
+@Aspect // aspect 클래스 명시 <aop:aspect ... >
+@Component // bean 등록 <bean ... >
+public class AspectA{
+}
+```
+
+두 번째 단점으론 XML스키마 방식은 AOP 표현에 있어 @AspectJ 방식보다 제약적이라는 점이다. XML스키마 방식에서는 싱글톤 관점 인스턴스화 모델만 지원하고 XML에서 선언한 이름이 붙은 pointcut을 결합할 수 없다.
+
+``` java
+@pointcut ( ... ) public void pointCutA(){}
+@pointcut ( ... ) public void pointCutB(){}
+@pointcut ( pointCutA() || pointCutB() ) public void pointCutAorB(){}
+```
+
+반면 @AspectJ에선 다음 코드처럼 정의된 기존 정의한 pointcut들을 조합한 pointcut 사용을 지원하고, 모듈 단위로 관점을 유지할 수 있다는 장점을 지니고 있다.
+
+- `org.aspectj.lang.annotation.Aspect`
+
+또한, @Aspect 어노테이션은 Spring AOP에서 자체적으로 제공하는 어노테이션이 아닌  AspectJ 기반의 어노테이션을 사용하고 있다는 점은 Spring AOP와 AspectJ가 모두 @AspectJ 방식을 인식할 수 있고 Spring AOP에서 AspectJ로 쉽게 마이그레이션을 할 수 있다는 장점이 있다.
+
+이러한 @AspectJ 방식의 장점들 때문에 Spring 팀에선 XML스키마 방식보다 @AspectJ 방식을 선호한다.
 
 
 

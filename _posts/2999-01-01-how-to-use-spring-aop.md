@@ -1,4 +1,4 @@
-Aspect---
+---
 layout: post
 title: "Spring에서 AOP 선언의 선택"
 tags: [AOP, Spring, AspectJ, Srpring-AOP]
@@ -278,15 +278,50 @@ public void monitoringTest() throws Exception {
 ```
 
 ``` reulst
-execution(Business.doAction()) : 501 ms  
-execution(Business.doAction()) : 501 ms  
-execution(Business.doAction()) : 500 ms  
+execution(Business.doAction()) : 501 ms
+execution(Business.doAction()) : 501 ms
+execution(Business.doAction()) : 500 ms
 execution(Business.doRuntimeException()) : 0 ms , ERROR > 에러가 발생하였습니다.
 ```
 
 다음 결과를 통해 XML 설정으로 간단히 Proxy Object가 생성되고, 기존 Business 클래스를 별도의 수정 작업 없이 Aspect가 적용되었다는 걸 확인할 수 있었다.
 
-하지만 Spring Boot과 같이 XML 설정을 할 수 없다면, @AspectJ 어노테이션을 활용하는 방법을 선택해야 한다.
+하지만 XML스키마 방식에 대한 몇 가지 단점들을 살펴볼 수 있다.
+
+#### XML스카마 방식의 단점
+
+1. Encapsulate
+2. 표현의 제한
+
+첫 번째 문제는 `Encapsulate`의 문제이다.
+
+``` xml
+<!-- Aspect bean XML -->
+<bean id="aspectBean" class="..." />
+
+<!-- AOP 설정 XML-->
+<aop:config>
+  <aop:aspect id="aspectA" ref="aspectBean">
+      ...
+  </aop:asepct>
+</aop:config>
+```
+
+다음과 같이 XML스키마 방식은 Aspect 클래스를 bean으로 정의하고 `<aop:aspect>` 태그를 사용해서 빈을 참조하는 방식으로 구현되었다.
+
+- Aspect bean + AOP 설정
+
+이처럼 XML 방식을 사용할 때 aspect 기반의 bean 클래스의 선언과 설정파일의 XML에 나누어져 하나의 설정으로 관리하지 못한다는 단점이 생긴다. 이는 DRY 원리에 위
+
+> DRY 원리 : 특정 정보와 기능이 하나의 원천으로 존재한다는 것을 강조하는 개발 원리로써, 단순히 중복 코드를 방지를 넘어 하나의 정보로 명확하고 신뢰할 수 있는 코드를 지향하여 최종적으로 Clean Code까지 달성할 수 있는 개발 원리이다.
+
+
+
+
+
+ 또한 XML 방식에서는 "싱글톤" 관점 인스턴스화 모델만 지원하고 XML에서 선언한 이름이 붙은 포인트컷을 결합할 수 없다.
+
+Spring Boot과 같이 XML 설정을 할 수 없다면, @AspectJ 어노테이션을 활용하는 방법을 선택해야 한다.
 
 ### @AspectJ
 

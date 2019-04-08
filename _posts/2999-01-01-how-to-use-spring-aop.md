@@ -294,18 +294,18 @@ execution(Business.doRuntimeException()) : 0 ms , ERROR > 에러가 발생하였
 
 Spring에서 @AspectJ 방식을 사용하기 위해선 Spring AOP의 자동 프록싱(`autoproxying`) 설정이 필요하다.
 
-> `autoproxying`는 Spring은 bean이 하나 이상의 Aspect에 의해 advice을 받았다고 판단하면 자동으로 메소드 호출을 가로채고 advice가 실행이 보장되도록  해당 bean이 Proxy Object가 자동으로 생성되는 개념을 뜻한다.
+> `autoproxying`는 Spring은 bean이 하나 이상의 Aspect에 의해 advice을 받았다고 판단하면 자동으로 메소드 호출을 가로채고 advice가 실행이 보장되도록  해당 bean이 Proxy Object가 자동으로 생성되는 개념을 뜻한다. `autoproxying`에 대한 상세한 정보는 이 [링크](https://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch09s09.html)를 참고하자.
 
 #### @AspectJ 어노테이션 활성화
 
-Spring AOP에선 두 가지 방법을 통해 자동 프록싱 설정을 할 수 있다.
+Spring에 `autoproxying` 설정이 활성화되면 의해 Spring 애플리케이션 컨텍스트 또는 클래스를 통해 정의된 모든 bean 중에 @AspectJ 어노테이션 부착 여부를 자동으로 감지하고, Spring은 감지된 클래스를 사용하여 Spring AOP를 설정하는 데 사용된다.
 
-1. `@Configuration`, `@EnableAspectJAutoProxy`
-2. `<aop:aspectj-autoproxy />`
+Spring AOP에선 두 가지 방법을 통해 `autoproxying` 설정을 할 수 있다.
 
->@EnableAspectJAutoProxy 어노테이션에 대한 자세한 정보는 이 [링크](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)를 참고하자.
+1. `<aop:aspectj-autoproxy />`
+2. `@Configuration`, `@EnableAspectJAutoProxy`
 
-두 번째 방식은 XML스키마 기반의 설정임으로 생략하자.
+첫 번째는 XML에서 `<aop:aspectj-autoproxy />` 태그를 작성하면 간편히 `autoproxying` 환경이 설정된다. 마지막으로 Java Object로 설정하는 방법을 지원한다.
 
 ``` java
 @Configuration
@@ -320,7 +320,9 @@ public class AspectJAutoProxyConfig {
 }
 ```
 
-@AspectJ 지원이 활성화되면 Spring에 의해 애플리케이션 컨텍스트 또는 클래스를 통해 정의된 모든 bean 중에 @AspectJ 어노테이션 부착 여부를 자동으로 감지하고, 이를 Spring AOP를 설정하는 데 사용된다.
+다음 코드를 보면 `@Configuration`, `@EnableAspectJAutoProxy` 어노테이션을 사용하여 `autoproxying`을 설정할 수 있다. @EnableAspectJAutoProxy의 `proxyTargetClass` 속성은 CGLIB(하위 클래스 기반)으로 Proxy를 생성할지를 설정할 수 있지만, 기본값이 false임으로 별도의 설정이 아니라면 JDK Dynamic Proxy 기반으로 Proxy가 생성된다.
+
+> @EnableAspectJAutoProxy 어노테이션에 대한 자세한 정보는 이 [링크](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)를 참고하자.
 
 #### @AspectJ로 Aspect 구현
 
@@ -331,18 +333,27 @@ public class AspectJAutoProxyConfig {
 @Component
 public class SimplePerformanceMonitor {
 
-    // 포인트 컷
+    // Pointcut 정의
     @Pointcut ("execution(* com.learning.aop.business.*.*(..))")
     private void businessService () {}
 
+    // Advice 정의
     @Around(value="businessService()")
     public Object monitoring(ProceedingJoinPoint joinPoint) throws Throwable{
+        ...
+    }
+
+    private void endStopWatch(StopWatch stopWatch, Throwable throwable){
         ...
     }
 }
 ```
 
-제일 먼저 @AspectJ를 활용한다면 해당 @Pointcut, @Around 등 어노테이션을 사용해야한다.
+1. @Aspect 어노테이션을 선언하여 해당 Java Object가 Aspect 클래스라는걸 선언한다.
+2. 해당 Aspect 클래스를 @Component를 선언하여 bean으로 등록한다.
+3. @Pointcut를 선언하여 pointcut 메소드를 정의한다.
+4. @Around 어노테이션을 선언하여 Advice 메소드를 구현한다.
+
 
 
 하지만 XML스키마 방식에 대한 몇 가지 단점들을 살펴볼 수 있다.
@@ -398,9 +409,6 @@ public class AspectA{
 또한, @Aspect 어노테이션은 Spring AOP에서 자체적으로 제공하는 어노테이션이 아닌  AspectJ 기반의 어노테이션을 사용하고 있다는 점은 Spring AOP와 AspectJ가 모두 @AspectJ 방식을 인식할 수 있고 Spring AOP에서 AspectJ로 쉽게 마이그레이션을 할 수 있다는 장점이 있다.
 
 이러한 @AspectJ 방식의 장점들 때문에 Spring 팀에선 XML스키마 방식보다 @AspectJ 방식을 선호한다.
-
-
-
 
 #### 마무리
 

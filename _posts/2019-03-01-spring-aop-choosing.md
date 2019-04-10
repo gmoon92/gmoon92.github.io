@@ -231,9 +231,9 @@ Aspect가 선언했다면 Target Object에 Aspect를 적용하기 위해 pointcu
 <bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
 ```
 
-#### 테스트 코드를 통해 XML 설정 확인해보자
+#### XML 설정을 테스트 코드로 확인해보자
 
-다음 학습 테스트 코드의 목적은 크게 두 가지로 볼 수 있다.
+다음 학습 테스트 코드의 목적은 크게 세 가지로 볼 수 있다.
 
 1. Business bean이 JDK Dynamic Proxy Object로 생성되는지
 2. Aspect가 적용됐는지
@@ -436,7 +436,7 @@ public class SimplePerformanceMonitor {
 
 XML 방식과 마찬가지로 advice에 관련된 AspectJ 어노테이션들은 정의된 pointcut 메소드를 참조할 수 있다.
 
-#### 테스트 코드를 통해 @AspectJ 설정 확인해보자
+#### @AspectJ 설정을 테스트 코드로 확인해보자
 
 이제 @AspectJ 방식의 설정이 제대로 동작하는지  테스트 코드를 통해 확인해보자.
 
@@ -509,13 +509,15 @@ class com.learning.aop.business.BusinessImple$$EnhancerBySpringCGLIB$$e5825056
 분명 AspectJAutoProxyConfig 클래스에서  `@EnableAspectJAutoProxy`
 JDK Dynamic Proxy로  설정했는데 Spring에 의해 Proxy가 자동적으로 CGLIB Proxy로 생성되었다.
 
-무슨일일까... 이와 같은 현상은 다음 [링크 - springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)를 통해 답을 찾을 수 있다.
+무슨일일까... 이와 같은 현상은  [springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)에서 답을 찾을 수 있다.
 
 >We've generally found cglib proxies less likely to cause unexpected cast exceptions. - Phil Webb(Spring Framework committer and current lead of Spring Boot.)
 
 현재 Spring Boot의 프로젝트 리더인 Phil Web은 CGLIB Proxy 방식이 예기치 않은 캐스팅 예외를 일으킬 가능성이 적다고 한다.
 
-이 이슈에 대한 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가해주면 해결할 수 있다.
+이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `proxyTargetClass=true`로 기본적으로 셋팅된다. 즉 bean을 구성하기 위해 인터페이스로 구현하지 않아도 되고 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
+
+이 이슈에 대한 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가해주면 간단히 해결할 수 있다.
 
 ``` html
 class com.sun.proxy.$Proxy45
@@ -546,3 +548,4 @@ class com.sun.proxy.$Proxy45
 - [Spring 4.3.15 RELEASE DOC - AOP Schema](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
 - [Spring 4.3.15 RELEASE DOC - AOP AspectJ](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
 - [Spring 4.3.15 RELEASE DOC - AOP using AspectJ](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-using-aspectj)
+- [Spring-Boot-1.4-Release-Notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes)

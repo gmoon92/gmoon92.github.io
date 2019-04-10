@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Spring AOP 구현 방법과 적용하는 방식들"
-tags: [AOP]
+title: "Spring AOP의 AOP Proxy"
+tags: [AOP, Spring AOP, Proxy, JDK Dynamic Proxy, CGLIB]
 categories: [Spring, AOP]
-subtitle: "JDK Dynamic Proxy & CGLIB Proxy & AspectJ"
+subtitle: "JDK Dynamic Proxy 와 CGLIB Proxy에 대해 알아보자."
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
@@ -21,7 +21,10 @@ priority: 1.0
 
 ### 들어가기전
 
-  본 포스팅에선 Spring AOP에서 적용하는 방식에 따라 JDK Dynamic Proxy, CGLIB, AspectJ로 분류할 수 있는데, 이 방식들에 대해 알아보고 비교해보자.
+Spring AOP에 의해 생성되는 AOP Proxy는 JDK Dynamic Proxy와 CGLIB Proxy이다.
+
+이 AOP Proxy의
+데, 이 방식들에 대해 알아보고 비교해보자.
 
 ### 학습목표
 
@@ -63,29 +66,11 @@ Compile time(정적) : AspectJ    - 타깃 기반 (타깃 오브젝트를 직접
 참고[https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ]
 
 
-무슨일일까... 이와 같은 현상은 다음 링크를 통해 답을 찾을 수 있다.
-
-- [springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)
-- [springboot-issues#5423](https://github.com/spring-projects/spring-boot/issues/5423)
-
->We've generally found cglib proxies less likely to cause unexpected cast exceptions. - Phil Webb(Spring Framework committer and current lead of Spring Boot.)
-
-현재 Spring Boot의 프로젝트 리더인 Phil Web은 CGLIB Proxy 방식이 예기치 않은 캐스팅 예외를 일으킬 가능성이 적다고 한다.
-
-이러한 이슈로 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `proxyTargetClass=true`로 기본적으로 셋팅된다. 즉 bean을 구성하기 위해 인터페이스로 구현하지 않아도 되고 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
-
-> [Spring-Boot-1.4-Release-Notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes)
-
-
 ### 참고
 
 - [AOP 구현 세가지 방법 비교](https://www.reimaginer.me/entry/AOP-%EA%B5%AC%ED%98%84-%EC%84%B8%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-%EB%B9%84%EA%B5%90%EC%97%90-%EA%B4%80%ED%95%9C-%EC%A7%A7%EC%9D%80-%EA%B8%80-JAVA-proxy-CGLIB-AspectJ)
 
-
-
 ---
-
-
 
 ### 참고
 

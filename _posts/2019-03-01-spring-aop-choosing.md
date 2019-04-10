@@ -24,7 +24,7 @@ _**사용자 서비스에 실행 시간을 측정해서 알려주세요.**_
 
 다음 요구사항이 처리하는 데 있어 Aspect가 가장 좋은 접근이라고 결정했다면, 다양한 구현방식 중에 어떻게 구현해야 할지 선택해야 한다. 본 포스팅에선 Spring AOP 선언 방식과 이 과정에서 간단하게 메소드 실행 시간을 측정하는 Profiling 목적을 띈 클래스를 구현하는 과정을 학습해보는 시간을 가지려 한다.
 
-학습의 환경으론 Spring과 SpringBoot에서 진행했으며, XML 방법에선 Spring4 환경으로 @AspectJ 방법은 Spring Boot2을 사용했다. 본 포스팅에 사용했던 예제 코드는  [깃허브](https://github.com/gmun/spring-aop-simple-profiling-in-xml-config)를 참고하기 바란다.
+학습의 환경으론 Spring과 SpringBoot에서 진행했으며, XML 방법에선 Spring4 환경으로 @AspectJ 방법은 Spring Boot2을 사용했다. 본 포스팅에 사용했던 예제 코드는  [GitHub](https://github.com/gmun/spring-aop-simple-profiling)를 참고하기 바란다.
 
 ### 학습목표
 

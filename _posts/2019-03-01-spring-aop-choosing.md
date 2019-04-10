@@ -517,7 +517,7 @@ JDK Dynamic Proxy로  설정했는데 Spring에 의해 Proxy가 자동적으로 
 
 이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `proxyTargetClass=true`로 기본적으로 셋팅되도록 Release 되었다. 즉 bean을 구성하기 위해 인터페이스로 구현하지 않아도 되고 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
 
-따라서 CGLIB를 강제하지 않고 JDK Dynamic Proxy로 설정하는 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가하는 방법을 제시하고 있다. 테스트 코드로 확인해보자.
+Spring Boot 환경에서 CGLIB를 강제하지 않고 JDK Dynamic Proxy로 설정하는 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가하는 방법을 제시하고 있다. 테스트 코드로 확인해보자.
 
 ``` html
 class com.sun.proxy.$Proxy45

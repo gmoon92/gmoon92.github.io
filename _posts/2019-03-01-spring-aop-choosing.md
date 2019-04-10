@@ -66,7 +66,7 @@ public interface Business {
 
 #### Target Object 구현
 
-BusinessImple 클래스는 advice(부가 기능)가 적용될 Target Object이다.
+BusinessImple 클래스는 advice(부가 기능) 적용될 Target Object이다.
 
 ``` java
 @Component
@@ -515,9 +515,9 @@ JDK Dynamic Proxy로  설정했는데 Spring에 의해 Proxy가 자동적으로 
 
 현재 Spring Boot의 프로젝트 리더인 Phil Web은 CGLIB Proxy 방식이 예기치 않은 캐스팅 예외를 일으킬 가능성이 적다고 한다.
 
-이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `proxyTargetClass=true`로 기본적으로 셋팅된다. 즉 bean을 구성하기 위해 인터페이스로 구현하지 않아도 되고 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
+이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `proxyTargetClass=true`로 기본적으로 셋팅되도록 Release 되었다. 즉 bean을 구성하기 위해 인터페이스로 구현하지 않아도 되고 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
 
-이 이슈에 대한 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가해주면 간단히 해결할 수 있다.
+따라서 CGLIB를 강제하지 않고 JDK Dynamic Proxy로 설정하는 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가하는 방법을 제시하고 있다. 테스트 코드로 확인해보자.
 
 ``` html
 class com.sun.proxy.$Proxy45

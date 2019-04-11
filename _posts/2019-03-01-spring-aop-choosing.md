@@ -399,7 +399,7 @@ Spring AOP에선 두 가지 방법을 통해 `autoproxying` 설정할 수 있다
 1. `<aop:aspectj-autoproxy />`
 2. `@Configuration`, `@EnableAspectJAutoProxy`
 
-첫 번째는 XML에서 `<aop:aspectj-autoproxy />` 태그를 작성하면 간편히 `autoproxying` 환경이 설정된다. 반면 순수 Java 코드로 `autoproxying` 환경을 설정할 수 있다.
+ XML에서 `<aop:aspectj-autoproxy />` 태그를 작성하는 방법과 순수 Java 코드로 `autoproxying` 환경을 설정하는 방법이 있다.
 
 ``` java
 @Configuration
@@ -414,9 +414,11 @@ public class AspectJAutoProxyConfig {
 }
 ```
 
-다음 코드를 보면 `@Configuration`, `@EnableAspectJAutoProxy` 어노테이션을 사용하여 `autoproxying`을 설정할 수 있다. [@EnableAspectJAutoProxy](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)의 `proxyTargetClass` 속성은 CGLIB(하위 클래스 기반)으로 Proxy를 생성할지를 설정할 수 있지만, 기본값이 false임으로 별도의 설정이 아니라면 JDK Dynamic Proxy 기반으로 Proxy가 생성된다. 이제 @AspectJ 방식으로 Aspect 클래스를 구현해보자.
+다음 코드를 보면 `@Configuration`, `@EnableAspectJAutoProxy` 어노테이션을 사용하여 `autoproxying`을 설정할 수 있다.
 
-#### Spring Boot에서 @AspectJ로 Aspect 구현
+[@EnableAspectJAutoProxy](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)의 `proxyTargetClass` 속성은 CGLIB(하위 클래스 기반)으로 Proxy를 생성할지를 설정할 수 있지만, 기본값이 false임으로 별도의 설정이 아니라면 JDK Dynamic Proxy 기반으로 Proxy가 생성된다. 이제 @AspectJ 방식으로 Aspect 클래스를 구현해보자.
+
+#### 5.2. Spring Boot에서 @AspectJ로 Aspect 구현
 
 @AspectJ 방식으로 Aspect를 구현하기 위해선 클래스에 @Aspect 어노테이션을 선언하여 해당 클래스가 Aspect 클래스라는 걸 선언해줘야 한다.
 
@@ -465,7 +467,7 @@ public class SimplePerformanceMonitor {
 
 XML 방식과 마찬가지로 advice에 관련된 AspectJ 어노테이션들은 정의된 pointcut 메소드를 참조할 수 있다.
 
-#### @AspectJ 설정을 테스트 코드로 확인해보자
+#### 5.3. 테스트 코드로 검증해보자
 
 이제 @AspectJ 방식의 설정이 제대로 동작하는지  테스트 코드를 통해 확인해보자.
 
@@ -554,11 +556,15 @@ class com.sun.proxy.$Proxy45
 
 ~~3. Spring 통합 테스트도 통과되는지~~
 
+---
+
 ### 추가 공부거리...
 
 - @Pointcut의 다양한 표현 식
 - JDK Dynamic Proxy와 CGLIB Proxy 비교
 - Proxy 방식 AOP의 self-invocation 이슈
+
+---
 
 ### 마무리
 
@@ -569,6 +575,8 @@ class com.sun.proxy.$Proxy45
 이러한 이슈들을 최소화하고 부가 기능을 추가하는 방법으로 관점(Aspect)으로 본 포스팅처럼 AOP로 구현하는 방법이 가장 나은 접근일 수 있다.
 
 하지만 Aspect와 관계없이 비즈니스 로직을 수정할 때도 무리하게 AOP로 접근하는 방식은 오히려 관리 포인트가 높아지기 때문에 상황을 고려하여 신중히 적용해야 한다고 생각한다.
+
+---
 
 ### 참고
 

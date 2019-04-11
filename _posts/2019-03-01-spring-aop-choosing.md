@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Spring AOP 선언의 선택"
-tags: [AOP, Spring, AspectJ, Srpring-AOP]
+tags: [AOP, Spring, SpringAOP, XML, @AspectJ]
 categories: [Spring, AOP]
-subtitle: "Spring AOP로 시간 측정 Profiling 구현"
+subtitle: "Spring AOP로 메소드 시간 측정하기"
 feature-img: "md/img/thumbnail/spring-aop-choosing.png"
 thumbnail: "md/img/thumbnail/spring-aop-choosing.png"
 excerpt_separator: <!--more-->
@@ -14,7 +14,7 @@ priority: 1.0
 
 <!--more-->
 
-# Spring AOP로 시간 측정 Profiling 구현
+# Spring AOP로 메소드 시간 측정하기
 
 ---
 
@@ -22,9 +22,12 @@ priority: 1.0
 
 _**사용자 서비스에 실행 시간을 측정해서 알려주세요.**_
 
-다음 요구사항이 처리하는 데 있어 Aspect가 가장 좋은 접근이라고 결정했다면, 다양한 구현방식 중에 어떻게 구현해야 할지 선택해야 한다. 본 포스팅에선 Spring AOP 선언 방식과 이 과정에서 간단하게 메소드 실행 시간을 측정하는 Profiling 목적을 띈 클래스를 구현하는 과정을 학습해보는 시간을 가지려 한다.
+다음 요구사항이 처리하는 데 있어 Aspect가 가장 좋은 접근이라고 결정했다면 어떤 AOP 방식으로 구현할지 선택해야 한다. 이 선택지는 크게 AOP의 표준이라 할 수 있는 AspectJ와 Spring에서 제공하는 Spring AOP로 나뉠 수 있다. 본 포스팅은 Spring AOP의 방식으로 다음 요구사항을 해결하는 과정을 작성했다.
 
-학습의 환경으론 Spring과 SpringBoot에서 진행했으며, XML 방법에선 Spring4 환경으로 @AspectJ 방법은 Spring Boot2을 사용했다. 본 포스팅에 사용했던 예제 코드는  [GitHub](https://github.com/gmun/spring-aop-simple-profiling)를 참고하기 바란다.
+ 학습 환경으론 Spring과 SpringBoot에서 진행했고 학습 과정에서 사용했던 코드는 [GitHub](https://github.com/gmun/spring-aop-simple-profiling)를 참고하기 바란다.
+
+- XML : Spring 4.2.3.RELEASE
+- @AspectJ : Spring Boot 2.1.4.RELEASE
 
 ### 학습목표
 
@@ -34,7 +37,7 @@ _**사용자 서비스에 실행 시간을 측정해서 알려주세요.**_
 
 ### Spring AOP dependencies 설정
 
-Spring AOP는 [aspectjweaver.jar](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver)가 필요하다. 먼저 Maven의 빌드 설정 파일인 pom.xml 파일에 아래 코드를 추가하자.
+먼저 Spring AOP는 [aspectjweaver.jar](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver) 라이브러리가 필요하다. Maven의 빌드 설정 파일인 pom.xml 파일에 아래 코드를 추가하자.
 
 ``` xml
 <dependency>
@@ -44,13 +47,11 @@ Spring AOP는 [aspectjweaver.jar](https://mvnrepository.com/artifact/org.aspectj
 </dependency>
 ```
 
-### 비즈니스 로직 구현
+### 1. 비즈니스 로직
 
-필자는 JDK Dynamic Proxy를 사용하여 Aspect를 구현해보려 한다. JDK Dynamic Proxy와 CGLIB의 차이점에 대해선 다음에 자세히 다룰 예정이다.
+Spring AOP의 Proxy는 JDK Dynamic Proxy 또는 CGLIB으로 생성할 수 있다. 본 포스팅은 JDK Dynamic Proxy로 진행해보자. JDK Dynamic Proxy는 인터페이스만 지원하기 때문에 먼저 인터페이스를 구현해줘야 한다.
 
-#### 인터페이스 구현
-
-본론으로 돌아와서, 아시다시피 JDK의 Proxy는 인터페이스만 지원하기 때문에, 먼저 비즈니스 인터페이스를 구현해보자.
+#### 1.1. 인터페이스 구현
 
 ``` java
 public interface Business {
@@ -62,11 +63,9 @@ public interface Business {
 - doAction() → 비즈니스 로직 수행
 - doRuntimeException() → 강제 예외 발생
 
-첫 번째 메소드는 비즈니스 로직의 실행 시간을 측정하기 위함이고, 두 번째 메소드는 예외가 발생할 때 어떻게 처리가 될지 학습 테스트를 진행하기 위함이다.
+다음 메소드는 `1) 비즈니스 수행`, `2) 예외가 발생` 두 가지 상황을 테스트하기 위해 구성했다. 본 포스팅은 학습 테스트의 목적을 띄고 있기 때문에 기능은 심플하게 구현하자.
 
-#### Target Object 구현
-
-BusinessImple 클래스는 advice(부가 기능) 적용될 Target Object이다.
+#### 1.2. Target Object 구현
 
 ``` java
 @Component
@@ -83,13 +82,12 @@ public class BusinessImple implements Business{
 }
 ```
 
-다음 코드에서 doAction() 메소드는 Thread.sleep() 메소드를 사용하여 수행 시간을 지연시켰고 doRuntimeException() 메소드는 강제 예외를 발생시켰다.
+- doAction() → 0.5초간 실행을 지연시켜 실제 로직을 수행하는 것처럼 보이기 위함.
+- doRuntimeException() → 강제로 예외를 발생.
 
-여기서 AOP가 주는 가장 큰 이점을 발견할 수 있다. 이 점은 핵심 모듈(Aspect)과 부가 모듈을 분리하여 관리한다는 점이다. BusinessImple 클래스 내부에 메소드의 실행 시간을 측정과 관련된 어떠한 로직도 작성하지 않고 핵심 모듈로써 관리할 수 있다는 점을 살펴볼 수 있다.
+여기서 중요한 점은 BusinessImple 클래스 내부에 실행시간 측정과 관련된 어떠한 로직도 작성하지 않았다. 즉 관심사를 분리하여 관리할 수 있다는 AOP의 장점을 살펴볼 수 있다.
 
-#### 메소드 실행 측정 클래스 작성
-
-이제 Aspect를 구현해보자.
+### 2. 메소드 실행 측정 클래스 구현
 
 ``` java
 public class SimplePerformanceMonitor {
@@ -126,43 +124,81 @@ public class SimplePerformanceMonitor {
 - monitoring → advice 작성
 - endStopWatch → 비즈니스 메소드 종료를 알리는 메소드
 
-다음 `monitoring` 메소드의 매개 변수를 보면 ProceedingJoinPoint를 Spring AOP로부터 받는다는 걸 알 수 있다.
+다음 `monitoring()`의 ProceedingJoinPoint 매개 변수를 보면  Spring AOP로부터 받는다는 걸 알 수 있다.
 
-ProceedingJoinPoint를 사용함으로써 JoinPoint를 확장한 클래스로써 호출될 Target Object(BusinessImple.class)의 메소드 정보뿐만 아니라 `ProceedingJoinPoint.proceed()` 메소드를 통해 Target의 메소드의 호출 시점과 타깃의 매개 변수의 값을 제어할 수 있다.
-
-따라서 Target Object 메소드의 실행 전후에 `org.springframework.util.StopWatch`의 메소드를 사용하여 실행 시간을 측정을 했다.
-
-### Spring AOP 선택하기
-
-Aspect까지 구현했다면 Spring AOP를 통해 `BusinessImple` 클래스에 Aspect를 접목시켜야한다.
-
-일반적으로 JDK Dynamic Proxy를 구현하기 위해 `ProxyFactoryBean` 또는 `FactoryBean`을 통해 Aspect 구현할 수 있지만, Spring은 간편하게 AOP를 설정할 수 있도록 두 가지 방식을 제공하고 있다.
-
-1. XML(스키마 기반)
-2. @AspectJ(어노테이션 기반)
-
-### XML(스키마) 방식
-
-먼저 XML으로 Aspect를 정의하기 위해선 Spring이 제공하는 `aop`라는 Namespace 태그를 사용해야 한다.
-
- `aop` Namespace 태그 중에서 `<aop:config>`는 최상위 요소로써 XML 설정에 있어 가장 먼저 선언이 되어야 하고, AOP와 관련된 Aspect와 Advisor는 반드시 `<aop:config>` 요소 내부에 선언되어야 한다.
-
-```xml
-<aop:config>
-    <aop:aspect>...</aop:aspect> <!-- aspect -->
-    <aop:advisor>...</aop:advisor> <!-- advisor -->
-</aop:config>
+``` java
+public interface ProceedingJoinPoint extends JoinPoint{
+    void set$AroundClosure(AroundClosure arc);
+    public Object proceed() throws Throwable;
+    public Object proceed(Object[] args) throws Throwable;
+}
 ```
 
-Spring AOP는 Spring IoC 컨테이너와 함께 사용된다. 이 말은 Spring에서 Aspect는 애플리케이션 컨텍스트에서 bean으로 정의된 일반 Java Object라고 해석할 수 있다. 따라서 `SimplePerformanceMonitor.class` Aspect 클래스를 bean으로 등록해줘야 한다.
+_ProceedingJoinPoint is only supported for around advice_
 
-```xml
-<bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
-```
+ProceedingJoinPoint는 Around advice에서만 지원되는 JoinPoint이다. 기존 사용했던 joinPoint처럼 Target Object의 메소드 정보를 포함하고 있다. 특히 `ProceedingJoinPoint.proceed()`는 Target의 메소드를 실행을 제어할 수 있다.
 
-Aspect 클래스를 bean으로 등록했다면, Spring이 등록된 bean이 Aspect임을 인식할 수 있도록 Spring AOP 설정으로 Aspect임을 선언해줘야 한다.
+따라서 Target Object 메소드의 실행을 의미하는 `proceed()` 전후에 `org.springframework.util.StopWatch`의 메소드를 사용하여 실행 시간을 측정을 했다.
 
-Aspect 선언은 `<aop:aspect>` 태그를 사용하고, Spring에 등록된 `simplePerformanceMonitor` bean을 `<aop:aspect>`의 `ref` 속성을 사용하여 참조하면 된다. `ref`가 참조할 수 있는 bean은 부가 기능을 지원하는 bean으로써 기존에 사용된 Spring bean처럼 구성되고 DI 할 수 있다.
+여기까지 Spring AOP를 학습하기 위한 클래스들이 준비되었다.
+
+### 3. Spring AOP
+
+이제 Target Object에  Aspect를 구현하기 위해 Target Object에 대한 Proxy를 생성해야한다.
+
+ 명시적으로 `ProxyFactoryBean` 또는 `FactoryBean`을 통해 Proxy Object를 생성할 수 있지만, Spring은 Spring AOP를 통해 더 쉽게 Proxy의 생성과 관리를 할 수 있다.
+
+#### 3.1. Spring AOP 요약
+
+Spring AOP는 다음과 같이 크게 세가지로 요약할 수 있다.
+
+1.  Spring AOP는 Spring IoC 컨테이너와 함께 사용된다.
+2.  Spring AOP는 Proxy 기반의 AOP 프레임워크다.
+3.  Proxy 기반의 Weaving은 Runtime weaving이다.
+
+먼저 Spring AOP는 Spring IoC 컨테이너와 함께 사용된다. 이 말은 Spring AOP에서 사용하는 Aspect는 Spring에 bean으로 등록된 일반 Java Object라는 의미다.
+
+또한, Spring AOP는 `java.lang.reflect.Proxy` 기반으로 동작한다. 즉 기존 서비스 bean 대신 Proxy를 설정한 bean을 대체하여 동작하게 된다. 예를 들어 서비스의 프로세스가 실행되면 java.lang.reflect.Proxy로 구현한 Proxy bean이 호출되어 실행 시점에 다양한 Aspect를 수행하게 된다.
+
+#### 3.2. Spring AOP 선택하기
+
+이러한 Spring AOP는 스키마 방식과 어노테이션 방식을 지원하고 있다.
+
+ - XML(스키마 기반)
+ - @AspectJ(어노테이션 기반)
+
+### 4. XML(스키마) 방식
+
+XML으로 Aspect를 정의하기 위해선 Spring이 제공하는 `aop` 네임스페이스 태그를 사용해야 한다.
+
+- `<aop:config>`
+- `<aop:aspect>`
+- `<aop:advisor>`
+
+#### 4.1. Config 선언
+
+먼저 `<aop:네임스페이스>` 중에서 최상위 소요인 `<aop:config>`를 가장 먼저 선언되어야 한다. `<aop:config>`는 AOP의 설정의 시작을 알리는 요소다.  `<aop:config>` 요소 내부엔 Aspect와 Advisor의 태그를 선언해준다.
+
+ ```xml
+ <aop:config>
+     <aop:aspect>...</aop:aspect> <!-- aspect -->
+     <aop:advisor>...</aop:advisor> <!-- advisor -->
+ </aop:config>
+ ```
+
+#### 4.2. Aspect bean 등록
+
+그다음 `1.  Spring AOP는 Spring IoC 컨테이너와 함께 사용된다.`에서 설명했던것 처럼 `SimplePerformanceMonitor` 클래스가 bean으로 등록한다.
+
+ ```xml
+ <bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
+ ```
+
+Aspect 클래스를 bean으로 등록했다면, Spring이 등록된 bean을 Aspect임을 인식할 수 있도록 XML 설정을 해줘야한다.
+
+#### 4.3. Aspect 선언
+
+Aspect는 `<aop:aspect>` 태그를 사용하고 `ref` 속성을 사용하여 등록한 Aspect bean을 참조하면 된다. `ref`가 참조할 수 있는 bean은 부가 기능을 지원하는 bean으로써 기존에 사용된 Spring bean처럼 구성되고 DI 할 수 있다.
 
 ``` xml
 <aop:config>
@@ -175,7 +211,9 @@ Aspect 선언은 `<aop:aspect>` 태그를 사용하고, Spring에 등록된 `sim
 <bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
 ```
 
-Aspect가 선언했다면 Target Object에 Aspect를 적용하기 위해 pointcut과 advice를 정의해줘야 한다. 먼저 pointcut에 대해 간단히 살펴보자.
+다음과 같이 `simplePerformanceMonitor` bean을 참조한 Aspect를 선언하였다. 이제 `<aop:aspect>` 내부에 pointcut과 advice를 정의하여 weaving을 해줘야한다. 먼저 pointcut에 대해 간단히 살펴보자.
+
+#### 4.4. Pointcut
 
 ``` xml
 <aop:config>
@@ -187,7 +225,9 @@ Aspect가 선언했다면 Target Object에 Aspect를 적용하기 위해 pointcu
 </aop:config>
 ```
 
-다음과 같이 pointcut은 `<aop:pointcut>` 태그를 사용하고 `<aop:config>` 태그 내부 또는 `<aop:aspect>` 태그 내부에 설정할 수 있다. Spring에서 제공하는 pointcut의 표현 식은 AspectJ 5의 pointcut 표현 식을 사용하고, `<aop:pointcut>` 태그의 `expression` 속성을 통해 구현할 수 있다.
+다음과 같이 pointcut은 `<aop:pointcut>` 태그를 사용한다. 태그의 위치는 `<aop:config>`, `<aop:aspect>` 태그 내부에 설정할 수 있다.
+
+특정 JoinPoint를 가르키는 pointcut의 표현 식은 `expression` 속성에 정의한다. Spring에서 제공하는 pointcut의 표현 식은 AspectJ 5의 pointcut 표현 식을 사용한다.
 
 ``` xml
 <aop:aspect id="simpleMonitoring" ref="simplePerformanceMonitor">
@@ -195,7 +235,9 @@ Aspect가 선언했다면 Target Object에 Aspect를 적용하기 위해 pointcu
 </aop:aspect>
 ```
 
-마지막으로 adive는 `<aop:aspect>` 태그 내부에 `aop` 네임스페이스가 제공하는 advice 태그로 선언돼야 한다. 본 포스팅에선 서비스 프로세스의 시간 측정을 위해 `<aop:around>` 태그로 설정한다.
+#### 4.5. Around Advice
+
+ adive는 서비스 프로세스의 시간 측정을 위해 `<aop:around>` 태그로 설정한다.
 
 ``` xml
 <aop:around pointcut-ref="businessService" method="monitoring" />
@@ -208,36 +250,30 @@ Aspect가 선언했다면 Target Object에 Aspect를 적용하기 위해 pointcu
 > - `method`
     - `<aop:aspect>` 태그에서 지정한 aspect의 메소드 정의
 
-#### 완성된 XML 설정
-
-여기까지 XML을 활용하여 Spring AOP를 설정해보았다. 이제 테스트 코드를 만들어서 AOP가 잘 적용됐는지 확인해보자.
+#### 4.6. 완성된 XML 설정
 
 ``` xml
-<!-- Spring AOP config -->
 <aop:config>
-  <aop:aspect id="simpleMonitoring" ref="simplePerformanceMonitor">
-    <!-- pointcut 정의 : Advice가 적용될 JoinPoint를 정한다.  -->
-    <aop:pointcut id="businessService" expression="execution(* com.learning.business.*.*(..))" />
-
-    <!--
-    	Around의 pointcut-ref 속성을 사용하여 미리 정의한 "businessService"을 참조한다.
-    	aspect가 참조하는 bean의 부가기능 메소드를 method 속성을 통해 정의한다.
-    -->
-    <aop:around pointcut-ref="businessService" method="monitoring" />
-  </aop:aspect>
+    <aop:aspect id="simpleMonitoring" ref="simplePerformanceMonitor">
+        <aop:pointcut id="businessService" expression="execution(* com.learning.business.*.*(..))" />
+        <aop:around pointcut-ref="businessService" method="monitoring" />
+    </aop:aspect>
 </aop:config>
 
-<!-- 서비스 메서드의 프로세스 시간을 측정하는 데 사용하려는 monitoring 클래스 -->
 <bean id="simplePerformanceMonitor" class="com.learning.aspect.SimplePerformanceMonitor" />
 ```
 
-#### XML 설정을 테스트 코드로 확인해보자
+여기까지 XML을 활용하여 Spring AOP를 설정해보았다. 이제 테스트 코드를 통해 XML 설정을 검증해보자.
+
+#### 4.7. 테스트 코드로 검증해보자
 
 다음 학습 테스트 코드의 목적은 크게 세 가지로 볼 수 있다.
 
 1. Business bean이 JDK Dynamic Proxy Object로 생성되는지
 2. Aspect가 적용됐는지
 3. Spring 통합 테스트도 통과되는지
+
+먼저 `ClassPathXmlApplicationContext`를 통해 Business bean이 Proxy로 생성되었는지 확인해보자.
 
 ``` java
 public class BusinessTest {
@@ -259,18 +295,15 @@ public class BusinessTest {
     }
 }
 ```
-
-먼저 `ClassPathXmlApplicationContext.class`를 통해 설정한 애플리케이션 컨텍스트를 읽고 `getBean()` 메소드를 통해 생성된 Business bean이 Proxy로 생성되었는지 확인해보자.
-
 ``` html
 class com.sun.proxy.$Proxy9
 ```
 
 ~~1. Business bean이 JDK Dynamic Proxy Object로 생성되는지~~
 
-JUnit을 통해 테스트 코드를 실행하면 다음과 같이 Business bean이 Proxy Object로 생성되었다는 결과를 얻을 수 있다.
+테스트 코드를 실행하면 다음과 같이 Business bean이 Proxy Object로 생성되었다는 결과를 확인할 수 있다.
 
-이제 Spring AOP 설정이 제대로 적용됐는지 테스트 해보자.
+이제 Aspect가 적용됐는지 확인해보자.
 
 ``` java
 @Test
@@ -299,7 +332,7 @@ execution(Business.doRuntimeException()) : 0 ms , ERROR > 에러가 발생하였
 
 다음 결과를 통해 XML 방식으로 기존 Business 클래스를 별도의 수정 작업 없이 Aspect가 적용되었다는 걸 확인할 수 있었다. 하지만 XML 방식으로 Spring AOP를 설정할 때 다음과 같은 단점들을 생각해 볼 수 있다.
 
-#### XML 스키마 방식의 단점
+#### 4.8. XML 스키마 방식의 단점
 
 1. Encapsulate
 2. 표현의 제한
@@ -318,11 +351,11 @@ execution(Business.doRuntimeException()) : 0 ms , ERROR > 에러가 발생하였
 </aop:config>
 ```
 
-다음과 같이 XML 방식은 Aspect 클래스를 bean으로 정의하고 `<aop:aspect>` 태그를 사용해서 빈을 참조하는 방식으로 구현한다.
+다음과 같이 `<aop:aspect>` 태그는 직접 클래스를 명시하여 선언할 수 없다. 따라서 `ref`속성을 사용하여 bean을 참조하는 방식으로 구현된다.
 
-- Aspect bean + Spring AOP 설정 XML
+- Aspect bean + Spring AOP XML 설정
 
-이는 DRY 원리에 위배 되는 사항이다. XML 방식을 사용할 때 aspect 기반의 bean 클래스의 선언과 AOP 설정 코드가 나누어져 하나의 설정으로 관리하지 못한다는 단점이 생긴다.
+이는 DRY 원리에 위배 되는 사항이다. 즉 XML 방식은 aspect 기반의 bean과 Spring AOP 설정 태그가 분리되어있어 하나의 설정으로 관리할 수 없다는 단점이 생긴다.
 
 > DRY 원리 : 특정 정보와 기능이 하나의 원천으로 존재한다는 것을 강조하는 개발 원리로써, 단순히 중복 코드를 방지를 넘어 하나의 정보로 명확하고 신뢰할 수 있는 코드를 지향하여 최종적으로 `Clean Code`까지 달성할 수 있는 개발 원리이다.
 
@@ -343,29 +376,25 @@ public class AspectA{
 @pointcut ( pointCutA() || pointCutB() ) public void pointCutAorB(){}
 ```
 
-반면 다음 코드처럼 @AspectJ에선 정의된 기존 정의한 pointcut들을 조합한 pointcut 사용을 지원하고, 모듈 단위로 Aspect를 관리할 수 있어진다.
-
-또한, @Aspect 어노테이션은 Spring AOP에서 자체적으로 제공하는 어노테이션이 아닌  AspectJ 기반의 어노테이션을 사용하고 있다는 점은 Spring AOP와 AspectJ가 모두 @AspectJ 방식을 인식할 수 있고 Spring AOP에서 AspectJ로 쉽게 마이그레이션을 할 수 있다.
+반면 다음 코드처럼 @AspectJ에선 pointcut들의 조합을 허용하고 Java로 AOP를 설정하기 때문에 Aspect를 모듈 단위 관리할 수 있다.
 
 > On balance the Spring team prefer the @AspectJ style whenever you have aspects that do more than simple "configuration" of enterprise services. - Spring DOC
 
+또한, @AspectJ의 어노테이션들은 AspectJ5 라이브러리에 포함된 어노테이션을 사용하고 있다. 즉 Spring AOP와 AspectJ가 모두 @AspectJ 방식을 인식할 수 있고 Spring AOP에서 AspectJ로 쉽게 마이그레이션을 할 수 있다.
+
 이러한 장점들 때문에 하나 이상의 Aspect를 설정하는 경우 Spring 팀에선 XML 방식보다 @AspectJ 방식을 선호한다고 한다.
 
-### @AspectJ
+### 5. @AspectJ
 
-@AspectJ 방식에 대해 자세히 알아보자.
+@AspectJ 방식은 AspectJ 어노테이션을 기반으로 설정하는 방식이다. AspectJ5의 어노테이션으로 구현된다 해서 [AspectJ의 Compile-time weaving](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-using-aspectj)이 아닌 Spring AOP에 Runtime weaving으로 동작된다.
 
-@AspectJ 방식은 AspectJ 5 라이브러리의 어노테이션들을 사용하여 Aspect를 Java Object로 구현하는 방식을 의미한다. 이 Aspect는 Spring에 의해 자동으로 감지되며 Spring AOP에 의해 실행된다. @AspectJ 방식은 AspectJ의 Compiler/Weaver과는 무관하며 Spring에서 AspectJ의 방식을 사용하고 싶다면 다음 [링크](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-using-aspectj)를 참고하자.
+Spring에서 @AspectJ 방식을 사용하기 위해선 Spring AOP의 자동 프록싱(`autoproxying`) 설정이 필요하다.
 
-먼저 Spring에서 @AspectJ 방식을 사용하기 위해선 Spring AOP의 자동 프록싱(`autoproxying`) 설정이 필요하다.
+여기서 autoproxying이란 Spring이 bean에 대해서 Aspect에 의해 advice를 받는지 판단하고 Proxy Object를 생성해주는 개념이다. 따라서 Spring에 `autoproxying` 설정이 활성화되면 Spring은 애플리케이션 컨텍스트 또는 클래스를 통해 정의된 모든 bean 중에 @AspectJ 어노테이션 존재 여부를 감지하고, 감지된 Aspect 클래스를 사용하여 Spring AOP를 설정하는 데 사용된다.
 
-> `autoproxying`는 Spring은 bean이 하나 이상의 Aspect에 의해 advice을 받았다고 판단하면 자동으로 메소드 호출을 가로채고 advice가 실행이 보장되도록  해당 bean이 Proxy Object가 자동으로 생성되는 개념을 뜻한다. `autoproxying`에 대한 상세한 정보는 이 [링크](https://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch09s09.html)를 참고하자.
+#### 5.1. autoproxying 활성화
 
-#### @AspectJ 어노테이션 활성화
-
-Spring에 `autoproxying` 설정이 활성화되면 의해 Spring 애플리케이션 컨텍스트 또는 클래스를 통해 정의된 모든 bean 중에 @AspectJ 어노테이션 부착 여부를 자동으로 감지하고, Spring은 감지된 클래스를 사용하여 Spring AOP를 설정하는 데 사용된다.
-
-Spring AOP에선 두 가지 방법을 통해 `autoproxying` 설정을 할 수 있다.
+Spring AOP에선 두 가지 방법을 통해 `autoproxying` 설정할 수 있다.
 
 1. `<aop:aspectj-autoproxy />`
 2. `@Configuration`, `@EnableAspectJAutoProxy`
@@ -548,4 +577,5 @@ class com.sun.proxy.$Proxy45
 - [Spring 4.3.15 RELEASE DOC - AOP Schema](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-schema)
 - [Spring 4.3.15 RELEASE DOC - AOP AspectJ](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-ataspectj)
 - [Spring 4.3.15 RELEASE DOC - AOP using AspectJ](https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html#aop-using-aspectj)
+- [Spring 3.0.0 RELEASE DOC - Using the "autoproxy" facility](https://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch09s09.html)
 - [Spring-Boot-1.4-Release-Notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes)

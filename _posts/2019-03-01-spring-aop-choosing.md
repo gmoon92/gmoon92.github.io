@@ -418,7 +418,7 @@ public class AspectJAutoProxyConfig {
 
 [@EnableAspectJAutoProxy](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)의 `proxyTargetClass` 속성은 CGLIB(하위 클래스 기반)으로 Proxy를 생성할지를 설정할 수 있지만, 기본값이 false임으로 별도의 설정이 아니라면 JDK Dynamic Proxy 기반으로 Proxy가 생성된다. 이제 @AspectJ 방식으로 Aspect 클래스를 구현해보자.
 
-#### 5.2. Spring Boot에서 @AspectJ로 Aspect 구현
+#### 5.2. Spring Boot에서 @AspectJ로 구현
 
 @AspectJ 방식으로 Aspect를 구현하기 위해선 클래스에 @Aspect 어노테이션을 선언하여 해당 클래스가 Aspect 클래스라는 걸 선언해줘야 한다.
 
@@ -537,10 +537,10 @@ public void isJDKDynamicProxyWithSpringRunner() throws Exception{
 class com.learning.aop.business.BusinessImple$$EnhancerBySpringCGLIB$$e5825056
 ```
 
-분명 AspectJAutoProxyConfig 클래스에서  `@EnableAspectJAutoProxy`
+무슨일일까... 분명 AspectJAutoProxyConfig 클래스에서  `@EnableAspectJAutoProxy`
 JDK Dynamic Proxy로  설정했는데 Spring에 의해 Proxy가 자동적으로 CGLIB Proxy로 생성되었다.
 
-무슨일일까... 이와 같은 현상은  [springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)에서 답을 찾을 수 있다.
+이와 같은 현상은  [springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)에서 답을 찾을 수 있다.
 
 >We've generally found cglib proxies less likely to cause unexpected cast exceptions. - Phil Webb(Spring Framework committer and current lead of Spring Boot.)
 

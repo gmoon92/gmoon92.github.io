@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Spring AOP 선언의 선택"
-tags: [AOP, Spring, SpringAOP, XML, @AspectJ]
+tags: [AOP, Spring, SpringAOP, XML, AspectJ]
 categories: [Spring, AOP]
 subtitle: "Spring AOP로 메소드 시간 측정하기"
 feature-img: "md/img/thumbnail/spring-aop-choosing.png"
@@ -416,25 +416,29 @@ public class AspectJAutoProxyConfig {
 
 다음 코드를 보면 `@Configuration`, `@EnableAspectJAutoProxy` 어노테이션을 사용하여 `autoproxying`을 설정할 수 있다.
 
-[@EnableAspectJAutoProxy](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)의 `proxyTargetClass` 속성은 CGLIB(하위 클래스 기반)으로 Proxy를 생성할지를 설정할 수 있지만, 기본값이 false임으로 별도의 설정이 아니라면 JDK Dynamic Proxy 기반으로 Proxy가 생성된다. 이제 @AspectJ 방식으로 Aspect 클래스를 구현해보자.
+[@EnableAspectJAutoProxy](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/EnableAspectJAutoProxy.html)의 `proxyTargetClass` 속성은 CGLIB(하위 클래스 기반)으로 Proxy를 생성할지를 설정할 수 있는 속성이다. 기본값은 false로 별도의 설정값이 없으면 JDK Dynamic Proxy로 Proxy가 생성된다.
 
 #### 5.2. Spring Boot에서 @AspectJ로 구현
 
-@AspectJ 방식으로 Aspect를 구현하기 위해선 클래스에 @Aspect 어노테이션을 선언하여 해당 클래스가 Aspect 클래스라는 걸 선언해줘야 한다.
+이제 @AspectJ 방식으로 Spring AOP를 설정하자.
 
-사실상 Spring Boot에선 자체적으로 `autoproxying` 설정이 내장되어 있으므로 `autoproxying`  설정 클래스(AspectJAutoProxyConfig.class)없이도  @Aspect와 함께 @Component를 설정하여 Aspect를 자체적으로 bean으로 등록하여 사용할 수도 있다.
+#### 5.2.1. @Aspect
+
+@AspectJ 방식으로 Aspect를 구현하기 위해선 클래스에 @Aspect 어노테이션을 선언하여 해당 클래스가 Aspect 클래스라는 걸 선언해줘야 한다.
 
 ``` java
 @Aspect @Component public class SimplePerformanceMonitor { }
 ```
 
-하지만 AspectJAutoProxyConfig.aspect()에서 Aspect bean을 등록해주었기 때문에 예제 코드에서는 명시적으로 @Component 어노테이션을 부착하진 않았다.
+사실상 Spring Boot에선 자체적으로 `autoproxying` 설정이 내장되어 있으므로 `autoproxying`  설정 클래스(AspectJAutoProxyConfig.class)없이도  @Aspect와 함께 @Component를 설정하여 Aspect를 자체적으로 bean으로 등록하여 사용한다.
 
 ``` java
 @Aspect public class SimplePerformanceMonitor { }
 ```
 
-그다음 @Aspect 클래스 내부에 pointcut과 advice를 구현해줘야 한다. Pointcut은 @Pointcut 어노테이션을 사용하여 설정할 수 있다.
+하지만 AspectJAutoProxyConfig.aspect()에서 Aspect bean을 등록해주었기 때문에 @Component 어노테이션을 선언하지 않고 진행하자.
+
+#### 5.2.2. @Pointcut
 
 ``` java
 @Aspect
@@ -448,7 +452,7 @@ public class SimplePerformanceMonitor {
 
 @Pointcut은 메소드 수준에서 부착해야 하며, 사용되는 표현 식은 AspectJ5의 pointcut 표현 식과 같다. 표현 식의 상세한 정보는 [AspectJ5 DOC - PointCut](https://www.eclipse.org/aspectj/doc/released/progguide/semantics-pointcuts.html)를 참고하자.
 
-그 다음 Around는 @Around 어노테이션을 사용하여 설정한다.
+#### 5.2.3. @Around
 
 ``` java
 @Aspect
@@ -537,16 +541,15 @@ public void isJDKDynamicProxyWithSpringRunner() throws Exception{
 class com.learning.aop.business.BusinessImple$$EnhancerBySpringCGLIB$$e5825056
 ```
 
-무슨일일까... 분명 AspectJAutoProxyConfig 클래스에서  `@EnableAspectJAutoProxy`
-JDK Dynamic Proxy로  설정했는데 Spring에 의해 Proxy가 자동적으로 CGLIB Proxy로 생성되었다.
+무슨 일일까… 계획대로라면 AspectJAutoProxyConfig 클래스에서  `@EnableAspectJAutoProxy`의 proxyTargetClass 속성값을 설정하지 않았기에 JDK Dynamic Proxy로 생성되어야 한다. 하지만 결과적으로 Spring에 의해 자동으로 CGLIB Proxy로 생성되었다.
 
-이와 같은 현상은  [springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)에서 답을 찾을 수 있다.
+이와 같은 현상은 [springboot-issues#8434](https://github.com/spring-projects/spring-boot/issues/8434)에서 답을 찾을 수 있다.
 
 >We've generally found cglib proxies less likely to cause unexpected cast exceptions. - Phil Webb(Spring Framework committer and current lead of Spring Boot.)
 
 현재 Spring Boot의 프로젝트 리더인 Phil Web은 CGLIB Proxy 방식이 예기치 않은 캐스팅 예외를 일으킬 가능성이 적다고 한다.
 
-이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `proxyTargetClass=true`로 기본적으로 셋팅되도록 Release 되었다. 즉 bean을 구성하기 위해 인터페이스로 구현하지 않아도 되고 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
+이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `true`로 Release 되었다. 즉 bean의 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
 
 Spring Boot 환경에서 CGLIB를 강제하지 않고 JDK Dynamic Proxy로 설정하는 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가하는 방법을 제시하고 있다. 테스트 코드로 확인해보자.
 
@@ -556,15 +559,11 @@ class com.sun.proxy.$Proxy45
 
 ~~3. Spring 통합 테스트도 통과되는지~~
 
----
-
 ### 추가 공부거리...
 
 - @Pointcut의 다양한 표현 식
 - JDK Dynamic Proxy와 CGLIB Proxy 비교
 - Proxy 방식 AOP의 self-invocation 이슈
-
----
 
 ### 마무리
 

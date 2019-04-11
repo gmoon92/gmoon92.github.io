@@ -551,9 +551,7 @@ class com.learning.aop.business.BusinessImple$$EnhancerBySpringCGLIB$$e5825056
 
 이러한 이슈에 대해 Spring 4.3, Spring Boot 1.4 이상의 버전부터 proxyTargetClass 옵션이 `true`로 Release 되었다. 즉 bean의 인터페이스 유무와 상관없이 CGLIB Proxy가 생성됨을 의미한다.
 
-Spring Boot 환경에서 CGLIB를 강제하지 않고 JDK Dynamic Proxy로 설정하는 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가하면 된다.
-
-테스트 코드로 확인해보자.
+Spring Boot 환경에서 CGLIB를 강제하지 않고 JDK Dynamic Proxy로 설정하는 해결 방법으론 `application.properties` 파일에 `spring.aop.proxyTargetClass=false`를 추가하는 방법을 제시하고 있다. 테스트 코드로 확인해보자.
 
 ``` html
 class com.sun.proxy.$Proxy45

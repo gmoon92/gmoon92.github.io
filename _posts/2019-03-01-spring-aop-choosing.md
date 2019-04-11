@@ -148,9 +148,9 @@ ProceedingJoinPoint는 Around advice에서만 지원되는 JoinPoint이다. 기�
 
  명시적으로 `ProxyFactoryBean` 또는 `FactoryBean`을 통해 Proxy Object를 생성할 수 있지만, Spring은 Spring AOP를 통해 더 쉽게 Proxy의 생성과 관리를 할 수 있다.
 
-#### 3.1. Spring AOP 요약
+#### 3.1. Spring AOP 핵심
 
-Spring AOP는 다음과 같이 크게 세가지로 요약할 수 있다.
+Spring AOP의 핵심은 다음과 같이 크게 세가지로 요약할 수 있다.
 
 1.  Spring AOP는 Spring IoC 컨테이너와 함께 사용된다.
 2.  Spring AOP는 Proxy 기반의 AOP 프레임워크다.

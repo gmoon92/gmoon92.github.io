@@ -1,20 +1,21 @@
 ---
 layout: post
-title: "Spring AOP 선언의 선택"
-tags: [AOP, Spring, SpringAOP, XML, AspectJ]
+title: "Spring AOP에서 Proxy를 선택한 이유"
+tags: [AOP, Spring, SpringAOP, Proxy]
 categories: [Spring, AOP]
-subtitle: "Spring AOP로 메소드 시간 측정하기"
+subtitle: "Spring AOP에서 Proxy란"
 feature-img: "md/img/thumbnail/spring-aop-choosing.png"
 thumbnail: "md/img/thumbnail/spring-aop-choosing.png"
 excerpt_separator: <!--more-->
 sitemap:
+display: "false"
 changefreq: daily
 priority: 1.0
 ---
 
 <!--more-->
 
-# Spring AOP로 메소드 시간 측정하기
+# Spring AOP에서 Proxy란
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "정적에서 동적의 AOP로"
+title: "Spring AOP와 AspectJ"
 tags: [AOP, Spring AOP, Proxy, JDK Dynamic Proxy, CGLIB]
 categories: [Spring, AOP]
 subtitle: "JDK Dynamic Proxy & CGLIB Proxy"

@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Spring AOP와 AspectJ"
-tags: [AOP, Spring]
+title: "AspectJ의 Advice와 Pointcut"
+tags: [AOP, SpringAOP, AspectJ, Advice, Pointcut]
 categories: [Spring, AOP]
-subtitle: "Spring AOP와 AspectJ의 비교"
+subtitle: "어드바이스와 포인트컷"
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
@@ -15,7 +15,7 @@ priority: 1.0
 
 <!--more-->
 
-# Spring AOP와 AspectJ의 비교
+# 어드바이스와 포인트컷
 
 ---
 

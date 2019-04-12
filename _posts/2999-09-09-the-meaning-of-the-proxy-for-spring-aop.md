@@ -21,7 +21,7 @@ priority: 1.0
 
 ### 들어가기전
 
-사실 전에 작성한 [Spring AOP 선언의 선택](https://gmun.github.io/spring/aop/2019/03/01/spring-aop-choosing.html)의 포스팅에서  **"** *난 프록시가 뭔지 모르는데... 잘 읽었어요.* **"** 라는 피드백을 많이 받았다.
+[Spring AOP 선언의 선택](https://gmun.github.io/spring/aop/2019/03/01/spring-aop-choosing.html)의 포스팅에서  **"** *난 프록시가 뭔지 모르는데... 잘 읽었어요.* **"** 라는 피드백을 많이 받았다.
 
 나 역시도, Proxy는 Spring AOP를 공부하면서 가장 이해하기 어려웠던 개념이었다. Spring AOP의 레퍼런스만 봐도 Runtime weaving, autoproxying, JDK Dynamic Proxy 등 수 많은 용어와 개념들을 학습하는데 있어 Proxy에 대한 개념은 필수적이다.
 
@@ -38,8 +38,15 @@ priority: 1.0
 ### 관심사의 이슈
 
 ``` java
+public class A{
 
+  (isLogin_
+
+
+}
 ```
+
+
 Proxy라는 단어를 이
 
 

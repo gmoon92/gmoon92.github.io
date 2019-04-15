@@ -35,14 +35,17 @@ priority: 1.0
 - Spring AOP과 Proxy의 관계에 대한 이해
 - 이제 weaving에 대한 관심이 생겼다면 OK
 
-### 관심사의 이슈
+### 문제
+
+
 
 ``` java
 public class A{
+    syso("시작");
 
-  (isLogin_
+    ... logic
 
-
+    syso("끝")
 }
 ```
 

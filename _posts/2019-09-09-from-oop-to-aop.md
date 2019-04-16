@@ -150,6 +150,35 @@ public class AdminBusiness extends SimplePerformanceMonitor{
 
 ```
 
+### 테스트 검증
+
+``` java
+public class TemplateMethodTest {
+
+    private ApplicationContext context;
+
+    private AdminBusiness  adminBusiness;
+    private MemberBusiness memberBusiness;
+
+    @Before
+    public void init() {
+        context = new AnnotationConfigApplicationContext(MyApplication.class);
+        adminBusiness  = context.getBean(AdminBusiness.class, "AdminBusinessDesign1");
+        memberBusiness = context.getBean(MemberBusiness.class, "MemberBusinessDesign1");
+    }
+
+    @Test
+    public void isApplyOfAspect() {
+        adminBusiness.doActionWithMonitoring();
+        memberBusiness.doActionWithMonitoring();
+    }
+}
+```
+``` html
+담당자 비즈니스 로직 수행중... time : 1008 ms
+사원 비즈니스 로직 수행중...
+```
+
 
 #### 2.2. 메소드 팩토리 패턴
 

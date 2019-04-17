@@ -8,7 +8,7 @@ feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->
 sitemap:
-display: "false"
+#display: "false"
 changefreq: daily
 priority: 1.0
 ---
@@ -34,7 +34,7 @@ AOP는 흔히 마법과 같다고 말한다. 본 포스팅이 그 이유에 대�
 1. OOP의 기술적인 한계
 2. AOP의 사용성의 이해
 
-### 모듈의 재사용과 다양한 적용
+### OOP의 모듈의 재사용과 다양한 적용
 
 하나의 프로세스는 하나의 기능이라는 개발 관점이 지배적이던 시절에 OOP의 등장은 혁신과 같았다.
 
@@ -63,7 +63,7 @@ public class ****Business {
 
 - doAction() → 비즈니스 로직(핵심 관심사) + 실행시간 측정 로직(횡단 관심사)
 
-먼저 비즈니스 클래스들의 doAction() 메소드안을 살펴보면 실행시간을 측정하는 로직과 비즈니스 로직이 공존하고 있다. AOP의 용어에선 비즈니스 로직을 `핵심 관심사`(Core Concerns)라 하고 그 외 메소드 측정 기능과 같은 부가 기능을 `횡단 관심사`(Cross-cutting Concern)라 한다. 이처럼 하나의 객체에 두 관심사가 공존하고 있는 경우 `1) 비즈니스 로직을 파악하기 어렵고` 또한 `2) 부가 기능의 관리가 쉽지 않다.`
+먼저 비즈니스 클래스들의 doAction() 메소드안을 살펴보면 실행시간을 측정하는 로직과 비즈니스 로직이 공존하고 있다. AOP의 용어에선 비즈니스 로직을 `핵심 관심사`(Core Concerns)라 하고 그 외 메소드 측정 기능과 같은 부가기능을 `횡단 관심사`(Cross-cutting Concern)라 한다. 이처럼 하나의 객체에 두 관심사가 공존하고 있는 경우 `1) 비즈니스 로직을 파악하기 어렵고` 또한 `2) 부가기능의 관리가 쉽지 않다.`
 
 #### 1.2. Target Object와 Aspect
 
@@ -76,27 +76,39 @@ public class ****Business {
 
 이처럼 관심사들을 독립적인 모듈로써 관리만 할 수 있다면야 기존에 제기되었던 문제들을 해결할 수 있을 것이다.
 
-~~1. 비즈니스 로직을 파악하기 어렵다.~~<br/>
-~~2. 부가 기능의 관리가 어렵다.~~
-
 ### OOP와 디자인 패턴
 
-하지만 여기서 **＂**`어떻게 Target Object에 Aspect를 적용할 수 있을까?`**”** 라는 해결해야 할 문제가 생긴다. 이 문제에 대해선 일반적으로 사용되고 있는 여러 디자인 패턴을 활용하여 해결해보려 한다.
+하지만 여기서 **＂**`어떻게 Target Object에 Aspect를 적용할 수 있을까?`**”** 라는 해결해야 할 문제가 생긴다. 이 문제에 대해선 일반적으로 사용되고 있는 여러 디자인 패턴을 활용하여 구조적으로 해결하고 부가기능(Advice)이 독립적인 모듈로써 제 기능을 할 수 있는지 같이 살펴보자.
+
+1. Target Object에 Aspect를 적용할 수 있는지
+2. Advice가 다양한 시점에 적용할 수 있는지
+3. Aspect는 독립적인 모듈로써 재사용할 수 있는지
 
 #### 2.1. 템플릿 메소드 패턴
 
-첫 번째 생각할 수 있는 해결 방안은 상속이다. 상속은 OOP에서 기능을 확장하기 위한 가장 보편적인 접근 방법이 아닐까 생각한다. 이러한 상속의 특징을 활용하여 고안된 디자인 패턴이 바로 템플릿 메소드 패턴이다.
+첫 번째 생각할 수 있는 해결 방안은 상속이다.
 
-템플릿 메소드 패턴을 적용하면 다음과 같은 구조가 형성된다.
+상속은 OOP에서 기능을 확장하기 위한 가장 보편적인 접근 방법이 아닐까 생각한다. 이러한 상속의 특징을 활용하여 고안된 디자인 패턴이 바로 템플릿 메소드 패턴이다. 이 패턴은 상위 클래스에서 전체적인 흐름을 잡아주고 상속받은 하위 클래스 오버라이딩하여 상세한 로직을 구현하는 디자인 패턴이다.
 
-![img](/md/img/aop/from-oop-to-aop/class-diagram3.png)
+<img src="/md/img/aop/from-oop-to-aop/class-diagram3.png" style="max-height:none;">
 
-- isMonitoring() : Hooking 목적
-- doActionWithMonitoring() : 부가 기능 정의
+템플릿 메소드 패턴을 적용한 방법은 다음과 같다.
+
+1. `****Business` 클래스들의 공통된 `doAction()` 메소드는 추상화 메소드로 정의하여 일반화한다.
+2. 부가기능의 적용 여부를 `****Business` 클래스에서 정할 수 있도록 상위 클래스에 Hooking 목적을 띈 `isMonitoring()` 메소드를 정의한다.
+3. `doActionWithMonitoring()` 메소드에서 메소드 실행시간 측정 부가기능을 적용한다.
+4. `****Business` 클래스는 상위 클래스에서 `doAction()` 메소드를 재정의하여 비즈니스 로직을 구현한다.
 
 ``` java
-abstract protected class SimplePerformanceMonitor {
+abstract public class SimplePerformanceMonitor {
     private final StopWatch stopWatch = new StopWatch();
+
+    abstract protected void doAction();
+
+    // Hooking Method 실행시간 측정 여부 목적
+    protected boolean isMonitoring() {
+      return false;
+    }
 
     final protected void doActionWithMonitoring() {
         if(isMonitoring()) {
@@ -110,81 +122,88 @@ abstract protected class SimplePerformanceMonitor {
             System.out.format("time : %s ms\n", stopWatch.getLastTaskTimeMillis());
         }
     }
-
-    protected boolean isMonitoring() {
-        return false;
-    }
-
-    abstract protected void doAction();
-}
-```
-``` java
-@Component("MemberBusinessDesign1")
-public class MemberBusiness extends SimplePerformanceMonitor{
-
-    @Override
-    public void doAction() {
-        try {
-            System.out.format("사원 비즈니스 로직 수행중... ");
-            Thread.sleep(500);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-}
-
-@Component("AdminBusinessDesign1")
-public class AdminBusiness extends SimplePerformanceMonitor{
-
-    @Override
-    public void doAction() {
-        try {
-            System.out.format("담당자 비즈니스 로직 수행중... ");
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public boolean isMonitoring() {
-        return true; // 모니터링 활성화
-    }
-}
-
-```
-
-### 테스트 검증
-
-``` java
-public class TemplateMethodTest {
-
-    private ApplicationContext context;
-
-    private AdminBusiness  adminBusiness;
-    private MemberBusiness memberBusiness;
-
-    @Before
-    public void init() {
-        context = new AnnotationConfigApplicationContext(MyApplication.class);
-        adminBusiness  = context.getBean(AdminBusiness.class, "AdminBusinessDesign1");
-        memberBusiness = context.getBean(MemberBusiness.class, "MemberBusinessDesign1");
-    }
-
-    @Test
-    public void isApplyOfAspect() {
-        adminBusiness.doActionWithMonitoring();
-        memberBusiness.doActionWithMonitoring();
-    }
 }
 ```
 ``` html
-담당자 비즈니스 로직 수행중... time : 1008 ms
-사원 비즈니스 로직 수행중...
+담당자 비즈니스 로직 수행중... time : 1008 ms    ← Hooking 메소드 활성화
+사원 비즈니스 로직 수행중...                     ← Hooking 메소드 비활성화
 ```
 
+~~1. Target Object에 Aspect를 적용할 수 있는지~~~<br/>
+~~2. Advice가 다양한 시점에 적용할 수 있는지~~<br/>
+
+`****Business.doActionWithMonitoring()` 메소드를 실행해보면 다음 첫 번째와 두 번째 이슈는 해결할 수 있었다. 하지만 템플릿 메소드 패턴은 Java라는 언어 특성상 다중 상속이 불가능하다는 큰 단점을 가지고 있다. 또한, 여러 부가기능이 추가될수록 상위 클래스에서 추가해야 하므로 코드가 복잡해진다. 무엇보다 상위 클래스의 `doActionWithMonitoring()` 메소드만 봐도 Adivce와 비즈니스 로직이 공존함으로 `3. Aspect는 독립적인 모듈로써 재사용할 수 있는지`에 대한 이슈는 해결했다고 말하기 곤란하다.
 
 #### 2.2. 메소드 팩토리 패턴
+
+![img](/md/img/aop/from-oop-to-aop/class-diagram4.png)
+
+``` java
+abstract public class BusinessMonitorFactory{
+	private final StopWatch stopWatch = new StopWatch();
+
+	abstract protected Business newInstance();
+	final protected void doActionWithMonitoring() {
+		stopWatch.start();
+
+		try {
+			newInstance().doAction();
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Business is null...");
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("throws ...");
+		}
+
+		stopWatch.stop();
+		System.out.format("time : %s ms\n", stopWatch.getLastTaskTimeMillis());
+	}
+}
+
+public class SimplePerformanceMonitor extends BusinessMonitorFactory{
+	private Object targetObj;
+
+	@Override
+	protected Business newInstance() {
+		try {
+			return (Business) targetObj;
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("is Business.newInstance Error...");
+		}
+	}
+
+	public SimplePerformanceMonitor setTargetObj(Object targetObj) {
+		this.targetObj = targetObj;
+		return this;
+	}
+}
+
+public class FactoryMethodTest {
+
+	private ApplicationContext context;
+	private Business adminBusiness;
+	private Business memberBusiness;
+
+	@Before
+	public void init() {
+		context = new AnnotationConfigApplicationContext(MyApplication.class);
+		adminBusiness  = context.getBean(AdminBusiness.class, "AdminBusinessDesignOfFM");
+		memberBusiness = context.getBean(MemberBusiness.class, "MemberBusinessDesignOfFM");
+	}
+
+	@Test
+	public void isApplyOfAspect() {
+		BusinessMonitorFactory factory = new SimplePerformanceMonitor().setTargetObj(adminBusiness);
+		factory.doActionWithMonitoring();
+	}
+}
+```
+
+``` html
+담당자 비즈니스 로직 수행중... time : 1001 ms
+```
 
 #### 2.3. 데코레이션 패턴
 

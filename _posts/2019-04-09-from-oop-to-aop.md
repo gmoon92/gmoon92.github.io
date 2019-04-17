@@ -85,21 +85,25 @@ public class ****Business {
 
 #### 2.1. 템플릿 메소드 패턴
 
-첫 번째 생각할 수 있는 해결 방안은 상속이다. 상속은 OOP에서 기능을 확장하기 위한 가장 쉬운 방법이 아닐까 생각한다. 상속에 대한 디자인 패턴을 논하자면 당연 템플릿 메소드 패턴을 뽑을 수 있겠다.
+첫 번째 생각할 수 있는 해결 방안은 상속이다. 상속은 OOP에서 기능을 확장하기 위한 가장 보편적인 접근 방법이 아닐까 생각한다. 이러한 상속의 특징을 활용하여 고안된 디자인 패턴이 바로 템플릿 메소드 패턴이다.
+
+템플릿 메소드 패턴을 적용하면 다음과 같은 구조가 형성된다.
 
 ![img](/md/img/aop/from-oop-to-aop/class-diagram3.png)
 
+- isMonitoring() : Hooking 목적
+- doActionWithMonitoring() : 부가 기능 정의
+
 ``` java
-abstract public class SimplePerformanceMonitor {
+abstract protected class SimplePerformanceMonitor {
     private final StopWatch stopWatch = new StopWatch();
 
-    final public void doActionWithMonitoring() {
-
+    final protected void doActionWithMonitoring() {
         if(isMonitoring()) {
             stopWatch.start();
         }
 
-        doAction();
+        doAction(); // 비즈니스 로직
 
         if(isMonitoring()) {
             stopWatch.stop();
@@ -107,11 +111,11 @@ abstract public class SimplePerformanceMonitor {
         }
     }
 
-    public boolean isMonitoring() {
+    protected boolean isMonitoring() {
         return false;
     }
 
-    abstract public void doAction();
+    abstract protected void doAction();
 }
 ```
 ``` java

@@ -8,7 +8,7 @@ feature-img: "md/img/thumbnail/from-oop-to-aop.png"
 thumbnail: "md/img/thumbnail/from-oop-to-aop.png"
 excerpt_separator: <!--more-->
 sitemap:
-#display: "false"
+display: "false"
 changefreq: daily
 priority: 1.0
 ---
@@ -34,7 +34,7 @@ AOP는 흔히 마법과 같다고 말한다. 본 포스팅이 그 이유에 대�
 1. OOP의 기술적인 한계
 2. AOP의 사용성의 이해
 
-### 1. OOP의 모듈의 재사용과 다양한 적용
+### OOP의 모듈의 재사용과 다양한 적용
 
 하나의 프로세스는 하나의 기능이라는 개발 관점이 지배적이던 시절에 OOP의 등장은 혁신과 같았다.
 
@@ -82,9 +82,13 @@ public class ****Business {
 
 1. 분리된 환경에서 Target Object에 Aspect 적용되는지
 2. Advice가 다양한 시점에 적용되는지
-3.  Aspect를 재사용할 수 있는지
+3. Aspect를 재사용할 수 있는지
 
+<<<<<<< HEAD
 ### 2.1. 템플릿 메소드 패턴
+=======
+#### 2.1. 상속의 템플릿 메소드 패턴
+>>>>>>> 69e010b548aa58fccdb4b5fbfe2437df833dbf7a
 
 첫 번째 생각할 수 있는 해결 방안은 상속이다.
 
@@ -94,7 +98,7 @@ public class ****Business {
 
 따라서 템플릿 메소드 패턴은 상위 클래스에서 전체적인 흐름을 잡아주고 상속받은 하위 클래스에선 상세한 로직을 오버라이딩하여 구현하는 방식으로 개발된다.
 
-<img src="/md/img/aop/from-oop-to-aop/class-diagram3.png" style="max-height:none;">
+<img src="/md/img/aop/from-oop-to-aop/template-method1.png" style="max-height:none;">
 
 1. `****Business` 클래스들의 공통된 `doAction()` 메소드는 추상화 메소드로 정의하여 일반화한다.
 2. 부가기능의 적용 여부를 `****Business` 클래스에서 정할 수 있도록 상위 클래스에 Hooking 목적을 띈 `isMonitoring()` 메소드를 정의한다.
@@ -105,6 +109,7 @@ public class ****Business {
 abstract public class SimplePerformanceMonitor {
     private final StopWatch stopWatch = new StopWatch();
 
+    // 하위 클래스에게 기능 구현을 맡김
     abstract protected void doAction();
 
     // Hooking Method 실행시간 측정 여부 목적
@@ -112,12 +117,13 @@ abstract public class SimplePerformanceMonitor {
       return false;
     }
 
+    // 부가기능을 접목시킨 메소드
     final protected void doActionWithMonitoring() {
         if(isMonitoring()) {
             stopWatch.start();
         }
 
-        doAction(); // 비즈니스 로직
+        this.doAction(); // 비즈니스 로직
 
         if(isMonitoring()) {
             stopWatch.stop();
@@ -140,164 +146,103 @@ abstract public class SimplePerformanceMonitor {
 
 **`2. Advice가 다양한 시점에 적용되는지`** 에 대한 부분은 `isMonitoring()` Hooking 메소드를 통해 부가기능의 활성화 여부를 하위 클래스에서 정할 순 있다지만 적용해야 할 Target Object들에 대한 정확한 구조와 공통점들을 파악하기 어렵다면 구현하기 힘들다. 마지막으로 상위 클래스의 `doActionWithMonitoring()` 메소드만 봐도 Adivce와 비즈니스 로직이 공존함으로 **`3.  Aspect를 재사용할 수 있는지`**  에 대한 부분도 부족하다.
 
-이처럼 일반적으로 상속을 사용한 디자인 패턴은 유연하지 않고 정적인 구조로 되어 있다. 특히 Aspect의 특성상 추후 수정하거나 추가로 다른 Aspect를 부착시키는 동적인 작업들이 빈번하게 발생할 수밖에 없다. 따라서 본 패턴을 통해 해결할 수 없고 Aspect를 구조적으로 유연하게 관리할 수 있는 디자인 패턴을 찾아야 한다.
+일반적으로 상속을 사용한 디자인 패턴은 유연하지 않고 정적인 구조로 되어 있기에 이러한 문제들이 제기될 수밖에 없다. 특히 Aspect는 수정하거나 추가로 또 다른 Aspect를 부착시키는 작업들이 빈번하게 발생할 수밖에 없다. 따라서 본 패턴을 통해 해결할 수 없고 Aspect를 구조적으로 유연하게 관리할 수 있는 디자인 패턴으로 해결해야 한다.
 
+<<<<<<< HEAD
 ### 2.2. 데코레이터 패턴
+=======
+### 2.2. 프록시를 기반으로한 패턴들
+>>>>>>> 69e010b548aa58fccdb4b5fbfe2437df833dbf7a
 
-데코레이터 패턴은  Aspect를 동적으로 유연하게 관리할 수 있는 디자인 패턴이다. `토비의 스프링`에서도 데코레이터 패턴을 자세히 소개할 만큼 이 패턴에 대해선 다들 잘 아실꺼라 생각한다.
+Aspect와 같은 부가기능을 동적으로 유연하게 관리하기 위해선 Proxy 기반의 디자인 패턴을 사용하면 구조적으로 해결할 수 있다.
 
+<<<<<<< HEAD
 다시 한번 정리를하자면 데코레이터 패턴은 인터페이스를 이용한 디자인 패턴으로써 객체의 책임을 전가를 하는 방식으로 런타임 시 다이나믹게 부가기능들을 덭붙여 기능을 완성시키는 패턴이다. 대표적으로 `java.io` 패키지의 InputStream.class, OutputStream.class가 데코레이터 패턴을 적용한 클래스들이다.
+=======
+- 데코레이터 패턴 : 부가기능 목적
+- 프록시 패턴 : 접근제어 목적
+>>>>>>> 69e010b548aa58fccdb4b5fbfe2437df833dbf7a
 
-런타입 시 다이내믹하게 부여해주기 위해 프록시를 사용하는 패턴을 말한다. 프록시로서 동작하는 각 데코레이터는 위임하는 대상에도 인터페이스로 접근하기 때문에 자신이 최종 타깃으로 위임하는지 아니면 다음 단계의 데코레이터 프록시로 위임하는지 알지 못한다.
+#### 2.2.1. 데코레이터 패턴
 
-데코레이터의 다음 위임 대상은 인터페이스로 선언하고 생성자나 수정자 메소드를 통해 위임 대상을 외부에서 런타임 시에 주입받을 수 있도록 만들어야 한다.
+먼저 데코레이터 패턴은 Aspect와 같은 부가기능을 동적으로 유연하게 관리할 수 있도록 고안된 Proxy 기반의 디자인 패턴이다.
 
-데코레이터 패턴은 인터페이스를 통해 위임하는 방식이기 때문에 어느 데코레이터에서 타깃으로 연결될지 코드 레벨에선 미리 알 수 없다.
-
+<<<<<<< HEAD
 실제 Target Object 앞에 부가기능을 정의하는 Aspect 클래스들을 Proxy라 한다.
+=======
+이 패턴은 인터페이스를 이용한 디자인 패턴으로써 객체의 책임을 전가를 하는 방식으로 기능들을 덭붙여 객체를 완성시키는 패턴이다. 대표적으로 `java.io` 패키지의 InputStream.class, OutputStream.class가 데코레이터 패턴을 적용한 클래스들이다. 이해를 돕기 위해 생활속에서 예를 들자면 하나의 자동차를 생성한다고 가정해보자.
+>>>>>>> 69e010b548aa58fccdb4b5fbfe2437df833dbf7a
 
-_Call → 1) Business → 2) SimplePerformanceMonitor → 3) AdminBusiness → End_
+![img](/md/img/aop/from-oop-to-aop/car-factory-process.png)
 
-1. Business 데코레이터 인터페이스 정의
-2. SimplePerformanceMonitor 에서 메소드 실행시간 측정 로직 구현, 다음 단계에서 호출될 객체에 기능을 위임
-3. AdminBusiness에서 비즈니스 로직 구현
+독립적으로 각 공정은 맡은 부분만 작업하고 해당 공정의 관심사에 벗어난 작업들은 다음 공정으로 책임을 전가하여 자동차를 완성하는 방식을 따른다. 이와 마찬가지로 데코레이터 패턴도 Aspect를 유연하게 관리하기 위해 각 모듈에서 독립적으로 기능을 덧붙이고 모듈을 점차 발전시키는 구조로 설계된다.
 
-``` java
-public interface Business{
-  public void doAction();
-}
+<img src="/md/img/aop/from-oop-to-aop/decorator1.png" style="max-height:none;">
 
-// Proxy
-public class SimplePerformanceMonitor implements Business{
-  private final Business business;
+1. 완성시킬 모듈을 인터페이스로 정의한다.
+2. 각 데코레이터의 기능의 위임은 생성자나 수정자 메소드를 통해 전달한다.
 
-  public SimplePerformanceMonitor(Business business){
-      this.business = business;
-  }
+다음 구조처럼 각 모듈은 자신의 기능을 완성하고 다음 데코레이터 객체로 전달하기 위해 정의한 Business 인터페이스를 생성자나 수정자 메소드를 통해 전달된다. 따라서 데코레이터 패턴은 최종적인 객체를 얻기 위해 객체의 순서를 정해줘야 한다.
 
+<<<<<<< HEAD
   @Override
   public void doAction(){
       // ... 부가기능 구현
       business.doAction(); // AdminBusiness 클래스에게 기능 위임
       //...
   }
+=======
+데코레이터의 다음 위임 대상은 인터페이스로 선언하고 생성자나 수정자 메소드를 통해 위임 대상을 외부에서 런타임 시에 주입받을 수 있도록 만들어야 한다.
+>>>>>>> 69e010b548aa58fccdb4b5fbfe2437df833dbf7a
 
-}
-public class AdminBusiness implements Business {
-    @Override
-    public void doAction(){
-        //...비즈니스 로직 구현
-    }
+``` java
+public Business createAdminBusiness() {
+    Business business = new AdminBusiness(); // 비즈니스 Target Object
+    business = new SimplePerformanceMonitor(business); // 실행시간 측정 Aspect
+    return business;
 }
 ```
 
-- 데코레이터 패턴의 구조에서 각 클래스들은 각 기능에만 집중하면 된다.
-- 기능이 독립된 클래스 구조 덕분에 테스트가 수월해진다.
+`createAdminBusiness()` 메소드를 통해 데코레이터의 순서를 정해주고 생성된 `Business` 객체의 기능 테스트를 진행해보면 다음과 같은 결과를 얻을 수 있었다.
+
+``` java
+@Test
+public void isWeaving() {
+    Business amdin = createAdminBusiness();
+    admin.doAction();
+}
+```
+``` html
+SimplePerformanceMonitor.class ← 부가기능 로직 수행
+AdminBusiness.class            ← 비즈니스 로직 수행
+담당자 비즈니스 로직 수행중... time : 1001 ms
+```
+
+_Call → 1) SimplePerformanceMonitor → 2) AdminBusiness → End_
+
+다음 결과를 보면 클라이언트의 관점에선 단순히 비즈니스 클래스의 기능이 호출되는 것처럼 보이지만 사실상 SimplePerformanceMonitor에 의해 AdminBusiness 클래스를 요청된다는 걸 알 수 있다. 이 과정에서
+AdminBusiness 클래스를 대신하여 SimplePerformanceMonitor 클래스가 수행한다 해서 SimplePerformanceMonitor 클래스를 **`Proxy`** 라 한다. 즉 Proxy는 클라이언트가 타깃에 접근하는 방법을 제어하거나 타깃에 부가적인 기능을 부여하는 목적을 가지고 있다.
+
+~~1. 분리된 환경에서 Target Object에 Aspect 적용되는지~~<br/>
+~~2. Advice가 다양한 시점에 적용되는지~~<br/>
+
+결과적으로 부가기능은 Proxy에서 독립적으로 관리할 수 있고, 추후 Aspect가 추가되더라도 Proxy를 추가하고 Proxy의 순서만 정해주면 최종적인 부가기능이 부착된 비즈니스 객체를 얻을 수 있다.
+
 - 다른 객체에 영향을 주지 않고 동적으로 독립적인 Aspect를 추가할 수 있다.
-- 적용할 Aspect가 많아져도 DI 순서만 정의해주면 유연하게 관리할 수 있다.
+- 데코레이터 클래스들은 각 기능에만 집중하면 된다.
+- 각각의 데코레이터 클래스는 목적이 뚜렷하기 때문에 테스트가 수월하다.
+- 적용할 Aspect가 많아져도 데코레이터의 위임의 순서만 정의해주면 유연하게 관리할 수 있다.
 - 언제든 Aspect의 철회가 가능하다.
 - 각 비즈니스 클래스에 필요에 따라 Aspect를 붙이거나 각각 다르게 적용할 수 있다.
 
 #### 구현 이슈
 
-#### 2.3. 프록시 패턴
+**3. Aspect를 재사용할 수 있는지**
 
-데코레이터 패턴도 이러한 Proxy를 기반으로 설계된 디자인 패턴이지만 다르다.
+- 구현해야할 과정들이 번거롭다.
+- 대상 위임의 은닉성
+- 부가기능의 중복
 
-프록시 패턴은 클라이언트가 직접적인 타깃에 접근하지 못하도록 제어의 목적을 가진 디자인 패턴이다.
+기존 비즈니스 클래스를 인터페이스로 구성하고 각 데코레이터 클래스들의 대상 위임을 설정하는 과정은 번거로울 수밖에 없다. 또한, 데코레이터 패턴은 인터페이스를 통해 위임하는 방식이기 때문에 코드 레벨에선 위임의 순서를 미리 알 수 없다. 이러한 익명성으로 중복된 부가기능을 생성할 경우가 발생할 수 있다.
 
-프록시 패턴의 프록시는 타깃의 기능을 확장하거나 추가하지 않는다. 대신 클라이언트가 타깃에 접근하는 방식을 변경해준다.
-
-  타깃 오브젝트를 생성하기가 복잡하거나 당장 필요하지 않은 경우에는 꼭 필요한 시점까지 오브젝트를 생성하지 않는 편이 좋다. 그런데 타깃 오브젝트에 대한 레퍼런스가 미리 필요할 수 있을때 이 패턴을 적용하면 된다.
-
-클라이언트에게 타깃에 대한 레퍼런스를 넘겨야 하는데, 실제 타깃 오브젝트는 만드는 대신 프록시를 넘겨주는 것이다. 그리고 프록시의 메소드를 통해 타깃을 사용하려고 시도하면, 그때 프록시가 타깃 오브젝트를 생성하고 요청을 위임해주는 방식이다.
-
-
-
-
-
-
-Proxy의 목적
-
-1. 클라이언트가 타깃에 접근하는 방법을 제어
-2. 타깃에 부가적인 기능을 부여하기 위함
-
-####  Pattern Issues
-
-#### 2.3. 메소드 팩토리 패턴
-
-#### 구현 이슈
-
-코드가 작동해야하는 객체의 정확한 유형과 종속성을 미리 알지 못하는 경우 팩토리 메서드를 사용하십시오.
-
-![img](/md/img/aop/from-oop-to-aop/class-diagram4.png)
-
-``` java
-abstract public class BusinessMonitorFactory{
-	private final StopWatch stopWatch = new StopWatch();
-
-	abstract protected Business newInstance();
-	final protected void doActionWithMonitoring() {
-		stopWatch.start();
-
-		try {
-			newInstance().doAction();
-		}catch(NullPointerException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Business is null...");
-		}catch(Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("throws ...");
-		}
-
-		stopWatch.stop();
-		System.out.format("time : %s ms\n", stopWatch.getLastTaskTimeMillis());
-	}
-}
-
-public class SimplePerformanceMonitor extends BusinessMonitorFactory{
-	private Object targetObj;
-
-	@Override
-	protected Business newInstance() {
-		try {
-			return (Business) targetObj;
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("is Business.newInstance Error...");
-		}
-	}
-
-	public SimplePerformanceMonitor setTargetObj(Object targetObj) {
-		this.targetObj = targetObj;
-		return this;
-	}
-}
-
-public class FactoryMethodTest {
-
-	private ApplicationContext context;
-	private Business adminBusiness;
-	private Business memberBusiness;
-
-	@Before
-	public void init() {
-		context = new AnnotationConfigApplicationContext(MyApplication.class);
-		adminBusiness  = context.getBean(AdminBusiness.class, "AdminBusinessDesignOfFM");
-		memberBusiness = context.getBean(MemberBusiness.class, "MemberBusinessDesignOfFM");
-	}
-
-	@Test
-	public void isApplyOfAspect() {
-		BusinessMonitorFactory factory = new SimplePerformanceMonitor().setTargetObj(adminBusiness);
-		factory.doActionWithMonitoring();
-	}
-}
-```
-
-``` html
-담당자 비즈니스 로직 수행중... time : 1001 ms
-```
-
-
-### AOP
+### AspectJ를 활용한 AOP 적용

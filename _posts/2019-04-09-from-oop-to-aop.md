@@ -4,8 +4,8 @@ title: "OOP에서 AOP"
 tags: [AOP]
 categories: [Spring, AOP]
 subtitle: "Separation of Concerns"
-feature-img: "md/img/thumbnail/aop.png"
-thumbnail: "md/img/thumbnail/aop.png"
+feature-img: "md/img/thumbnail/from-oop-to-aop.png"
+thumbnail: "md/img/thumbnail/from-oop-to-aop.png"
 excerpt_separator: <!--more-->
 sitemap:
 #display: "false"
@@ -84,7 +84,7 @@ public class ****Business {
 2. Advice가 다양한 시점에 적용되는지
 3.  Aspect를 재사용할 수 있는지
 
-#### 2.1. 템플릿 메소드 패턴
+### 2.1. 템플릿 메소드 패턴
 
 첫 번째 생각할 수 있는 해결 방안은 상속이다.
 
@@ -142,11 +142,11 @@ abstract public class SimplePerformanceMonitor {
 
 이처럼 일반적으로 상속을 사용한 디자인 패턴은 유연하지 않고 정적인 구조로 되어 있다. 특히 Aspect의 특성상 추후 수정하거나 추가로 다른 Aspect를 부착시키는 동적인 작업들이 빈번하게 발생할 수밖에 없다. 따라서 본 패턴을 통해 해결할 수 없고 Aspect를 구조적으로 유연하게 관리할 수 있는 디자인 패턴을 찾아야 한다.
 
-#### 2.2. 데코레이터 패턴
+### 2.2. 데코레이터 패턴
 
 데코레이터 패턴은  Aspect를 동적으로 유연하게 관리할 수 있는 디자인 패턴이다. `토비의 스프링`에서도 데코레이터 패턴을 자세히 소개할 만큼 이 패턴에 대해선 다들 잘 아실꺼라 생각한다.
 
-데코레이터 패턴은 인터페이스를 이용한 디자인 패턴으로써 객체의 책임을 전가를 하는 방식으로 기능들을 덭붙여 객체를 완성시키는 패턴이다. 대표적으로 `java.io` 패키지의 InputStream.class, OutputStream.class가 데코레이터 패턴을 적용한 클래스들이다.
+다시 한번 정리를하자면 데코레이터 패턴은 인터페이스를 이용한 디자인 패턴으로써 객체의 책임을 전가를 하는 방식으로 런타임 시 다이나믹게 부가기능들을 덭붙여 기능을 완성시키는 패턴이다. 대표적으로 `java.io` 패키지의 InputStream.class, OutputStream.class가 데코레이터 패턴을 적용한 클래스들이다.
 
 런타입 시 다이내믹하게 부여해주기 위해 프록시를 사용하는 패턴을 말한다. 프록시로서 동작하는 각 데코레이터는 위임하는 대상에도 인터페이스로 접근하기 때문에 자신이 최종 타깃으로 위임하는지 아니면 다음 단계의 데코레이터 프록시로 위임하는지 알지 못한다.
 
@@ -154,7 +154,7 @@ abstract public class SimplePerformanceMonitor {
 
 데코레이터 패턴은 인터페이스를 통해 위임하는 방식이기 때문에 어느 데코레이터에서 타깃으로 연결될지 코드 레벨에선 미리 알 수 없다.
 
-실제 Target Object 앞에 부가 기능을 정의하는 Aspect 클래스들을 Proxy라 한다.
+실제 Target Object 앞에 부가기능을 정의하는 Aspect 클래스들을 Proxy라 한다.
 
 _Call → 1) Business → 2) SimplePerformanceMonitor → 3) AdminBusiness → End_
 
@@ -177,7 +177,7 @@ public class SimplePerformanceMonitor implements Business{
 
   @Override
   public void doAction(){
-      // ... 부가 기능 구현
+      // ... 부가기능 구현
       business.doAction(); // AdminBusiness 클래스에게 기능 위임
       //...
   }

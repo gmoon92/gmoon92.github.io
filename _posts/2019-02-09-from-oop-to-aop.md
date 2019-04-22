@@ -3,12 +3,11 @@ layout: post
 title: "OOP에서 AOP"
 tags: [AOP]
 categories: [Spring, AOP]
-subtitle: "Separation of Concerns"
+subtitle: "OOP의 기술적인 한계 그리고 AOP의 마법"
 feature-img: "md/img/thumbnail/from-oop-to-aop.png"
 thumbnail: "md/img/thumbnail/from-oop-to-aop.png"
 excerpt_separator: <!--more-->
 sitemap:
-#display: "false"
 changefreq: daily
 priority: 1.0
 ---
@@ -208,7 +207,6 @@ _Call → 1) SimplePerformanceMonitor(**Proxy**) → 2) AdminBusiness(**Target**
 **`2. Aspect가 탈부착/관리가 쉬운지`** 에 대한 부분은 간단하게 Proxy를 추가하여 검증해보면 된다. 예를들어 MemberBusiness가 개발 단계에 있다고 가정하여 MemberBusiness 기능을 호출 시에 강제 에러를 발생시킨다고 가정해보자.
 
 ``` java
-...
 public Business createMemberBusiness() {
     Business business = new MemberBusiness(); // Target
     business = new SimplePerformanceMonitor(business); // 부가기능 : 실행시간 측정
@@ -244,22 +242,50 @@ java.lang.RuntimeException: 서비스 준비중입니다.    ← MmemberBusiness
 
 다음 그림처럼 데코레이터 패턴은 부가기능을 추가를 위해 Proxy를 사용하지만 프록시 패턴은 Target의 라이프 사이클을 자체적으로 관리하기 위해 Target의 직접적인 접근을 제한하는 목적으로 Proxy를 사용한다.
 
-- Proxy 사용의 장점
-  1. 다른 객체에 영향을 주지 않고 동적으로 독립적인 Aspect를 추가할 수 있다.
-  2. Proxy들은 각 기능에만 집중하면 된다.
-  3. 각각의 Proxy는 목적이 뚜렷하기 때문에 테스트가 수월하다.
-  4. 적용할 Aspect가 많아져도 다음 대상 위임의 순서만 정의해주면 유연하게 관리할 수 있다.
-  5. 언제든 Aspect의 철회가 가능하다.
-  6. 각 비즈니스 클래스에 필요에 따라 Aspect를 붙이거나 각각 다르게 적용할 수 있다.
+무엇보다 Proxy를 기반으로 하는 디자인을 활용하여 Aspect와 Target을 독립적인 모듈로써 관리할 수 있었고 더 나아가 다음과 같은 이점들을 생각할 수 있었다.
+
+1. 다른 객체에 영향을 주지 않고 동적으로 독립적인 Aspect를 추가할 수 있다.
+2. Proxy들은 각 기능에만 집중하면 된다.
+3. 각각의 Proxy는 목적이 뚜렷하기 때문에 테스트가 수월하다.
+4. 적용할 Aspect가 많아져도 다음 대상 위임의 순서만 정의해주면 유연하게 관리할 수 있다.
+5. 언제든 Aspect의 철회가 가능하다.
+6. 각 비즈니스 클래스에 필요에 따라 Aspect를 붙이거나 각각 다르게 적용할 수 있다.
 
 #### 구현 이슈
-
-하지만 Proxy를 기반으로하는 디자인은 기본적으로 인터페이스를 활용하기 때문에 기존 비즈니스 클래스를 인터페이스로 구성하고 각 데코레이터 클래스들의 대상 위임을 설정하는 과정은 번거로울 수밖에 없다.
 
 - 구현해야할 과정들이 번거롭다.
 - 대상 위임의 은닉성
 - 부가기능의 중복
 
- 또한, 데코레이터 패턴은 인터페이스를 통해 위임하는 방식이기 때문에 코드 레벨에선 위임의 순서를 미리 알 수 없다. 이러한 익명성으로 중복된 부가기능을 생성할 경우가 발생할 수 있다.
+하지만 데코레이터 패턴은 인터페이스를 통해 위임하는 방식이기 때문에 코드 레벨에선 위임의 순서를 미리 알 수 없다. 이러한 익명성으로 중복된 부가기능을 생성할 경우가 발생할 수 있다는 단점이 있다. 또한, Proxy를 기반으로하는 디자인은 기본적으로 인터페이스를 활용하기 때문에 기존 비즈니스 클래스를 인터페이스로 구성하고 각 데코레이터 클래스들의 대상 위임을 설정하는 과정은 번거로울 수밖에 없다.
 
-### AspectJ를 활용한 AOP 적용
+![img](/md/img/aop/from-oop-to-aop/proxy2.png)
+
+무엇보다 Proxy를 기반으로 하는 디자인들은 인터페이스를 기반으로 구조를 잡기 때문에 인터페이스 자체에 메소드를 추가/수정/제거하는 작업이 동반되면 동시에 구현체마다 각각의 작업을 진행해야 한다는 최악의 단점이 생긴다. 이러한 이유엔 기본적으로 OOP의 특징상 객체와 객체 간의 관계가 필연적으로 생길 수밖에 없기 때문이다.
+
+### 비즈니스에 AOP를 적용
+
+그렇다면 구조적으로 어떻게 해결을 해야 할까? 바로 AOP를 활용하면 쉽게 원하는 Target에 부가기능을 적용할 수 있다.
+
+![img](/md/img/aop/from-oop-to-aop/aspectj1.png)
+
+AOP의 가장 큰 장점은 OOP의 구조적인 관계를 얽매이지 않는다는 점이다. 즉 부가기능을 원하는 시점에 적용할 수 있고 비로써 Aspect를 독립적인 모듈로써 온전히 관리할 수 있다는 점이다.
+
+<img src="/md/img/aop/from-oop-to-aop/aspectj2.png" style="max-height:none;">
+
+``` html
+AdminBusiness.doAction()
+aspectJ 적용 테스트  com.gmun.fromooptoaop.design.aspectj.AdminBusiness@167279d1 > time : 1000 ms
+MemberBusiness.doAction()
+aspectJ 적용 테스트  com.gmun.fromooptoaop.design.aspectj.MemberBusiness@138caeca > time : 501 ms
+```
+
+~~1. Aspect가 적용되는지~~<br/>
+~~2. Aspect가 탈부착/관리가 쉬운지~~<br/>
+~~3. Aspect가 독립적인 모듈인지~~<br/>
+
+### 마무리
+
+OOP의 한계에 대해 알아보았다. 무엇보다 관심사의 분리 어려움에 대한 OOP의 근본적인 문제는 객체 간의 관계에 있다는 점이다. 따라서 AspectJ를 통해 AOP를 적용하여 이러한 관계의 문제점에 대해 해결해보았다.
+
+하지만 Spring AOP는 AspectJ가 아닌 기존 Proxy를 기반으로 관계에 대한 문제를 해결하고 있다. 이러한 의문은 다음 포스팅에서 작성해보도록 하겠다.

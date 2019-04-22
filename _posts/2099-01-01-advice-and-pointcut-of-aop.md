@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "AspectJ의 Advice와 Pointcut"
+title: "AspectJ 5의 Advice와 Pointcut"
 tags: [AOP, SpringAOP, AspectJ, Advice, Pointcut]
 categories: [Spring, AOP]
-subtitle: "어드바이스와 포인트컷"
+subtitle: "포인트컷의 어드바이스의 활용법"
 feature-img: "md/img/thumbnail/aop.png"
 thumbnail: "md/img/thumbnail/aop.png"
 excerpt_separator: <!--more-->

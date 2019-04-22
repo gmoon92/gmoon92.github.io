@@ -267,10 +267,45 @@ java.lang.RuntimeException: 서비스 준비중입니다.    ← MmemberBusiness
 
 ![img](/md/img/aop/from-oop-to-aop/aspectj1.png)
 
-AOP의 가장 큰 장점은 OOP의 구조적인 관계를 얽매이지 않는다는 점이다. 즉 부가기능을 원하는 시점에 적용할 수 있고 비로써 Aspect를 독립적인 모듈로써 온전히 관리할 수 있다는 점이다.
+다음 구조를 보면 AOP는 OOP의 구조적인 관계에 대해 얽매이지 않는다는 것을 알 수 있다. 즉 부가기능을 원하는 시점에 적용할 수 있고 비로써 Aspect를 독립적인 모듈로써 온전히 관리할 수 있다는 점이다.
+
+AOP 구현 방식에 대해 자세히 살펴보기 위해선 몇 가지 기본적인 AOP의 용어에 대해 알아야한다.
+
+- Advice : 부가기능의 코드
+- JoinPoint : Advice를 적용할 수 있는 여러 시점
+- PointCut : 여러 JoinPoint 중에서 최종적으로 Advice를 적용할 JoinPoint
+- Weaving : JoinPoint에 Advice하여 핵심기능과 횡단기능이 교차하여 새롭게 생성된 객체를 프로세스에 적용하는 일련의 모든 과정
+> 참고 [AOP : Aspect Oriented Programming 개념](https://gmun.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html)
 
 <img src="/md/img/aop/from-oop-to-aop/aspectj2.png" style="max-height:none;">
 
+먼저 `****Business.doAction()`에 Adivce를 적용시키기 위해 PointCut를 정의해준다.
+
+``` java
+pointcut businessCalls()
+:call(* com.gmun.fromooptoaop.design.aspectj..*Business.doAction(..));
+```
+
+Target의 호출 시점을 제어할 수 있는 Around Advice를 사용하고 Target의 메소드 호출은 `proceed();`를 통해 호출 시점을 고려하여 부가기능을 구현해준다. 테스트 코드를 통해 Weaving이 적용됐는지 검증해보자.
+
+``` java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class AspectJTest {
+
+    @Autowired
+    private AdminBusiness admin;
+
+    @Autowired
+    private MemberBusiness member;
+
+    @Test
+    public void isWeaving(){
+        admin.doAction();
+        member.doAction();
+    }
+}
+```
 ``` html
 AdminBusiness.doAction()
 aspectJ 적용 테스트  com.gmun.fromooptoaop.design.aspectj.AdminBusiness@167279d1 > time : 1000 ms

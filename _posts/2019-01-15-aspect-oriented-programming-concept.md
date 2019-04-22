@@ -149,13 +149,13 @@ _의존 관계 : UserService.class → UserServiceTX.class → UserServiceImple.
 
 AOP는 분리된 횡단 관심사를 `Aspect`라는 모듈 형태로 만들어서 설계하고 개발을 한다.
 
-Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심 기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 횡단 관심사 모듈을 효율적으로 관리할 수 있게 된다.
+Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 자체적으로 부가 기능을 여러 객체의 핵심기능에 교차로 적용을 시켜주기 때문에 추상화를 통해 분리하는 작업도 필요가 없어짐으로 횡단 관심사 모듈을 효율적으로 관리할 수 있게 된다.
 
 <img src="/md/img/aop/aspect-modules.png" style="max-height: 500px;" alt="img">
 
 >[... It does so by adding additional behavior to existing code (an advice) without modifying the code itself  ... - Wikipedia AOP](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
-무엇보다 Aspect 모듈의 가장 큰 장점은 핵심 기능에 부가 기능의 코드가 남아 있지 않아도 된다는 점이다. 이러한 이유엔 대부분의 AOP 프레임워크들이 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)를 통해 핵심 기능에 부가 기능을 결합하는 방식을 사용하기 때문이다.
+무엇보다 Aspect 모듈의 가장 큰 장점은 핵심기능에 부가 기능의 코드가 남아 있지 않아도 된다는 점이다. 이러한 이유엔 대부분의 AOP 프레임워크들이 [Interceptors](https://docs.oracle.com/javaee/6/tutorial/doc/gkeed.html)를 통해 핵심기능에 부가 기능을 결합하는 방식을 사용하기 때문이다.
 
 - 횡단 관심사의 모듈화
 - 효율적인 횡단 모듈 관리
@@ -165,7 +165,7 @@ Aspect 모듈에는 부가 기능(횡단 관심사)을 내포하고 있으며 �
 - OOP : 핵심 관심사의 모듈화
 - AOP : 인프라 혹은 횡단 관심사의 모듈화
 
-본론으로 들어와서, 앞서 설명한 Aspect가 어떻게 핵심 기능에 적용되는지 알아야 한다.
+본론으로 들어와서, 앞서 설명한 Aspect가 어떻게 핵심기능에 적용되는지 알아야 한다.
 
 ### AOP 개념 - 용어와 동작
 
@@ -210,17 +210,17 @@ AOP의 메커니즘은 프로그램을 핵심 관심사와 횡단 관심사로 �
 
 ##### Target Object
 
-먼저 `Target Object`는 횡단 기능(`Advice`)이 적용될 객체(Object)를 뜻한다. 이 객체는 핵심 모듈(비즈니스 클래스)이라 할 수 있다. Spring AOP에선 Advice를 받는 객체라 하여 `Adviced Object`라는 용어로 쓰이기도 한다.
+먼저 `Target Object`는 횡단기능(`Advice`)이 적용될 객체(Object)를 뜻한다. 이 객체는 핵심 모듈(비즈니스 클래스)이라 할 수 있다. Spring AOP에선 Advice를 받는 객체라 하여 `Adviced Object`라는 용어로 쓰이기도 한다.
 
 Spring AOP에선 실제 적용할 객체 대신 `Runtime Proxy`를 사용하여 구현되기 때문에, Target Object는 항상 `Proxy Object`다.
 
 ##### JoinPoint
 
-`JoinPoint`는 Target Object안에서 횡단 기능(`Advice`)이 적용될 수 있는 여러 위치를 뜻한다.
+`JoinPoint`는 Target Object안에서 횡단기능(`Advice`)이 적용될 수 있는 여러 위치를 뜻한다.
 
 ![img](/md/img/aop/joinpoint.png)
 
-이 위치는 프로그램이 실행될 때 (1) 예외가 발생하거나 (2) 필드(attribute)가 수정되는 시점 또는 (3) 객체가 생성(constructor)되는 시점 그리고 (4) 메소드가 호출되는 시점 등 그 외 프로그램이 실행될 때 발생할 수 있는 모든 시점은 횡단 기능이 적용될 수 있는 위치들이다.
+이 위치는 프로그램이 실행될 때 (1) 예외가 발생하거나 (2) 필드(attribute)가 수정되는 시점 또는 (3) 객체가 생성(constructor)되는 시점 그리고 (4) 메소드가 호출되는 시점 등 그 외 프로그램이 실행될 때 발생할 수 있는 모든 시점은 횡단기능이 적용될 수 있는 위치들이다.
 
 일반적으로 AspectJ는 모든 JoinPoint에 접근이 가능하지만 Spring AOP는 기본적으로 메소드 interceptor를 기반으로 하고 있어서 JoinPoint는 항상 메소드 단위다.
 
@@ -327,7 +327,7 @@ Spring을 포함하여 대부분 AOP 프레임워크에서 Proxy를 사용하여
 
 #### 용어와 동작 - 관심사의 교차
 
-AOP는 특정 JoinPoint에 Advice하여 핵심 기능과 횡단 기능이 교차하여 새롭게 생성된 객체를 프로세스에 적용하는 일련의 모든 과정을 `Weaving`라 한다.
+AOP는 특정 JoinPoint에 Advice하여 핵심기능과 횡단기능이 교차하여 새롭게 생성된 객체를 프로세스에 적용하는 일련의 모든 과정을 `Weaving`라 한다.
 
 ##### Weaving
 

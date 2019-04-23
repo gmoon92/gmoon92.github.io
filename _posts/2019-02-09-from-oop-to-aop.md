@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "OOP에서 AOP"
-tags: [AOP]
-categories: [Spring, AOP]
+tags: [AOP, OOP, Design-Pattern, AspectJ]
+categories: [Spring, AOP, OOP]
 subtitle: "OOP의 기술적인 한계 그리고 AOP의 마법"
 feature-img: "md/img/thumbnail/from-oop-to-aop.png"
 thumbnail: "md/img/thumbnail/from-oop-to-aop.png"

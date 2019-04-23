@@ -76,6 +76,8 @@ https://minwan1.github.io/2017/10/29/2017-10-29-Spring-AOP-Proxy/
 ---
 
 ### 참고
+- https://www.eclipse.org/aspectj/doc/next/aspectj5rt-api/org/aspectj/lang/annotation/Pointcut.html
+- https://www.eclipse.org/aspectj/doc/next/progguide/semantics-pointcuts.html
 
 https://www.baeldung.com/aspectj
 

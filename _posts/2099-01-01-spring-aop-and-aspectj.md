@@ -87,9 +87,15 @@ Compile time(정적) : AspectJ    - 타깃 기반 (타깃 오브젝트를 직접
 
 ### 참고
 
+- https://doanduyhai.wordpress.com/2011/12/12/advanced-aspectj-part-ii-inter-type-declaration/
+- https://www.baeldung.com/spring-aop-vs-aspectj
+- https://www.baeldung.com/?s=+CGLIB+Proxy
+- https://www.baeldung.com/cglib
+- http://blog.kezhuw.name/2017/08/31/spring-aspectj-load-time-weaving/
 
-- Blog
-  - [toby - Spring 3.0 (11) Aspects 모듈의 선택 라이브러리 분석](http://toby.epril.com/?p=620)
+- https://www.credera.com/blog/technology-insights/open-source-technology-insights/aspect-oriented-programming-in-spring-boot-part-2-spring-jdk-proxies-vs-cglib-vs-aspectj/
 
-- Spring
-  - [Top Spring AOP Interview Questions with Answers](https://howtodoinjava.com/interview-questions/top-spring-aop-interview-questions-with-answers/)
+- [toby - Spring 3.0 (11) Aspects 모듈의 선택 라이브러리 분석](http://toby.epril.com/?p=620)
+- [Top Spring AOP Interview Questions with Answers](https://howtodoinjava.com/interview-questions/top-spring-aop-interview-questions-with-answers/)
+- [Compile- vs load-time weaving performance in Spring](https://www.nurkiewicz.com/2009/10/yesterday-i-had-pleasure-to-participate.html)
+- [debunking-myths-proxies-impact-performance](https://spring.io/blog/2007/07/19/debunking-myths-proxies-impact-performance)

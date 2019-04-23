@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Spring AOP "
+title: "아드리안 콜리어의 OOP로 해결한 AOP"
 tags: [AOP, Spring, SpringAOP, XML, AspectJ]
 categories: [Spring, AOP]
-subtitle: "Spring AOP로 메소드 시간 측정하기"
+subtitle: "Spring은 어떻게 동적으로 AOP를 적용할까"
 feature-img: "md/img/thumbnail/spring-aop-choosing.png"
 thumbnail: "md/img/thumbnail/spring-aop-choosing.png"
 excerpt_separator: <!--more-->
@@ -15,9 +15,10 @@ priority: 1.0
 
 <!--more-->
 
-# 아드리안 콜리어의 OOP로 해결한 AOP
+# Spring은 어떻게 동적으로 AOP를 적용할까
 
 ---
+
 [Adrian Colyer](https://nofluffjuststuff.com/conference/speaker/adrian_colyeramming)
 
 ### 들어가기전

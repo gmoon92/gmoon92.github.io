@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "아드리안"
+title: "Spring AOP "
 tags: [AOP, Spring, SpringAOP, XML, AspectJ]
 categories: [Spring, AOP]
 subtitle: "Spring AOP로 메소드 시간 측정하기"
@@ -9,6 +9,7 @@ thumbnail: "md/img/thumbnail/spring-aop-choosing.png"
 excerpt_separator: <!--more-->
 sitemap:
 changefreq: daily
+display: "false"
 priority: 1.0
 ---
 

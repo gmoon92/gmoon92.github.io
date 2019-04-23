@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Spring은 어떻게 동적으로 AOP를 적용할까"
+title: "Spring의 AOP Proxy"
 tags: [AOP, Spring, SpringAOP, XML, AspectJ]
 categories: [Spring, AOP]
-subtitle: "아드리안 콜리어의 Dynamic Weaving"
+subtitle: "FactoryBean과 ProxyFactoryBean"
 feature-img: "md/img/thumbnail/spring-aop-choosing.png"
 thumbnail: "md/img/thumbnail/spring-aop-choosing.png"
 excerpt_separator: <!--more-->
@@ -15,37 +15,45 @@ priority: 1.0
 
 <!--more-->
 
-# 아드리안 콜리어의 Dynamic Weaving
+# FactoryBean과 ProxyFactoryBean
 
 ---
 
 ### 들어가기전
 
-[이전 포스팅](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)에서 OOP의 디자인 패턴들을 통해 관심사의 분리가 어렵다는 걸 알 수 있었고 AspectJ를 통해 관심사의 분리에 대한 문제를 근본적으로 해결할 수 있었다. 이러한 이유엔 AspectJ는 기본적으로 Target의 바이트 코드를 조작하여 Target에 Advice를 적용하는 Compile-Weaving임으로 객체의 관계를 무시할 수 있었다. 이 AspectJ는 AOP 프레임워크의 대명사라 할 수 있는데, 아드리안 콜리어(Adrian Colyer)는 AspectJ 프로젝트팀의 리더이면서 한 때는 Spring CTO까지 지냈던 사람이다.
+[이전 포스팅](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)에서 OOP의 디자인 패턴들을 통해 관심사의 분리가 어렵다는 걸 알 수 있었고 AspectJ를 통해 관심사의 분리에 대한 문제를 근본적으로 해결할 수 있었다.
 
-따라서 Spring AOP가 굳이 많은 AOP 프레임워크 중에 AspectJ5 라이브러리의 기반으로 구현되어있다는 부분 역시 그의 영향이 미쳤다는 걸 알 수 있다. 하지만 Spring AOP는 기존의 AspectJ의 Weaving 방식과 달리 자바에서 기본적으로 제공하는 `java.lang.reflect.Proxy`를 활용하여 Weaving 하는데 이 대목에서 아드리안 콜리어는 어떻게 객체의 관계를 해결하고 있는지 궁금해졌다.
+이 AspectJ는 AOP 프레임워크의 대명사라 할 수 있는데, 아드리안 콜리어(Adrian Colyer)는 AspectJ 프로젝트팀의 리더이면서 한 때는 Spring CTO까지 지냈던 사람이다. Spring AOP가 굳이 많은 AOP 프레임워크 중에 AspectJ5 라이브러리의 기반으로 구현되어있다는 부분 역시 그의 영향이 미쳤다는 걸 알 수 있는 대목이다. 하지만 `*.aj`라는 모듈로 AOP를 구현하는 AspectJ와 달리 Spring AOP는 순수 Java를 활용하여 AOP를 구현할 수 있는데 이 점에서 아드리안 콜리어는 어떻게 객체의 관계를 해결했는지 궁금해졌다.
 
-물론 동적 Weaving을 도입한 이유에 대해 먼저 고민해봐야겠지만, 본 포스팅에선 FactoryBean과 ProxyFactoryBean을 학습을 해보며, 아드리안 콜리어는 어떻게 객체의 관계를 해결했는지 생각해보는 시간을 가지려 한다.
+물론 동적 Weaving을 도입한 이유에 대해 먼저 고민해봐야겠지만, 본 포스팅에선 FactoryBean과 ProxyFactoryBean을 학습을 해보며, 아드리안 콜리어는 객체의 관계에 대해 어떻게 해결했는지 생각해보는 시간을 가지려 한다.
 
 ### 학습목표
 
-- 팩토리 메소드 디자인 패턴의 이해
 - FactoryBean의 이해
 - ProxyFactoryBean의 이해
 
 ### 왜 관심사의 분리를 해결하지 못했을까?
 
-이전 포스팅에서 다뤘던 디자인 패턴들로 관심사의 분리하는 데 한계가 있었다. 그 이유에 대해선 크게 두 가지로 정리해볼 수 있다.
+이전 포스팅에서 다뤘던 디자인 패턴들로 관심사의 분리하는 데 각각의 패턴들로 구현하는 데 있어 한계가 있다는 걸 알 수 있었는데, 이 이유에 대해선 두 가지로 정리해볼 수 있다.
 
-1. 관심사의 분리를 하기 위해선 구체적인 구조가 파악되야 한다.
-2. 어찌됐든 기존 구조를 변형시켜 해결해야 한다.
+- 관심사의 분리를 하기 위해선 구체적인 구조가 파악되야 한다.
+- 어찌됐든 기존 구조를 변형시켜 해결한다.
 
-OOP로 Weaving을 하기 위해선 적용할 Target의 전체적인 구조가 파악되어야 가능했다. 결과적으로 전체적인 구조가 파악됐더라도 기존의 구조를 변형시킨다는 점은 근본적으로 관심사의 분리를 해결하지 못한 부분이라 말할 수 있다.
+우선 Weaving을 하기 위해선 적용할 타깃의 전체적인 구조가 파악해야 된다는 전제가 깔려 있다. 또한, 전체적인 구조가 파악됐더라도 기존의 구조를 변형시킨다는 점은 추후 개발에 있어 고려해야될 사항들이 많았다.
 
-제일 쉽게 부가기능을 확장하기 위해선 상속이라는 개념이 제일 베스트이다.
-따라서 구체적인 대상을 모를 경우엔 해결할 수 있는 디자인 패턴으로 고려해야한다.
+반면 AspectJ로 관심사를 분리했을 땐 어땠을까? 다시 한번 살펴보자.
 
-### 팩토리 메소드 패턴과 프록시
+1. Pointcut으로 타깃의 프로세스 시점을 정의한다.
+2. Advice를 구현하고 Pointcut를 정의해준다.
+
+AspectJ는 Advice가 주입될 시점을 Poincut으로 명시되어있기 때문에 타깃의 구체적인 구조를 파악할 필요 없이 타깃의 바이트 코드를 조작하여 타깃에 Advice를 적용시킬 수 있다. 이 점은 프록시 기반의 디자인 패턴의 매커니즘과 매우 유사하다.
+
+- 구체적인 대상 위임을 정의해준다.
+- 지정된 요청 시에 부가기능을 수행한다.
+
+다른 점이라면 자바로 순수 프록시를 구성하기에 번거럽다는 점이다.
+
+### 리플렉션 그리고 팩토리 메소드 패턴
 
 팩토리 메소드 패턴은 객체의 정확한 유형과 종속성을 미리 알지 못하는 경우에 유용하게 사용할 수 있는 디자인 패턴이다.
 
@@ -57,6 +65,9 @@ OOP로 Weaving을 하기 위해선 적용할 Target의 전체적인 구조가 �
 해결책은 프레임 워크에서 구성 요소를 구성하는 코드를 단일 팩토리 메서드로 줄이고 구성 요소 자체를 확장하는 것 외에도 누구나이 메서드를 재정의 할 수있게하는 것입니다.
 
 
+리플렉션은 자바 코드 자체를 추상화해서 접근해서 접근하도록 만든다.
+
+AspectJ의 Weaving 방식과 달리 자바에서 기본적으로 제공하는 `java.lang.reflect.Proxy`
 
 ### FactoryBean
 

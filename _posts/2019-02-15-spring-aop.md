@@ -29,7 +29,7 @@ AOP 프록시를 JDK 다이내믹 프록시와 ProxyFactoryBean으로 구현해�
 
 ### 프록시 기반 디자인 패턴의 한계
 
-[이전 포스팅](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)에서 다뤘던 디자인 패턴들로 관심사의 분리하는 데 각각의 패턴들로 구현하는 데 있어 한계가 있다는 걸 알 수 있었는데, 이 이유에 대해선 두 가지로 정리해볼 수 있다.
+이전 포스팅 "[OOP에서 AOP](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)"에서 다뤘던 디자인 패턴들로 관심사의 분리하는 데 각각의 패턴들로 구현하는 데 있어 한계가 있다는 걸 알 수 있었는데, 이 이유에 대해선 두 가지로 정리해볼 수 있다.
 
 - 관심사의 분리를 하기 위해선 구체적인 구조가 파악되야 한다.
 - 어찌됐든 기존 구조를 변형시켜 해결한다.
@@ -464,7 +464,7 @@ result : 1035
 
 ### 마무리
 
-[이전 포스팅](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)에서 OOP의 디자인 패턴들을 통해 관심사의 분리가 어렵다는 걸 알 수 있었고 AspectJ를 통해 관심사의 분리에 대한 문제를 근본적으로 해결할 수 있었다.
+이전 포스팅 "[OOP에서 AOP](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)"에서 OOP의 디자인 패턴들을 통해 관심사의 분리가 어렵다는 걸 알 수 있었고 AspectJ를 통해 관심사의 분리에 대한 문제를 근본적으로 해결할 수 있었다.
 
 이 AspectJ는 AOP 프레임워크의 대명사라 할 수 있는데, 아드리안 콜리어(Adrian Colyer)는 AspectJ 프로젝트팀의 리더이면서 한 때는 Spring CTO까지 지냈던 사람이다. Spring AOP가 굳이 많은 AOP 프레임워크 중에 AspectJ5 라이브러리의 기반으로 구현되어있다는 부분 역시 그의 영향이 미쳤다는 걸 알 수 있는 대목이다. 하지만 `*.aj`라는 모듈로 AOP를 구현하는 AspectJ와 달리 Spring AOP는 순수 Java를 활용하여 AOP를 구현할 수 있는데 이 점에서 아드리안 콜리어는 어떻게 객체의 관계를 해결했는지 궁금해졌다.
 

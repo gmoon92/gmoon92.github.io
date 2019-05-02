@@ -72,6 +72,15 @@ Compile time(정적) : AspectJ    - 타깃 기반 (타깃 오브젝트를 직접
 
 일반적으로 Compile 시점 또는 Class Load 시점에 Binary 코드를 조작하여 weaving하는 AspectJ와 달리 Spring AOP는 Runtime weaving을 기반으로 수행하기 때문에,  응용프로그램이 실행하는 도중에 Proxy를 활용하여 다양한 Aspect를 만들수 있다.
 
+`java.lang.ClassLoader` 자체는 동적으로 클래스를 로드하기 위해 인터페이스나 추상화 클래스가 필요하다. 따라서
+클래스 로더는 런타임 시점에 클래스 파일을 찾아 로드하는 책임이 있는 클래스
+
+
+> [What is a Java ClassLoader?](https://stackoverflow.com/questions/2424604/what-is-a-java-classloader)
+
+interface의 매개변수는 프록시 생성에 있어 ㅊ는
+
+
 
 #### 1.1. JDK Dynamic Proxy (InvocationHandler)
 

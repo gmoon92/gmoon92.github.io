@@ -4,8 +4,8 @@ title: "Self Invocation은 왜 발생할까?"
 tags: [AOP, SpringAOP, Self-invocation]
 categories: [Spring, AOP]
 subtitle: "Spring 프록시의 메커니즘"
-feature-img: "md/img/thumbnail/aop.png"
-thumbnail: "md/img/thumbnail/aop.png"
+feature-img: "md/img/thumbnail/aop-proxy-self-invocation.png"
+thumbnail: "md/img/thumbnail/aop-proxy-self-invocation.png"
 excerpt_separator: <!--more-->
 sitemap:
 changefreq: daily
@@ -14,7 +14,7 @@ priority: 1.0
 
 <!--more-->
 
-# Spring 프록시의 메커니즘
+# Spring 프록시의 메커니즘과 자기 호출의 해결책
 
 ---
 
@@ -23,6 +23,8 @@ priority: 1.0
 Spring AOP의 JDK 다이내믹 프록시와 CGLIB는 프록시를 기반으로 AOP를 적용한다. 이외에도 Spring에선 다양한 방면에서 프록시의 메커니즘을 기반으로 기술을 제공하고 있는데, 대표적으로 Cache, Transaction이 이에 해당한다. 무엇보다 이 프록시 메커니즘의 가장 큰 이슈는 Self-Invocation이다.
 
 마찬가지로 Spring AOP도 같은 이슈가 발생하는데 본 포스팅에선 Self-Invocation 발생하는 근본적인 원인과 이를 해결하고자 한다.
+
+학습 환경으론 Spring Boot 2.1.4에서 진행하였고 학습 과정에서 사용했던 코드는 [GitHub](https://github.com/gmun/aop-proxy-self-invocation)를 참고하기 바란다.
 
 ### 학습목표
 

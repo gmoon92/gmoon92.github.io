@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring의 AOP Proxy"
+title: "Spring AOP의 메커니즘과 Proxy Bean 생성"
 tags: [AOP, Spring, SpringAOP, XML, AspectJ]
 categories: [Spring, AOP]
 subtitle: "JDK Dynamic Proxy와 FactoryBean 그리고 ProxyFactoryBean"
@@ -20,7 +20,9 @@ priority: 1.0
 
 ### 들어가기전
 
-AOP 프록시를 JDK 다이내믹 프록시와 ProxyFactoryBean으로 구현해보며 Spring AOP의 기본적인 동작 원리와 구현방법에 대해 학습해보려 한다. 학습 환경으론 SpringBoot에서 진행했고 학습 과정에서 사용했던 코드는 [GitHub](https://github.com/gmun/spring-aop-proxy)를 참고하기 바란다.
+Spring AOP는 프록시를 기반으로 하고 있다. 그렇다면 프록시를 어떻게 구축할까?
+
+본 포스팅에선 JDK 다이내믹 프록시와 ProxyFactoryBean를 통해 AOP 프록시를 구현해보며, Spring AOP의 기본적인 동작 원리와 구현방법에 대해 학습해보려 한다. 학습 환경으론 SpringBoot에서 진행했고 학습 과정에서 사용했던 코드는 [GitHub](https://github.com/gmun/spring-aop-proxy)를 참고하기 바란다.
 
 ### 학습목표
 
@@ -29,7 +31,7 @@ AOP 프록시를 JDK 다이내믹 프록시와 ProxyFactoryBean으로 구현해�
 
 ### 프록시 기반 디자인 패턴의 한계
 
-이전 포스팅 "[OOP에서 AOP](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)"에서 다뤘던 디자인 패턴들로 관심사의 분리하는 데 각각의 패턴들로 구현하는 데 있어 한계가 있다는 걸 알 수 있었는데, 이 이유에 대해선 두 가지로 정리해볼 수 있다.
+이전 포스팅 "[OOP에서 AOP](https://gmun.github.io/spring/aop/oop/2019/02/09/from-oop-to-aop.html)"에서 디자인 패턴들로 관심사의 분리를 해보았다. 하지만 크게 두 가지의 문제로 관심사를 분리하기에 어려움이 있었다.
 
 - 관심사의 분리를 하기 위해선 구체적인 구조가 파악되야 한다.
 - 어찌됐든 기존 구조를 변형시켜 해결한다.

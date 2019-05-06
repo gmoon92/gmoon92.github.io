@@ -366,7 +366,7 @@ public class BusinessI
 
 프록시 기반의 기술에서 흔히 발생하는 Self-Invocation에 대한 원인과 해결 방안을 살펴보았다.
 
-AspectJ의 Weaving을 활용하여 코드의 변경 없이 AOP를 적용할 수 있었다. 하지만 "특정 @AspectJ만 설정 파일만 AspectJ Weaving을 적용할 순 없을까?"라는 의문이 생겼다. 이에 대해 [Mojo - IncludeExclude](https://www.mojohaus.org/aspectj-maven-plugin/examples/includeExclude.html)을 참고하여 학습하여 추후 AspectJ Weaving에 대해 포스팅하면 좋을 것 같다.
+AspectJ의 Weaving을 활용하여 코드의 변경 없이 AOP를 적용할 수 있었다. 하지만 "특정 @AspectJ만 설정 파일만 AspectJ Weaving을 적용할 순 없을까?"라는 의문이 생겼다. 이에 대해 [Mojo - IncludeExclude](https://www.mojohaus.org/aspectj-maven-plugin/examples/includeExclude.html)을 참고하여 학습하여 추후 AspectJ Weaving에 대해 자세히 포스팅을 진행하겠다.
 
 ---
 

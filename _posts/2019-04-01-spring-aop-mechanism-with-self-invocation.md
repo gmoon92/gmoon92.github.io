@@ -177,10 +177,10 @@ _`$Proxy`.ready() → `$Proxy`.go()_
 
 다음 코드처럼 호출된 AOP 프록시를 활용하여 go() 메소드를 호출해주면 된다. 즉 기존의 타깃을 참조되던 this.go() 메소드를 프록시로 참조할 수 있도록 AopContext.currentProxy()를 활용한 것이다. 이 AopContext.currentProxy() 메소드를 사용하기 위해선 expose-proxy 옵션을 활성화 해줘야 한다.
 
-- <aop:aspectj-autoproxy expose-proxy="true"/>
+- `<aop:aspectj-autoproxy expose-proxy="true"/>`
 - ProxyFactory.setExposeProxy(true)
 
-일반적으로 자동 프록싱 XML 태그인 `&lt;aop:aspectj-autoproxy&gt;`의 expose-proxy 옵션을 통해 활성화해주는 방법과 ProxyFactory의 setExposeProxy() 메소드를 활용하는 방법이 있다. 하지만 이 방법들론 expose-proxy을 활성화할 수 없다. 첫 번째 이윤 본 포스팅의 학습 환경이 Spring Boot이기 때문에 XML 설정을 할 수 없다. 마지막으로 @AspectJ 어노테이션으로 Spring AOP를 구축했기 때문에 ProxyFactory 방식을 사용할 수 없다.
+일반적으로 자동 프록싱 XML 태그인  `<aop:aspectj-autoproxy />`의 expose-proxy 옵션을 통해 활성화해주는 방법과 ProxyFactory의 setExposeProxy() 메소드를 활용하는 방법이 있다. 하지만 이 방법들론 expose-proxy을 활성화할 수 없다. 첫 번째 이윤 본 포스팅의 학습 환경이 Spring Boot이기 때문에 XML 설정을 할 수 없다. 마지막으로 @AspectJ 어노테이션으로 Spring AOP를 구축했기 때문에 ProxyFactory 방식을 사용할 수 없다.
 
 Spring Boot에선 @EnableAspectJAutoProxy 어노테이션을 활용하여 자동 프록싱을 지원하는데, 이를 활용해보자.
 
@@ -210,7 +210,7 @@ go...
 - AopContext.currentProxy()
 - expose-proxy 활성화
 
-#### IoC 컨테이너 Bean 활용
+#### 5.2. IoC 컨테이너 Bean 활용
 
 두 번째 방법으론 IoC 컨테이너에 등록된 자기 자신의 빈을 활용하는 방법이다.
 

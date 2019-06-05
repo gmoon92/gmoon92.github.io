@@ -110,7 +110,7 @@ _인터페이스 타입이 아닌 클래스 타입으로 DI_
 
 MemberService 클래스는 인터페이스를 상속받고 있기 때문에 Spring은 JDK Dynamic Proxy 방식으로 Proxy Bean을 생성해줍니다. 다음과 같은 코드를 실행을 하면 Runtime Exception이 발생합니다. 여기서 Runtime 에러가 발생되는 부분은 바로 `@Autowired MemberService memberService` 코드인데요.
 
-_MemberService memberService -> UserService memberService_
+_MemberService memberService → UserService memberService_
 
 JDK Dynamic Proxy는 인터페이스 타입으로 DI를 받아줘야 하기 때문에, ~~@Autowired MemberService service~~ 가 아닌 `private UserService service`로 형식을 구성해줘야 합니다.
 

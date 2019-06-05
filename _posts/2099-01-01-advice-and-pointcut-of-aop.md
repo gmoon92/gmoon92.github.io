@@ -24,7 +24,8 @@ priority: 1.0
 
 ### 학습목표
 
-1. s
+1. Pointcut의
+1. Adivce의 종류와 사용법
 
 ### Spring AOP
 

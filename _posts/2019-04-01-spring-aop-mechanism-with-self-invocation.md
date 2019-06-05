@@ -3,7 +3,7 @@ layout: post
 title: "Self Invocation은 왜 발생할까?"
 tags: [AOP, SpringAOP, Self-invocation]
 categories: [Spring, AOP]
-subtitle: "Spring 프록시의 메커니즘과 자기 호출의 해결책"
+subtitle: "개발자 20%만 아는 Spring AOP의 비밀"
 feature-img: "md/img/thumbnail/aop-proxy-self-invocation.png"
 thumbnail: "md/img/thumbnail/aop-proxy-self-invocation.png"
 excerpt_separator: <!--more-->
@@ -14,7 +14,7 @@ priority: 1.0
 
 <!--more-->
 
-# Spring 프록시의 메커니즘과 자기 호출의 해결책
+# 개발자 20%만 아는 Spring AOP의 비밀
 
 ---
 

@@ -1,3 +1,23 @@
+---
+layout: post
+title: "JDK Dynamic Proxy와 CGLIB의 차이점은 무엇일까?"
+tags: [AOP, Spring AOP, Proxy, JDK Dynamic Proxy, CGLIB]
+categories: [Spring, AOP]
+subtitle: "Spring AOP가 제공하는 두 가지 AOP Proxy"
+feature-img: "md/img/thumbnail/spring-aop.png"
+thumbnail: "md/img/thumbnail/spring-aop.png"
+excerpt_separator: <!--more-->
+sitemap:
+changefreq: daily
+display: "false"
+priority: 1.0
+---
+
+<!--more-->
+
+# Spring AOP가 제공하는 두 가지 AOP Proxy
+
+---
 
 컴퓨터 프로그래밍의 패러다임은 늘 변화했습니다.
 

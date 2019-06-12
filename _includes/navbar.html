@@ -24,18 +24,20 @@
 	        {% for page in site.pages %}
 		        {% if page.title and page.hide != true %}
 			        {% if name_page contains page.title %}
-			        
+			       
 			        {% else %}
-				        <li class="separator"> | </li>
-				        <li>
-				            <a class="clear {% if thumnailPage %}header-default-font-style{% endif %}" href="{{ page.url | relative_url }}">
-				            	{% if page.fa-icon %}
-				            		<i class="{{page.fa-icon}}"></i>
-				            	{% endif %}
-				            	
-				                {{ page.title }}
-				            </a>
-				        </li>
+			        	{% if "/portfolio/" != page.permalink %}
+					        <li class="separator"> | </li>
+					        <li>
+					            <a class="clear {% if thumnailPage %}header-default-font-style{% endif %}" href="{{ page.url | relative_url }}">
+					            	{% if page.fa-icon %}
+					            		<i class="{{page.fa-icon}}"></i>
+					            	{% endif %}
+					            	
+					                {{ page.title }}
+					            </a>
+					        </li>
+			        	{% endif %}
 			        {% endif %}
 			        
 			        {% assign name_page = page.title | append: name_page %}

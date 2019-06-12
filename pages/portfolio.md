@@ -6,8 +6,6 @@ permalink: /portfolio/
 #hide:true
 ---
 
-{% include portfolio.html %}
-
 <img src="/pages/portfolio/moong1.png" style="max-height: none;">
 
 <img src="/pages/portfolio/moong2.png" style="max-height: none;">

@@ -6,14 +6,14 @@ permalink: /portfolio/
 #hide:true
 ---
 
-<img src="/pages/portfolio/moong1.png" style="max-height: none;">
+<img src="/md/portfolio/moong1.png" style="max-height: none;">
 
-<img src="/pages/portfolio/moong2.png" style="max-height: none;">
+<img src="/md/portfolio/moong2.png" style="max-height: none;">
 
-<img src="/pages/portfolio/moong3.png" style="max-height: none;">
+<img src="/md/portfolio/moong3.png" style="max-height: none;">
 
-<img src="/pages/portfolio/moong4.png" style="max-height: none;">
+<img src="/md/portfolio/moong4.png" style="max-height: none;">
 
-<img src="/pages/portfolio/moong5.png" style="max-height: none;">
+<img src="/md/portfolio/moong5.png" style="max-height: none;">
 
-<img src="/pages/portfolio/moong6.png" style="max-height: none;">
+<img src="/md/portfolio/moong6.png" style="max-height: none;">

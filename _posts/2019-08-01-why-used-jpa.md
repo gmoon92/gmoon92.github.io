@@ -4,8 +4,8 @@ title: "JPA를 사용해야 하는 4가지 이유"
 tags: [JPA, Hibernate]
 categories: [JPA]
 subtitle: "왜 JPA를 사용해야 하는 걸까?"
-feature-img: "md/img/thumbnail/advice.png"
-thumbnail: "md/img/thumbnail/advice.png"
+feature-img: "md/img/thumbnail/why-used-jpa.png"
+thumbnail: "md/img/thumbnail/why-used-jpa.png"
 excerpt_separator: <!--more-->
 sitemap:
 changefreq: daily

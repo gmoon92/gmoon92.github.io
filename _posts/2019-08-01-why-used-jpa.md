@@ -85,7 +85,7 @@ _객체(Object) ← 개발자의 역할 → 관계(Relational)_
 
 이뿐만이 아닌 다른 테이블과 함께 조회되어야 할 상황이라면 어떻게 될까요?
 
-``` SQL
+``` sql
 -- [1] 기존 회원만 조회하는 SQL
 SELECT M.*
   FROM MEMBER M

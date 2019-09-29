@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JPA에서 @Transient 애노테이션이 존재하는 이유"
-tags: [JPA, Hibernate, Annotation]
+tags: [JPA, Hibernate, Annotation, @Transient]
 categories: [JPA]
 subtitle: "@Transient 제대로 이해하고 사용하자"
 feature-img: "md/img/thumbnail/why-used-jpa.png"
@@ -36,7 +36,7 @@ public class Member{
 
 다음 엔티티 객체에서 **`confirmPassword`**는 회원가입 화면에서 흔히 볼 수 있는 **`비밀번호 재입력`** 데이터 필드입니다.
 
-이 필드는 비밀번호를 입력하고 재차 비밀번호를 제대로 입력했는지 확인하는 용도로 사용됩니다. 아무래도 **`비밀번호 재입력`** 필드는 비즈니스 로직에서만 필요한 데이터일 뿐, 굳이 회원 테이블에서 컬럼으로 구성하여 <u>**관리할 필요가 없는 데이터**</u>입니다.
+이 필드는 비밀번호를 입력하고 재차 비밀번호를 제대로 입력했는지 확인하는 용도로 사용됩니다. 아무래도 **`비밀번호 재입력`** 필드는 비즈니스 로직에서만 필요한 데이터일 뿐, 굳이 회원 테이블에서 컬럼으로 구성하여 **<U>관리할 필요가 없는 데이터</U>**입니다.
 
 이럴 때 아래 코드처럼 confirmPassword 필드에 [1]@Transient 애노테이션을 선언해주면 됩니다.
 
@@ -52,7 +52,7 @@ public class Member{
 }
 ```
 
-하지만 이러한 컬럼 매핑 레퍼런스 애노테이션들은 **자칫 잘못 이해하고 사용한다면 문제가 될 수 있습니다. ** "설마 문제가 될까?" 라는 분들을 위해, <U>**다음 코드에서 문제가 되는 부분을 찾아봅시다.**</U>
+하지만 이러한 컬럼 매핑 레퍼런스 애노테이션들은 **자칫 잘못 이해하고 사용한다면 문제가 될 수 있습니다.** "설마 문제가 될까?" 라는 분들을 위해, **<U>다음 코드에서 문제가 되는 부분을 찾아봅시다.</U>**
 
 > 참고로 컬럼 매핑 레퍼런스 애노테이션에는 @Column, @Enumerate, @Temporal ... 등, javax.persistence 패키지에 포함된  JPA의 표준 애노테이션이 존재합니다.
 
@@ -86,10 +86,11 @@ public String getComfirmPassword(){ return this.confirmPassword; }
 ### 학습 목표
 
 1. @Transient 애노테이션의 이해
-2. @Transient 애노테이션의 사용법과 두 가지 엘리멘트 타입을 지원하는 이유에 대한 이해
+2. @Transient 애노테이션의 사용법
+3. 두 가지 엘리멘트 타입을 지원하는 이유
 	- ElementType.METHOD
 	- ElementType.FIELD
-3. JPA의 엔티티 영속 상태 접근 방식에 대한 이해
+4. JPA의 엔티티 영속 상태 접근 방식에 대한 이해
 	- 프로퍼티 접근 방식 (getter/setter Method)
 	- 필드 접근 방식 (Instance Fields)
 
@@ -118,7 +119,7 @@ public @interface Transient {}
 public String getComfirmPassword(){ return this.confirmPassword; }
 ```
 
-<u>**하지만 문제가 된다던 코드**</u> 역시 getter 메서드에 선언되어있었습니다. 앞서 설명대로라면 메서드에 선언된 다음 코드는 문제가 되지 않아야만 합니다. 눈치챈 분들도 있으시겠지만, <u>다음 문제의 원인은 getter 메서드에 선언되었기 때문이 아닙니다.</u> 아직까지 문제의 원인을 모르시는 분이라면, 거두절미하고 **"영속 대상에서 제외한다"**는 의미를 다시 생각해보셔야 합니다.
+**<U>하지만 문제가 된다던 코드</U>** 역시 getter 메서드에 선언되어있었습니다. 앞서 설명대로라면 메서드에 선언된 다음 코드는 문제가 되지 않아야만 합니다. 눈치챈 분들도 있으시겠지만, <u>다음 문제의 원인은 getter 메서드에 선언되었기 때문이 아닙니다.</u> 아직까지 문제의 원인을 모르시는 분이라면, 거두절미하고 **"영속 대상에서 제외한다"**는 의미를 다시 생각해보셔야 합니다.
 
 ### 1.1. 영속 대상에서 제외
 
@@ -197,7 +198,7 @@ public class Product{
   private BigDecimal price;
   @Transient
   private boolean isEvent;
-	// ^-- 해당 필드 영속 제외 대상
+  // ^-- 해당 필드 영속 제외 대상
 }
 ```
 
@@ -211,7 +212,7 @@ Hibernate:
     )
 ```
 
-다음 로그를 보시면 JPA의 DDL 자동 생성 과정에서 <u>**isEvent 컬럼을 제외**</u>하고 Product 테이블을 구성하는걸 확인할 수 있습니다. 또한, JPA에 의해 자동으로 생성되었던 SELECT/UPDATE/INSERT 쿼리문에서도 해당 isEvent 컬럼 자체가 제외되어 수행됩니다.
+다음 로그를 보시면 JPA의 DDL 자동 생성 과정에서 **<U>isEvent 컬럼을 제외</U>**하고 Product 테이블을 구성하는걸 확인할 수 있습니다. 또한, JPA에 의해 자동으로 생성되었던 SELECT/UPDATE/INSERT 쿼리문에서도 해당 isEvent 컬럼 자체가 제외되어 수행됩니다.
 
 ### 2.1.2. Method 방식
 
@@ -227,7 +228,7 @@ public class Product{
 	public Long getId(){ return this.id; }
 	public void setId(Long id){ this.id = id; }
 	// ^-- @GeneratedValue는 JPA의 내부적인 프로세스에 의해
-  //  	 setter 메서드를 통해 데이터를 셋팅하기 때문에 구성함
+	//     setter 메서드를 통해 데이터를 셋팅하기 때문에 구성함
 	@Transient // <-- 해당 메서드 영속 제외 대상
 	public String getIsEventProduct(){ return this.isEvent; }
 }
@@ -427,17 +428,17 @@ public class Product {
 
 여기서 저는 고민이 생겼습니다.
 
-제가 이해하기엔 도메인 객체란 사용자의 요구사항을 담고 있는, 즉 비즈니스를 담고 있는 온전한 객체라 생각합니다. 하지만 실무에서 엔티티를 단순한 DAO 역할로만 활용하고 사용자의 요구사항을 **`비즈니스 계층으로 나눠 관리`**하고 있었습니다. 해당 비즈니스를 구성하기 위해 [1] **`*Manager`**라는 인터페이스를 구성하고, 이를 [2] 구현한 Repository 클래스를 정의하여 비즈니스 로직을 개발하고 있습니다.
+제가 이해하기엔 도메인 객체란 사용자의 요구사항을 담고 있는, 즉 비즈니스를 담고 있는 온전한 객체라 생각합니다. 하지만 실무에서 엔티티를 단순한 DAO 역할로만 활용하고 사용자의 요구사항을 **`비즈니스 계층으로 나눠 관리`**하고 있었습니다. 해당 비즈니스를 구성하기 위해 [2] **`*Manager`**라는 인터페이스를 구성하고, 이를 [3] 구현한 Repository 클래스를 정의하여 비즈니스 로직을 개발하고 있습니다.
 
 - src/main
   - com.moong.api
     - domain
-      - Member.java <-- @Entity 클래스 
+      - Member.java <-- [1] @Entity 클래스 
 		- service
-			- MemberManager         <-- [1] 인터페이스, 비즈니스 요구사항 정의서
-			- MemberManagerImpl  <-- [2] @Repository 인터페이스 구현체
+			- MemberManager <-- [2] 인터페이스, 비즈니스 요구사항 정의서
+			- MemberManagerImpl  <-- [3] @Repository 인터페이스 구현체
 
-여기서 <U>**계층을 나눠 관리한다는 점을 잘못됐다고 말하는 것은 아닙니다.**</U> 다만 인터페이스 대부분은 구현체와 일대일 관계였습니다. 이는 설계상의 이점보단 관례상 인터페이스를 구현하고 있다고 느꼈습니다. 물론, 인터페이스를 미리 구성하여 추후 변경에 있을 상황을 유연하게 대처할 수 있을지는 모릅니다. 그렇다 하여 인터페이스를 꼭 구성해야 하는 걸까요? 
+여기서 **<U>계층을 나눠 관리한다는 점을 잘못됐다고 말하는 것은 아닙니다.</U>** 다만 인터페이스 대부분은 구현체와 일대일 관계였습니다. 이는 설계상의 이점보단 관례상 인터페이스를 구현하고 있다고 느꼈습니다. 물론, 인터페이스를 미리 구성하여 추후 변경에 있을 상황을 유연하게 대처할 수 있을지는 모릅니다. 그렇다 하여 인터페이스를 꼭 구성해야 하는 걸까요? 
 
 또한, 단순한 비즈니스 로직이라면 @Entity 클래스에 구성하는 게 옳지 않을까 생각합니다. 하지만 아직은 경험이 부족하여, 어떻게 @Entity 객체를 도메인 객체로 활용할 수 있을지는 감이 잡히질 않습니다. 이에 대한 답을 미래에 저에게 맡기며 글을 마치려 합니다.
 

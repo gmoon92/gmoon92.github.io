@@ -377,7 +377,7 @@ Hibernate:
     create table product (
        id bigint not null, -- getId()
        name varchar(255),  -- getName()
-       primary key (id)		 -- @Id Long id
+       primary key (id)    -- @Id Long id
     )
 ```
 

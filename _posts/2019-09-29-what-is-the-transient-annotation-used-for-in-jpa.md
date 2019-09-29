@@ -221,16 +221,16 @@ Hibernate:
 ``` java
 @Entity
 public class Product{
-	private Long id;
-	private String isEvent;
-	
-	@Id @GeneratedValue
-	public Long getId(){ return this.id; }
-	public void setId(Long id){ this.id = id; }
-	// ^-- @GeneratedValue는 JPA의 내부적인 프로세스에 의해
-	//     setter 메서드를 통해 데이터를 셋팅하기 때문에 구성함
-	@Transient // <-- 해당 메서드 영속 제외 대상
-	public String getIsEventProduct(){ return this.isEvent; }
+    private Long id;
+    private String isEvent;
+    
+    @Id @GeneratedValue
+    public Long getId(){ return this.id; }
+    public void setId(Long id){ this.id = id; }
+    // ^-- @GeneratedValue는 JPA의 내부적인 프로세스에 의해
+    //     setter 메서드를 통해 데이터를 셋팅하기 때문에 구성함
+    @Transient // <-- 해당 메서드 영속 제외 대상
+    public String getIsEventProduct(){ return this.isEvent; }
 }
 ```
 
@@ -249,14 +249,14 @@ public class Product{
 ``` java
 @Entity
 public class Member{
-	@Id
-	private Long id;
-	private String userId;
-	private String password;
-	private String confirmPassword;
-	
-	@Transient // <-- 문제가 되는 부분
-	public String getComfirmPassword(){ return this.confirmPassword; }
+    @Id
+    private Long id;
+    private String userId;
+    private String password;
+    private String confirmPassword;
+    
+    @Transient // <-- 문제가 되는 부분
+    public String getComfirmPassword(){ return this.confirmPassword; }
 }
 ```
 
@@ -296,24 +296,24 @@ JPA 스펙에 따르자면, JPA는 **두 가지 방식**을 통해 영속 상태
 // [1] 필드 방식
 @Entity
 public class Member{
-	@Id
-	private Long id;
-	private String name;
-	...
+    @Id
+    private Long id;
+    private String name;
+    ...
 }
 
 // [2] 메서드 방식
 @Entity
 public class Member{
-	private Long id;
-	private String name;
-	
-	@Id
-	public Long getId(){return this.id;}
-	public void setId(Long id){this.id = id;}
-	
-	public String getName(){return this.name;}
-	public void setName(String name){this.name = name;}
+    private Long id;
+    private String name;
+    
+    @Id
+    public Long getId(){return this.id;}
+    public void setId(Long id){this.id = id;}
+    
+    public String getName(){return this.name;}
+    public void setName(String name){this.name = name;}
 }
 ```
 
@@ -330,14 +330,14 @@ _JPA의 엔티티의 접근 방식 = @Id 위치_
 ``` java
 @Entity
 public class Member{
-	@Id // 필드 방식
-	private Long id;
-	private String userId;
-	private String password;
-	private String confirmPassword;
-	
-	@Transient // JPA에서 인식 불가 → 동작 안함
-	public String getComfirmPassword(){ return this.confirmPassword; }
+    @Id // 필드 방식
+    private Long id;
+    private String userId;
+    private String password;
+    private String confirmPassword;
+    
+    @Transient // JPA에서 인식 불가 → 동작 안함
+    public String getComfirmPassword(){ return this.confirmPassword; }
 }
 ```
 
@@ -354,11 +354,11 @@ public class Product {
     private String name;
     private BigDecimal price;
     private boolean isEvent = true;
-
+    
     @Id // [1] Property 접근 방식
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-  	// [2] getter 메서드 기준으로 컬럼 생성
+    // [2] getter 메서드 기준으로 컬럼 생성
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
  }
@@ -388,17 +388,17 @@ Hibernate:
 ``` java
 @Entity
 public class Product {
-		@Id
+    @Id
     private Long id;
     private String name;
     
     // [1] 기능성 메서드 정의
     @Transient // [2] 불필요한 애노테이션 선언
-		public Set<GrantedAuthority> getAuthorities() {
-      Set<GrantedAuthority> authorities = new LinkedHashSet<GrantedAuthority>();
-      authorities.add(role);
-      return authorities;
-  	}
+    public Set<GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new LinkedHashSet<GrantedAuthority>();
+        authorities.add(role);
+        return authorities;
+    }
  }
 ```
 
@@ -457,28 +457,26 @@ public class Product {
 public class ProductTest {
     @Autowired private ProductRepository productRepository;
     @Autowired private EntityManager em;
-  
+    
     @Before
     public void init() {
         productRepository.saveAll(
-                Arrays.asList(
-                          Product.builder().id(1L).name("RV").isEvent(true).build()
-                        , Product.builder().id(2L).name("RC").isEvent(true).build()
-                        , Product.builder().id(3L).name("RM").isEvent(true).build()
-                        , Product.builder().id(4L).name("RS").isEvent(true).build()
-                )
+        Arrays.asList(
+              Product.builder().id(1L).name("RV").isEvent(true).build()
+            , Product.builder().id(2L).name("RC").isEvent(true).build()
+            , Product.builder().id(3L).name("RM").isEvent(true).build()
+            , Product.builder().id(4L).name("RS").isEvent(true).build()
+            )
         );
         em.flush();
         em.clear(); // [1] 1차 캐시 초기화
     }
-
+    
     @Test
     public void findALLTest() {
         System.out.format( "finALL : %s"
-                          , productRepository.findAll().stream().findFirst()
-        );
+            , productRepository.findAll().stream().findFirst() );
     }
-
 }
 ```
 ``` java

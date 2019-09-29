@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JPA에서 @Transient 애노테이션이 존재하는 이유"
-tags: [JPA, Hibernate, Annotation, @Transient]
+tags: [JPA, Hibernate, Annotation, Transient]
 categories: [JPA]
 subtitle: "@Transient 제대로 이해하고 사용하자"
 feature-img: "md/img/thumbnail/why-used-jpa.png"

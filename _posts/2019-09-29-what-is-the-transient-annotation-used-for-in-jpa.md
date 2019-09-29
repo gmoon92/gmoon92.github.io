@@ -26,11 +26,11 @@ priority: 1.0
 ``` java
 @Entity
 public class Member{
-	@Id
-	private Long id; // PK
-	private String userId; // 사용자 아이디
-	private String password; // 비밀번호
-	private String confirmPassword; // 비밀번호 재입력
+    @Id
+    private Long id; // PK
+    private String userId; // 사용자 아이디
+    private String password; // 비밀번호
+    private String confirmPassword; // 비밀번호 재입력
 }
 ```
 
@@ -43,12 +43,12 @@ public class Member{
 ``` java
 @Entity
 public class Member{
-	@Id
-	private Long id;
-	private String userId;
-	private String password;
-	javax.persistence.@Transient // [1] @Transient 선언
-	private String confirmPassword; // 비밀번호 재입력 매핑 제외
+    @Id
+    private Long id;
+    private String userId;
+    private String password;
+    javax.persistence.@Transient // [1] @Transient 선언
+    private String confirmPassword; // 비밀번호 재입력 매핑 제외
 }
 ```
 
@@ -59,14 +59,14 @@ public class Member{
 ``` java
 @Entity
 public class Member{
-	@Id
-	private Long id;
-	private String userId;
-	private String password;
-	private String confirmPassword;
-	
-	@Transient
-	public String getComfirmPassword(){ return this.confirmPassword; }
+    @Id
+    private Long id;
+    private String userId;
+    private String password;
+    private String confirmPassword;
+    
+    @Transient
+    public String getComfirmPassword(){ return this.confirmPassword; }
 }
 ```
 
@@ -152,11 +152,11 @@ public class Product {
     private BigDecimal price;
     private boolean isEvent;
     // ^-- 영속 제외 대상
-
+    
     public void runEventProcess(){
-    	if(isEvent){
-    		// ... 이벤트 로직 수행
-    	}
+        if(isEvent){
+            // ... 이벤트 로직 수행
+        }
     }
 }
 ```
@@ -192,13 +192,13 @@ Hibernate:
 ``` java
 @Entity
 public class Product{
-	@Id
-  private Long id;
-  private String name;
-  private BigDecimal price;
-  @Transient
-  private boolean isEvent;
-  // ^-- 해당 필드 영속 제외 대상
+    @Id
+    private Long id;
+    private String name;
+    private BigDecimal price;
+    @Transient
+    private boolean isEvent;
+    // ^-- 해당 필드 영속 제외 대상
 }
 ```
 

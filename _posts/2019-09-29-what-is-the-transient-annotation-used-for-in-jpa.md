@@ -227,8 +227,8 @@ public class Product{
     @Id @GeneratedValue
     public Long getId(){ return this.id; }
     public void setId(Long id){ this.id = id; }
-    /* ^-- @GeneratedValue는 JPA의 내부적인 프로세스에 의해
-           setter 메서드를 통해 데이터를 셋팅하기 때문에 구성함 */
+    // ^-- @GeneratedValue는 JPA의 내부적인 프로세스에 의해
+    //     setter 메서드를 통해 데이터를 셋팅하기 때문에 구성함
     @Transient // <-- 해당 메서드 영속 제외 대상
     public String getIsEventProduct(){ return this.isEvent; }
 }

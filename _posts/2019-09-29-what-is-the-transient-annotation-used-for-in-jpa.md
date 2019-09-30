@@ -416,6 +416,8 @@ public class Product {
 2. JPA 컬럼 매핑 레퍼런스 애노테이션은 Filed, Property 방식을 지원하기 위해 필드와 메서드에 선언할 수 있다.
 3. 컬럼 매핑 레퍼런스 애노테이션을 사용할 때 JPA의 엔티티 접근 방식을 살펴보자.
 	- @Id 애노테이션의 위치를 보자.(@Access 애노테이션으로 접근 방식을 재정의하지 않는 이상)
+4. **<U>QueryDSL 또한 JPA의 엔티티 접근 방식을 기준으로 QDomain 클래스를 생성한다.</U>** 
+    - 따라서 @Transient가 선언된 필드나 메서드는 생성 과정에서 제외된다.
 
 학습 과정에서 @Transient를 활용한다면 엔티티 객체는 ORM(Object Relation Mapping)의 역할을 넘어서 도메인 객체(Domain Object)로써 활용할 수 있다고 생각이 들었습니다. 이러한 생각이 들었던 이유는 다음과 같습니다.
 

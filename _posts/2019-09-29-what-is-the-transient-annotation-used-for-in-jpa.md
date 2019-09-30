@@ -410,7 +410,7 @@ public class Product {
 
 ### 4. 정리
 
-@Transient를 요약하면 다음과 같습니다.
+마지막으로 @Transient 애노테이션을 정리하면 다음과 같습니다.
 
 1. @Transient는 영속 대상에서 제외한다.
 2. JPA 컬럼 매핑 레퍼런스 애노테이션은 Filed, Property 방식을 지원하기 위해 필드와 메서드에 선언할 수 있다.

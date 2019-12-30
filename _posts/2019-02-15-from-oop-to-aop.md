@@ -275,7 +275,7 @@ AOP 구현 방식에 대해 자세히 살펴보기 위해선 몇 가지 기본�
 - JoinPoint : Advice를 적용할 수 있는 여러 시점
 - PointCut : 여러 JoinPoint 중에서 최종적으로 Advice를 적용할 JoinPoint
 - Weaving : JoinPoint에 Advice하여 핵심기능과 횡단기능이 교차하여 새롭게 생성된 객체를 프로세스에 적용하는 일련의 모든 과정
-> 참고 [AOP : Aspect Oriented Programming 개념](https://gmun.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html)
+> 참고 [AOP : Aspect Oriented Programming 개념](https://gmoon92.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html)
 
 <img src="/md/img/aop/from-oop-to-aop/aspectj2.png" style="max-height:none;">
 

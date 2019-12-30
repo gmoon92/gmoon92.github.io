@@ -24,8 +24,8 @@ priority: 1.0
 
 무엇보다 독립적인 모듈화에 대한 부분은 OOP의 특성을 이해하고 정리가 되었다면 많은 부분을 해소할 수 있을거라 생각한다. 본 포스팅은 OOP를 하면서 무심코 지나쳤던 OOP의 특징들, 흔히 "캡추다산정"이라 불리는 캡슐화, 추상화, 다형성, 상속성, 정보은닉의 개념에 대해 정리하고 생각하는 시간을 가지려 한다. 객체지향, OOP의 개념적인 부분은 아래 링크를 참고하기 바란다.
 
-- [객체지향에 대해](https://gmun.github.io/oo/2018/11/12/oo.html) <br/>
-- [OOP에 대해](https://gmun.github.io/oo/2018/11/20/oop.html)
+- [객체지향에 대해](https://gmoon92.github.io/oo/2018/11/12/oo.html) <br/>
+- [OOP에 대해](https://gmoon92.github.io/oo/2018/11/20/oop.html)
 
 ### 학습 목표
 

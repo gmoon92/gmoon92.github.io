@@ -46,7 +46,7 @@ Spring AOP는 프록시 기반으로 JDK Dynamic Proxy와 CGLIB을 활용하여 
 
 가장 쉽게 설명을 드리자면 Spring은 AOP Proxy를 생성하는 과정에서 자체 검증 로직을 통해 타깃의 인터페이스 유무를 판단합니다.
 
->Target이란 횡단기능(Advice)이 적용될 객체(Object)를 뜻합니다. AOP의 개념적인 용어들은 이전에 작성된 [AOP 개념편](https://gmun.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html) 포스트를 참고해주세요.
+>Target이란 횡단기능(Advice)이 적용될 객체(Object)를 뜻합니다. AOP의 개념적인 용어들은 이전에 작성된 [AOP 개념편](https://gmoon92.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html) 포스트를 참고해주세요.
 
 ![img](/md/img/aop/jdk-dynamic-proxy-and-cglib/aop-proxy-mechanism2.png)
 

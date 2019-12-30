@@ -66,7 +66,7 @@ Spring은 객체지향적으로 AOP 기술을 구현하기 위해 프록시 패�
 
 여기서 중요한 점은 타깃(Proxy Bean)에 대한 메소드가 수행할 시점엔 어떠한 Aspect가 동작하지 않습니다. 이는 프록시 메커니즘을 기반으로 한 AOP 기술에서 발생할 수 있는 공통적인 문제로써, 이를 자기 호출 문제라 합니다. Spring AOP에서 제공하는 CGLib(바이트 조작 기반)도 마찬가지로 JDK Dynamic Proxy를 기반으로 설계된 구조를 통해 동작하기 때문에 자기 호출 문제가 발생합니다.
 
-Spring에서 자기 호출의 문제에 대한 여러 해결 방안이 존재합니다. 이 부분에 대해선, 이전에 작성한 ["Self Invocation은 왜 발생할까?"](https://gmun.github.io/spring/aop/2019/04/01/spring-aop-mechanism-with-self-invocation.html) 포스팅을 참고해주시면 감사하겠습니다.
+Spring에서 자기 호출의 문제에 대한 여러 해결 방안이 존재합니다. 이 부분에 대해선, 이전에 작성한 ["Self Invocation은 왜 발생할까?"](https://gmoon92.github.io/spring/aop/2019/04/01/spring-aop-mechanism-with-self-invocation.html) 포스팅을 참고해주시면 감사하겠습니다.
 
 #### 1.2. 성능 이슈
 

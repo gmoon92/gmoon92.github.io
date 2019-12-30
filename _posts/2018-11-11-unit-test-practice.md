@@ -22,7 +22,7 @@ priority: 1.0
 
 이 글에선 개념적인 부분보다는 JUnit을 통해 단위 테스트를 작성하는 방법과 테스트 검증 시 일어나는 TDD-Cycle의 RGR 단계를 인지하여 개발하는 데에 초점을 둘 예정이다.
 
-TDD-Cycle이 왜, 언제 발생되는지 모른다거나 자세한 개념적인 부분이 필요하다면 이전에 작성한 [TestFramework : JUnit](https://gmun.github.io/test/2018/11/04/junit.html)과 [TDD : Test-Driven Development](https://gmun.github.io/test/2018/08/24/test-driven-development.html)를 같이 참고한다면 본 포스팅을 읽는 데 도움이 될 것 같다.
+TDD-Cycle이 왜, 언제 발생되는지 모른다거나 자세한 개념적인 부분이 필요하다면 이전에 작성한 [TestFramework : JUnit](https://gmoon92.github.io/test/2018/11/04/junit.html)과 [TDD : Test-Driven Development](https://gmoon92.github.io/test/2018/08/24/test-driven-development.html)를 같이 참고한다면 본 포스팅을 읽는 데 도움이 될 것 같다.
 
 ### Download
 
@@ -43,7 +43,7 @@ JUnit 버전에 따라 요구하는 Java 버전이 다르지만 본 포스팅에
 
 ### 주제 선정
 
- 단위 테스트를 연습할 주제를 선정해보자. 가장 처음 [TDD](https://gmun.github.io/test/2018/08/24/test-driven-development.html)를 연습할 때는 유틸성 기능 또는 알고리즘 문제를 통해 연습하면 좋다.
+ 단위 테스트를 연습할 주제를 선정해보자. 가장 처음 [TDD](https://gmoon92.github.io/test/2018/08/24/test-driven-development.html)를 연습할 때는 유틸성 기능 또는 알고리즘 문제를 통해 연습하면 좋다.
  
 _문제 1) 더하기, 빼기, 나누기, 곱셈할 수 있는 문자열 계산기 만들기_
 

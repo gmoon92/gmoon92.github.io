@@ -24,7 +24,7 @@ priority: 1.0
 
 2019년 Ahea 공식적인 첫 일정은 상반기에 진행할 2019 Ahea Conference이다. 이와 관련하여 일정에 대한 이야기가 나올 무렵 스터디 그룹원들의 반응도 가지각색이었다. 어떤 분은 행사 자체를 즐기는 반면, 어떤 분들은 익숙해서인지 그냥 무덤덤한 반응도 보였다.
 
-반면 나는 걱정이 많았다. [작년 스터디(TDD)](https://gmun.github.io/ahea/2018/09/27/ahea-2018-conference.html)에 대한 한 번의 실패를 경험하고 나서 스터디 자체가 부담되었고 무엇보다 스터디 자체에 대한 트라우마가 있었다. 이를 그룹원들도 알았을까, 우스갯소리로 "TDD의 트라우마 극복해야죠?"라며 넌지시 농담 한마디를 건넸다. 언제까지 트라우마에 매여 있을 순 없기에 다시 마음을 잡고 2019 Ahean Conference는, 트라우마를 극복하겠다는 목표를 가지고 시작하였다.
+반면 나는 걱정이 많았다. [작년 스터디(TDD)](https://gmoon92.github.io/ahea/2018/09/27/ahea-2018-conference.html)에 대한 한 번의 실패를 경험하고 나서 스터디 자체가 부담되었고 무엇보다 스터디 자체에 대한 트라우마가 있었다. 이를 그룹원들도 알았을까, 우스갯소리로 "TDD의 트라우마 극복해야죠?"라며 넌지시 농담 한마디를 건넸다. 언제까지 트라우마에 매여 있을 순 없기에 다시 마음을 잡고 2019 Ahean Conference는, 트라우마를 극복하겠다는 목표를 가지고 시작하였다.
 
 #### 구체적인 주제선정(2018.12 ~ 2019.02)
 
@@ -178,13 +178,13 @@ _https://onoffmix.com/event/178671_
 
 #### Spring AOP를 스터디하며 완성된 문서들
 
-- [Spring Boot2에서 AspectJ 위빙으로 바꿔볼까?](https://gmun.github.io/spring/aop/2019/05/24/aspectj-of-spring.html)
-- [마법의 코드, 어드바이스](https://gmun.github.io/spring/aop/2019/05/15/advice.html)
-- [포인트 컷의 다양한 표현식](https://gmun.github.io/spring/aop/2019/05/06/pointcut.html)
-- [JDK Dynamic Proxy와 CGLIB의 차이점은 무엇일까?](https://gmun.github.io/spring/aop/2019/04/20/jdk-dynamic-proxy-and-cglib.html)
-- [Self Invocation은 왜 발생할까?](https://gmun.github.io/spring/aop/2019/04/01/spring-aop-mechanism-with-self-invocation.html)
-- [Spring AOP 선언의 선택](https://gmun.github.io/spring/aop/2019/03/01/spring-aop-choosing.html)
-- [Spring AOP의 메커니즘과 Proxy Bean 생성](https://gmun.github.io/spring/aop/2019/02/23/spring-aop-proxy-bean.html)
-- [OOP에서 AOP](https://gmun.github.io/spring/aop/oop/2019/02/15/from-oop-to-aop.html)
-- [AOP가 왜 필요할까?](https://gmun.github.io/spring/aop/2019/02/09/why-used-aop.html)
-- [AOP : Aspect Oriented Programming 개념](https://gmun.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html)
+- [Spring Boot2에서 AspectJ 위빙으로 바꿔볼까?](https://gmoon92.github.io/spring/aop/2019/05/24/aspectj-of-spring.html)
+- [마법의 코드, 어드바이스](https://gmoon92.github.io/spring/aop/2019/05/15/advice.html)
+- [포인트 컷의 다양한 표현식](https://gmoon92.github.io/spring/aop/2019/05/06/pointcut.html)
+- [JDK Dynamic Proxy와 CGLIB의 차이점은 무엇일까?](https://gmoon92.github.io/spring/aop/2019/04/20/jdk-dynamic-proxy-and-cglib.html)
+- [Self Invocation은 왜 발생할까?](https://gmoon92.github.io/spring/aop/2019/04/01/spring-aop-mechanism-with-self-invocation.html)
+- [Spring AOP 선언의 선택](https://gmoon92.github.io/spring/aop/2019/03/01/spring-aop-choosing.html)
+- [Spring AOP의 메커니즘과 Proxy Bean 생성](https://gmoon92.github.io/spring/aop/2019/02/23/spring-aop-proxy-bean.html)
+- [OOP에서 AOP](https://gmoon92.github.io/spring/aop/oop/2019/02/15/from-oop-to-aop.html)
+- [AOP가 왜 필요할까?](https://gmoon92.github.io/spring/aop/2019/02/09/why-used-aop.html)
+- [AOP : Aspect Oriented Programming 개념](https://gmoon92.github.io/spring/aop/2019/01/15/aspect-oriented-programming-concept.html)

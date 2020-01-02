@@ -3,7 +3,7 @@ layout: post
 title: "Hibernate Envers를 활용한 이력관리"
 tags: [Spring, JPA, Hibernate, Spring Data JPA, Envers]
 categories: [Spring, Hibernate, Envers]
-subtitle: "엔티티의 이력관리하는 방법"
+subtitle: "Hibernate Envers Concepts"
 feature-img: "md/img/thumbnail/hibernate-envers.png"
 thumbnail: "md/img/thumbnail/hibernate-envers.png"
 excerpt_separator: <!--more-->

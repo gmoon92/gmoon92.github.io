@@ -107,9 +107,9 @@ public void changeTeam(MemberVO vo){
 
 # 앞으로 진행될 내용
 
-지금까지 Hibernate Envers에 대한 대략적인 개념과 동작 방식과 관련된 이론적인 설명이 많았습니다.
+지금까지 Hibernate Envers에 대한 대략적인 개념과 동작 방식과 관련된 이론적인 설명 중심으로 작성했습니다.
 
-물론, 개념과 동작 원리라고 하기엔 생략된 부분들이 많습니다. 예를 들어 이력 테이블에 존재하는 REVTYPE 컬럼은 무엇을 의미하는지, Audited Table은 어떻게 생성하고 관리해야 하는지 Revision Number는 어느 시점에 생성되는지 등등 궁금증이 생기실 것입니다. 앞으로 작성될 포스트를 통해 제기된 궁금증들을 풀어갈 예정이며 보다 Hibernate Envers에 어떻게 사용할 수 있는지에 대해 설명을 하겠습니다.
+물론, 이론적인 설명이라 하기엔 생략된 부분들이 많습니다. 예를 들어 이력 테이블에 존재하는 REVTYPE 컬럼은 무엇을 의미하는지, Audited Table은 어떻게 생성하고 관리되는지, Revision Number는 어느 시점에 생성되는지 등등 자세한 설명은 생략되었습니다. 앞으로 작성될 포스트를 통해 제기된 궁금증들을 풀어갈 예정이며, Hibernate Envers를 실무에 적용했던 사례를 통해 이론보다는 사용법과 주의사항에 대해 자세히 설명하겠습니다.
 
 - Audited Entity
 - Custom Revision Entity

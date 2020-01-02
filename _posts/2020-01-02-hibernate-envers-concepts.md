@@ -15,7 +15,7 @@ priority: 1.0
 
 <!--more-->
 
-# 엔티티의 이력관리하는 방법
+# 엔티티의 데이터 이력관리
 # 1. Hibernate Envers Concepts
 
 ---

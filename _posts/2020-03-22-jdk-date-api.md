@@ -216,8 +216,8 @@ public class BasicVO {
 }
 ```
 
-### 1.3. 하위 클래스의 문제점
-### 1.3.1. Naming
+### 1.4. 하위 클래스의 문제점
+### 1.4.1. Naming
 
 이처럼 문제가 많은 java.util.Date 클래스를 상속한 하위 클래스에도 문제가 존재합니다. 우선 java.sql.Date 클래스는 상위 클래스인 java.util.Date 클래스와 이름이 같습니다. 
 
@@ -232,7 +232,7 @@ public class Date
 
 이를 두고 Java 플랫폼 설계자는 클래스 이름을 지으면서 깜빡 존 듯하다는 조롱까지 나왔습니다. java.sql.Date 클래스는 Comparable 인터페이스에 대한 정의를 클래스 선언에서 하지 않았기 때문에 Comparable과 관련된 Generics 선언을 복잡하게 만들었습니다.
 
-### 1.3.2. 동등성 (equality)
+### 1.4.2. 동등성 (equality)
 
 이보다 더 문제는 java.sql.TimeStamp 클래스에 있습니다.
 
@@ -251,7 +251,7 @@ void shouldNotBeUsedEqualsWhenComapareToChildObject() {
 
 따라서 a.equals(b)가 true라도 b.equals(a)는 false인 경우가 생길 수 있습니다.
 
-### 1.4. 찾기 어려운 버그들
+### 1.5. 찾기 어려운 버그들
 
 마지막으로 찾기 어려운 버그들이 존재합니다.
 

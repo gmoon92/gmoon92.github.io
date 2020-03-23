@@ -19,11 +19,11 @@ priority: 1.0
 
 ---
 
-# 들어가기전
+### 들어가기전
 
 프로젝트를 진행하던 중에 여러 나라의 시간대를 맞추기 위해 기본 날짜 API를 사용한 유틸성 클래스가 존재했습니다. 최종적으로 기본 날짜 API를 Java8의 Time API로 개선할 예정이기 때문에 기본 날짜 API에 대한 학습의 시간이 필요했습니다. 본 포스팅에선 파악된 기본 날짜 API의 문제점을 기반으로 Java8 Time API 코드로 개선하려는 이유에 대해 공유하려 합니다.
 
-## 기본 날짜 API (JDK 1.1 ~ 7)
+### 기본 날짜 API (JDK 1.1 ~ 7)
 
 Java8 이전엔 날짜와 관련된 다양한 클래스들을 제공하고 있습니다.
 
@@ -37,7 +37,7 @@ java
 
 다음 클래스를 통해 특정 날짜를 생성하여 표현하지만, 일반적으로 특정 일자를 더하거나 빼거나 하는 날짜 계산이 필요한 경우가 많습니다. 기본 날짜 API에선 날짜 계산을 위해 java.util.Date, java.util.Calendar 클래스를 사용하게 됩니다. 하지만 기본 날짜 API의 문제들을 많은 개발 커뮤니티를 통해 쉽게 발견할 수 있습니다.
 
-## 1. 기본 날짜 API의 문제점
+### 1. 기본 날짜 API의 문제점
 
 Java에서 기본적으로 제공하고 있는 Date, Calendar 클래스의 대표적인 문제점은 다음과 같습니다.
 
@@ -48,7 +48,7 @@ Java에서 기본적으로 제공하고 있는 Date, Calendar 클래스의 대�
 - 하위 클래스의 문제점
 - 찾기 어려운 버그들
 
-## 1.1. 햇갈리는 날짜 계산
+### 1.1. 햇갈리는 날짜 계산
 
 다음 문제점들은 2020-01-01 날짜를 문자열로 반환하는 다음 예제 코드를 통해 설명하겠습니다.
 
@@ -169,7 +169,7 @@ public Date addMonth(Date date, int plus){
 
 다음 월 계산 상수엔 4가지의 선택지가 존재합니다. 다음 계산 상수에서 `월 + 1` 계산 상수는 `Calendar.MONTH`을 사용해야 합니다. 이처럼 날짜 계산을 하기 위한 다양한 날짜 계산 상수의 숙지가 필요합니다. 앞서 설명했던 것과 마찬가지로 컴파일 시점에서 에러가 나타나지 않습니다. 자칫 잘못된 계산 상수를 사용하여 코드 수정이 필요하다면, 어떤 부분에서 잘못되었는지 파악하기가 매우 어렵습니다.
 
-## 1.2. Date와 Calendar의 애매한 역할
+### 1.2. Date와 Calendar의 애매한 역할
 
 여기서 기본 날짜 API에 대해 사용하는 데 있어 익숙지 않은 분들이라면 의문점이 생기실 수 있습니다.
 
@@ -179,7 +179,7 @@ public Date addMonth(Date date, int plus){
 
 하지만 Calendar 클래스의 생성 비용이 비싼 편일뿐더러, 날짜 계산을 위해 필연적으로 Calendar 객체를 생성해야 하므로 성능상으로도 좋지 않습니다. 이러한 불편함을 덜기 위해 [Apache Commons Lang 라이브러리](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3)에 있는 DateUtils 클래스의 plusDays() 메서드나 plusMonth() 메서드 같은 메서드를 주로 활용하지만 DateUtils 클래스를 쓰더라도 중간 객체로 Calendar 인스턴스를 생성하는 것은 같기 때문에 성능상으론 좋지 않습니다.
 
-## 1.3. 불편 클래스가 아니다. (Not immutable)
+### 1.3. 불편 클래스가 아니다. (Not immutable)
 
 단순히 날짜 계산의 어려움은 API 보거나 [Apache Commons Lang 라이브러리](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3)를 사용하면 됩니다. 하지만, 그보다 Date, Calendar 클래스의 가장 큰 문제는 불변이 아니라는 점입니다.
 
@@ -216,7 +216,7 @@ public class BasicVO {
 }
 ```
 
-## 1.3. 하위 클래스의 문제점
+### 1.3. 하위 클래스의 문제점
 ### 1.3.1. Naming
 
 이처럼 문제가 많은 java.util.Date 클래스를 상속한 하위 클래스에도 문제가 존재합니다. 우선 java.sql.Date 클래스는 상위 클래스인 java.util.Date 클래스와 이름이 같습니다. 
@@ -281,8 +281,8 @@ private static TimeZone getTimeZone(String ID, boolean fallback) {
 
 이러한 특성 때문에 컴파일 시점뿐만 아니라 런타임 시점에서도 오류가 발생하지 않고 마치 `GMT` 시간대가 지정된 것처럼 테스트를 통과하게 됩니다. 결과적으로 찾기 어려운 버그가 생길 위험이 있습니다.
 
-## 2. 새로운 Java의 날짜 API
-## java.time.*
+### 2. 새로운 Java의 날짜 API
+### java.time.*
 
 이 외에도 본 포스팅에선 다루지 않은 `java.text.SimpleDateFormat`의 Thread-safe 하지 않는 이슈가 존재합니다. 이처럼 Java의 기본 날짜 API는 설계부터가 잘못되어 사용하기에 불편하고 개발자의 실수를 유발할 수 있는 클래스로 평가하고 있으며, 심지어 구현조차 잘못된 클래스로 악평이 자자합니다. 이러한 부분들은 Date 클래스를 보면 대부분 메서드가 @Deprecated 되어 있다는 걸 알 수 있습니다. Java 진영에선 나쁘지만 삭제되지 않을 클래스에 대해 @Deprecated 주석을 사용하는 것으로 유명한데, 이를 근거로 Java에서도 본인들의 실수를 어느 정도 인정하는듯한 모습이라 할 수 있습니다.
 
@@ -414,13 +414,13 @@ public void dateBinder(WebDataBinder dataBinder, HttpServletRequest request) {
 
 따라서 날짜 문자열 타입을 Date 타입으로 바인딩하기 위해 존재했던 코드가 필요 없습니다.
 
-## 결론
-## 더 오래되고 아직까지도 존재하는 Date 클래스가 더 좋은게 아닌가?
-## 묻거나 따지지말고 새로운 프로젝트에선 Java8 날짜 API를 도입하자.
+### 결론
+### 더 오래되고 아직까지도 존재하는 Date 클래스가 더 좋은게 아닌가?
+### 묻거나 따지지말고 새로운 프로젝트에선 Java8 날짜 API를 도입하자.
 
 Java SE 8부터는 사용자에게 java.time (JSR-310) 으로 마이그레이션해야합니다. - [Oracle 발췌](https://www.oracle.com/technical-resources/articles/java/jf14-date-time.html)
 
-## 참고
+### 참고
 
 - [Baeldung - Java Date to LocalDate and LocalDateTime](https://www.baeldung.com/java-date-to-localdate-and-localdatetime)
 - [Oracle - How and When To Deprecate APIs](https://docs.oracle.com/javase/7/docs/technotes/guides/javadoc/deprecation/deprecation.html)

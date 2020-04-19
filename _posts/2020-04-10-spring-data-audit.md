@@ -214,7 +214,8 @@ class MemberRepositoryTest {
 ```
 ![img](/md/img/hibernate/audit/test-result2.png)
 
-## 1.3. @MappedSuperclass 애노테이션 활용
+## 1.3. 이력 유형 데이터 추상화
+## @MappedSuperclass 애노테이션 활용
 
 앞서 본 예제 코드처럼 엔티티 클래스에 이력 유형 애노테이션들을 명시하여 관리할 수 있습니다.
 

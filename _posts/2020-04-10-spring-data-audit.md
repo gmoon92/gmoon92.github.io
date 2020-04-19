@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spring Data JPA의 이력 유형 필드 관리"
+title: "Spring Data JPA의 이력 유형 데이터 관리"
 tags: [Spring, JPA, Hibernate, Spring Data JPA, Audited]
 categories: [Spring, Hibernate, Audited]
 subtitle: "엔티티의 이력 유형 데이터 모델링"
@@ -39,9 +39,10 @@ priority: 1.0
 
 # 학습 목표
  
-- Spring Data JPA의 Audit로 이력 유형 필드 관리하기
+- Spring Data Audit 기능
+- 엔티티의 이력 유형 데이터 모델링
 
-## 1. Spring Data JPA의 Audit
+## 1. Spring Data JPA의 Audit 기능
 
 Spring Data JPA에선 이력 유형 데이터를 쉽게 관리할 수 있도록 @CreatedBy, @CreatedDate, @LastModifiedBy, @LastModifiedDate 이력 유형 애노테이션을 제공하고 있습니다. 애노테이션의 네이밍 그대로 생성자, 생성 일자, 마지막 수정자, 마지막 수정 일자를 의미합니다.
 
@@ -55,7 +56,7 @@ Spring Data JPA에선 이력 유형 데이터를 쉽게 관리할 수 있도록 
 1. 이력 유형 필드에 애노테이션 명시
 2. 이력 유형 리스너 활성화
 
-# 1.1. 이력 유형 필드에 애노테이션 명시
+## 1.1. 이력 유형 필드에 애노테이션 명시
 
 우선 엔티티를 구성할 때, 이력 유형 필드에 애노테이션을 명시해줍니다.
 

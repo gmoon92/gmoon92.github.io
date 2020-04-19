@@ -19,7 +19,7 @@ priority: 1.0
 
 ---
 
-# 들어가기전
+### 들어가기전
 
  데이터베이스에서 이력 데이터 모델링은 실무에서 중요한 부분이라 할 수 있습니다.
 
@@ -37,12 +37,12 @@ priority: 1.0
 - Spring Boot 2.2.2.RELEASE
 - Hibernate 5.4.9 Final
 
-# 학습 목표
+### 학습 목표
  
 - Spring Data Audit 기능
 - 엔티티의 이력 유형 데이터 모델링
 
-## 1. Spring Data JPA의 Audit 기능
+### 1. Spring Data JPA의 Audit 기능
 
 Spring Data JPA에선 이력 유형 데이터를 쉽게 관리할 수 있도록 @CreatedBy, @CreatedDate, @LastModifiedBy, @LastModifiedDate 이력 유형 애노테이션을 제공하고 있습니다. 애노테이션의 네이밍 그대로 생성자, 생성 일자, 마지막 수정자, 마지막 수정 일자를 의미합니다.
 
@@ -56,7 +56,7 @@ Spring Data JPA에선 이력 유형 데이터를 쉽게 관리할 수 있도록 
 1. 이력 유형 필드에 애노테이션 명시
 2. 이력 유형 리스너 활성화
 
-## 1.1. 이력 유형 필드에 애노테이션 명시
+### 1.1. 이력 유형 필드에 애노테이션 명시
 
 우선 엔티티를 구성할 때, 이력 유형 필드에 애노테이션을 명시해줍니다.
 
@@ -116,8 +116,8 @@ class MemberRepositoryTest {
 
 ![img](/md/img/hibernate/audit/test-result1.png)
 
-## 1.2. Audit Listener 등록 및 활성화
-## @EntityListeners, @EnableJpaAuditing
+### 1.2. Audit Listener 등록 및 활성화
+### @EntityListeners, @EnableJpaAuditing
 
 Spring Data JPA 애노테이션을 활성화하기 위해선, JPA 표준 규격 패키지에 포함된 javax.persistence.EntityListeners 애노테이션이 필요합니다.
 
@@ -214,8 +214,8 @@ class MemberRepositoryTest {
 ```
 ![img](/md/img/hibernate/audit/test-result2.png)
 
-## 1.3. 이력 유형 데이터 추상화
-## @MappedSuperclass 애노테이션 활용
+### 1.3. 이력 유형 데이터 추상화
+### @MappedSuperclass 애노테이션 활용
 
 앞서 본 예제 코드처럼 엔티티 클래스에 이력 유형 애노테이션들을 명시하여 관리할 수 있습니다.
 
@@ -262,7 +262,7 @@ public class Member extends BaseTraceEntity{
 }
 ```
 
-# 마무리
+### 마무리
 
 다음과 같이 Spring Data와 JPA를 활용하여 이력 유형 데이터를 모델링하는 방법에 대해 소개해드렸습니다.
 
@@ -272,7 +272,7 @@ public class Member extends BaseTraceEntity{
 
 이처럼 간단한 방법을 통해 엔티티를 누가 저장했는지, 누가 수정했는지에 대해 추적할 수 있습니다. 단 엔티티의 삭제 이력 데이터에 대해선 다음과 같은 방법으론 추적할 수 없습니다. 다음 포스팅에선 삭제된 이력 데이터를 관리하는 방법을 소개해드리겠습니다.
 
-# 참고
+### 참고
 
 - [jboss-docs-hibernate-4.1-Envers](https://docs.jboss.org/hibernate/core/4.1/devguide/en-US/html/ch15.html#envers-tracking-modified-entities-queries)
 - [Spring DOC - Spring data](https://docs.spring.io/spring-data/data-commons/docs/current/api/org/springframework/data/annotation/package-frame.html)

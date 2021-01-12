@@ -2,7 +2,7 @@
 layout: post
 title: "Spring Data JPA의 이력 유형 데이터 관리"
 tags: [Spring, JPA, Hibernate, Spring Data JPA, Audited]
-categories: [Spring, Hibernate, Audited]
+categories: [Spring, JPA, Hibernate, Audited]
 subtitle: "엔티티의 이력 유형 데이터 모델링"
 feature-img: "md/img/thumbnail/hibernate-envers.png"
 thumbnail: "md/img/thumbnail/hibernate-envers.png"

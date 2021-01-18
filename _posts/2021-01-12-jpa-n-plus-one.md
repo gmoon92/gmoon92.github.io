@@ -181,8 +181,8 @@ public class Member {
     private MemberOption memberOption;
 }
 ```
-- optional=false (default) : nullable, 외부 조인
-- optional=true : non-null, 내부 조인
+- optional=true : (default) nullable, 외부 조인
+- optional=false : non-null, 내부 조인
 
 ![test-one-to-one-lazy2](/md/img/hibernate/n-plus-one/test-one-to-one-lazy2.png)
 

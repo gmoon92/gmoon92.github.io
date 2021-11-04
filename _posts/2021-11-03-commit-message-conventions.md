@@ -270,7 +270,7 @@ todo: SpyBean 설정 추가
 - 모든 리펙토링 작업
 
 ```text
-refactor(sol/6.0.14.1.4): Viewer check 로직 불필요한 코드 제거 및 수정
+refactor(sol-6.0.14.1.4): Viewer check 로직 불필요한 코드 제거 및 수정
 
 - private -> protected 접근제한자 수정
 - 중첩된 depth 메서드 분리 작업
@@ -291,7 +291,7 @@ fix(6.0.16.3.1): TestController @Controller 제거
 
 -------------------------------------------------
 
-fix(sol/6.0.16.1): 원격지 PC 사용자 계정 무한 로딩 이슈 수정
+fix(sol-6.0.16.1): 원격지 PC 사용자 계정 무한 로딩 이슈 수정
 
 - 상위 부서 로직 NPE 수정
 
@@ -305,7 +305,7 @@ ref #600133
 
 ```text
 style(6.1.0): 사용하지 않는 import 문 제거 및 정리
-style(sol/6.0.16.x): 들여쓰기 및 if문 괄호 닫기
+style(sol-6.0.16.x): 들여쓰기 및 if문 괄호 닫기
 style(sh-invest): code copy by 6.0.13.2
 ```
 

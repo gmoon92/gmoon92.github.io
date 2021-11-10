@@ -42,7 +42,7 @@ priority: 1.0
 기존 커밋 컨벤션을 규칙을 따라 실무에선 다음과 같이 작성했다.
 
 ```text
-ref #159862 트리 2뎁스에서도 에이전트 개수 노출 조건 처리
+ref #159862 트리 2뎁스에서도 사용자 개수 노출 조건 처리
 ref #162763 사용자 정보 가져오는 부분 수정
 ref #145618 웹 로그인 시 패스워드 초기화
 ref #161118 OTP 연동 리팩토링
@@ -105,9 +105,9 @@ ref #143300, #143337. feat: Simple View 개선 적용
 커밋 메시지 앞단에 작업 유형을 표시함으로써, 개발자는 기능이 추가됐는지, 수정됐는지 기능 파악에 용이하다.
 
 ```text
-feat(sol-8.0.0): 대시보드 기능 추가
-refactor(6.1.0): JMS 모듈 JPA 튜닝
-fix(gooddirect): 원격지 PC 트리 무한 로딩 버그 수정 
+feat(sol-3.0.0): 대시보드 기능 추가
+refactor(2.1.0): JMS 모듈 JPA 튜닝
+fix(apple): 원격지 PC 트리 무한 로딩 버그 수정 
 ```
 
 유형에 대한 자세한 내용은 [AngularJS Commit Message Conventions](https://gist.github.com/stephenparish/9941e89d80e2bc58a153) 참고해라.
@@ -126,18 +126,18 @@ fix(gooddirect): 원격지 PC 트리 무한 로딩 버그 수정
 
 |`<scope>`|branch|branch 설명|
 |---------|------|------|
-|6.1.0|origin/release/6.1.0|ASP release 브랜치|
-|6.0.16.3.1|origin/release/6.0.16.3.1|ASP release 브랜치|
-|6.0.16.3|origin/release/6.0.16.3|ASP release 브랜치|
-|sol-6.0.14.1.4|origin/solution/6.0.14.1.4|솔루션 release 브랜치|
-|sol-6.0.14.1.3|origin/solution/6.0.14.1.3|솔루션 release 브랜치|
-|sol-6.0.13.2|origin/solution/6.0.13.2|솔루션 release 브랜치|
-|sh-invest|origin/solution/sh-invest|솔루션 납품 브랜치|
-|gooddirect|origin/solution/gooddirect|솔루션 납품 브랜치|
+|2.1.0|origin/release/2.1.0|ASP release 브랜치|
+|2.0.1.3.1|origin/release/2.0.1.3.1|ASP release 브랜치|
+|2.0.1.3|origin/release/2.0.1.3|ASP release 브랜치|
+|sol-2.0.0.1.4|origin/solution/2.0.0.1.4|솔루션 release 브랜치|
+|sol-2.0.0.1.3|origin/solution/2.0.0.1.3|솔루션 release 브랜치|
+|sol-1.0.0|origin/solution/1.0.0|솔루션 release 브랜치|
+|google|origin/solution/google|솔루션 납품 브랜치|
+|apple|origin/solution/apple|솔루션 납품 브랜치|
 |nh|origin/solution/nh|솔루션 납품 브랜치|
 
 > solution release 브랜치 중에서 상위 브랜치는 당시 버전을 명시한다.<br/>
-> 예를 들어 `origin/solution/6.0.14.x`에서 작업을 해야 한다면, 프로젝트 버전(6.0.14.1.4)을 따라서 작성하면 된다.<br/> ex) feat(sol-6.0.14.1.4) 테스트 코드 추가
+> 예를 들어 `origin/solution/2.0.0.x`에서 작업을 해야 한다면, 프로젝트 버전(2.0.0.1.4)을 따라서 작성하면 된다.<br/> ex) feat(sol-2.0.0.1.4) 테스트 코드 추가
 
 버전이 명시되면 개발자가 어느 버전에서 기능 추가가 됐는지 커밋 메시지만 봐도 확인할 수 있다.
 
@@ -145,16 +145,16 @@ fix(gooddirect): 원격지 PC 트리 무한 로딩 버그 수정
 
 ```text
 // ASP 버전
-feat(6.0.16): 보안 옵션 기능 추가 
+feat(2.0.1): 보안 옵션 기능 추가 
 
 // 솔루션 표준본 버전
-feat(sol-6.0.16): 보안 옵션 기능 추가
-feat(sol-6.0.14.1.4): 워터마크 기능 추가
-feat(sol-6.0.13.2): 대결자 기능 추가
+feat(sol-2.0.1): 보안 옵션 기능 추가
+feat(sol-2.0.0.1.4): 워터마크 기능 추가
+feat(sol-1.0.0): 대결자 기능 추가
 
 // 솔루션 납품 버전
-feat(gooddirect): 보안 옵션 기능 추가
-feat(sh-invest): 보안 옵션 기능 추가
+feat(apple): 보안 옵션 기능 추가
+feat(google): 보안 옵션 기능 추가
 ```
 
 - 한눈에 적용 범위를 파악할 수 있다.
@@ -165,9 +165,9 @@ feat(sh-invest): 보안 옵션 기능 추가
 이외에도 치명적인 기능 결함 또는 버그로 수정된 기능을 적용할 브랜치 범위를 빠르게 파악할 수 있다.
 
 ```text
-fix(sol-6.0.14.1.4): OTP ID/PW 인증 우회 체크 로직 추가
+fix(sol-2.0.0.1.4): 사용자 정보 XSS 이슈
 
-- 보안 이슈: ID/PW 우회하여 에이전트 원격 제어 가능
+- 보안 이슈: XSS 스크립트 공격 가능
 ```
 
 예를 들어 솔루션 표준본에서 수정된 버그 수정에 대한 커밋 메시지를 개발자가 빠르게 파악할 수 있고, 해당 브랜치로부터 파생된 모든 납품 브랜치에 커밋 단위로 빠르게 적용할 수 있다.
@@ -185,16 +185,16 @@ fix(sol-6.0.14.1.4): OTP ID/PW 인증 우회 체크 로직 추가
 
 ```text
 ## Bad
-[1] fix(sol-6.0.14.1.4): [RV] ID/PW 인증 우회하여 OTP 인증요청으로 접속 가능한 취약점 조치
-[2] refactor(6.1.0): [서비스] 관리자가 등록한 계정으로 초기 로그인 비밀번호 아무거나 입력해도 비밀번호 수정창이 뜸 - 로그인 프로세스 정리 및 리팩토링.  - 2 factor 인증 사용시 인증확인후, 라이선스 체크, 패스워드 알람등 체크로직 추가
-[3] refactor(6.1.0): h2 태그 추가
-[4] style(6.1.0): 6.1.0 언어 리소스 추가
+[1] fix(sol-2.0.0.1.4): 내 정보 수정 화면 html 코드 저장되어 XSS 보안 취약점 조치
+[2] refactor(2.1.0): [서비스] 관리자가 등록한 계정으로 초기 로그인 비밀번호 아무거나 입력해도 비밀번호 수정창이 뜸 - 로그인 프로세스 정리 및 리팩토링.  - 2 factor 인증 사용시 인증확인후, 라이선스 체크, 패스워드 알람등 체크로직 추가
+[3] refactor(2.1.0): h2 태그 추가
+[4] style(2.1.0): 2.1.0 언어 리소스 추가
 
 ## Best
-[1] fix(sol-6.0.14.1.4): OTP 인증 요청(ID/PW) 보안 취약점 로직 개선
-[2] refactor(6.1.0): 웹 로그인 인증 프로세스 정리 및 리팩토링
-[3] refactor(6.1.0): 원격지 PC 화면 H2 태그 누락으로 인한 추가 
-[4] style(6.1.0): 언어 리소스 추가
+[1] fix(sol-2.0.0.1.4): 내 정보 수정 화면 XSS 보안 취약점 조치
+[2] refactor(2.1.0): 웹 로그인 인증 프로세스 정리 및 리팩토링
+[3] refactor(2.1.0): 원격지 PC 화면 H2 태그 누락으로 인한 추가 
+[4] style(2.1.0): 언어 리소스 추가
 ```
 
 ### body
@@ -204,7 +204,7 @@ fix(sol-6.0.14.1.4): OTP ID/PW 인증 우회 체크 로직 추가
 코드만으론 작업 히스토리를 완벽히 파악하기 어렵다. 작업 내용을 상세히 적어 개발자에게 도움을 줄 수 있는 내용으로 작성한다.
 
 ```text
-fix(6.0.16.2.1): ssl redirect 검증 로직 개선
+fix(2.0.1.2.1): ssl redirect 검증 로직 개선
 
 - 신규 한국 서버 구성으로 인한 X-Forwarded-Proto-original 커스텀 헤더 추가
 ```
@@ -214,7 +214,7 @@ fix(6.0.16.2.1): ssl redirect 검증 로직 개선
 `<footer>` 영역엔 일감 번호 또는 연관된 Commit revision number를 기입한다.
 
 ```text
-feat(6.1.0): 계정변경 메뉴 히든 처리, 그룹 이동 제한
+feat(2.1.0): 계정변경 메뉴 히든 처리, 그룹 이동 제한
 
 - 사용자 계정 그룹 이동 제한 기획으로 인한 수정
 
@@ -236,7 +236,7 @@ ref #160632, 2c31a033
 1. 새로운 기능 추가
 
 ```text
-feat(6.0.16.3): 사용 신청서 추가 대결자 저장 추가
+feat(2.0.1.3): 사용 신청서 추가 대결자 저장 추가
 
 - 기능성 메서드 추가
 - 대결자 기능 개선
@@ -246,7 +246,7 @@ ref #61234
 
 -------------------------------------------------
 
-feat(gooddirect): 시행세칙 보안옵션 기능 추가
+feat(apple): 시행세칙 보안옵션 기능 추가
 
 - 워터마크 추가
 - 어드민 보안옵션 관리 기능 추가
@@ -258,7 +258,7 @@ ref #612345, 2c31a033
 ### 테스트 코드
 
 ```text
-test(6.0.16.3): 대표옵션 컨트롤러 상세보기 테스트 코드 추가
+test(2.0.1.3): 대표옵션 컨트롤러 상세보기 테스트 코드 추가
 
 - 허용 IP 테스트 코드 추가
 
@@ -270,7 +270,7 @@ todo: SpyBean 설정 추가
 - 모든 리펙토링 작업
 
 ```text
-refactor(sol-6.0.14.1.4): Viewer check 로직 불필요한 코드 제거 및 수정
+refactor(sol-2.0.0.1.4): Viewer check 로직 불필요한 코드 제거 및 수정
 
 - private -> protected 접근제한자 수정
 - 중첩된 depth 메서드 분리 작업
@@ -285,13 +285,13 @@ todo: 솔루션 커스텀 기능 검토
 2. 보안 이슈
 
 ```text
-fix(6.0.16.3.1): TestController @Controller 제거
+fix(2.0.1.3.1): TestController @Controller 제거
 
-- 보안 이슈: AMQP file 생성 로직을 통해 웹 쉘 공격
+- XSS 보안 이슈
 
 -------------------------------------------------
 
-fix(sol-6.0.16.1): 원격지 PC 사용자 계정 무한 로딩 이슈 수정
+fix(sol-2.0.1.1): 원격지 PC 사용자 계정 무한 로딩 이슈 수정
 
 - 상위 부서 로직 NPE 수정
 
@@ -304,9 +304,9 @@ ref #600133
 2. 상위 프로젝트 코드 복사 작업
 
 ```text
-style(6.1.0): 사용하지 않는 import 문 제거 및 정리
-style(sol-6.0.16.x): 들여쓰기 및 if문 괄호 닫기
-style(sh-invest): code copy by 6.0.13.2
+style(2.1.0): 사용하지 않는 import 문 제거 및 정리
+style(sol-2.0.1.x): 들여쓰기 및 if문 괄호 닫기
+style(google): code copy by 1.0.0
 ```
 
 ### 버전 작업
@@ -316,14 +316,14 @@ style(sh-invest): code copy by 6.0.13.2
 3. 스키마 파일 DML 추가/수정 작업
 
 ```text
-chore(6.1.0): 6.0.16.3.1 -> 6.1.0 version up
+chore(2.1.0): 2.0.1.3.1 -> 2.1.0 version up
 
-- 도코모 + 6.0.16.3.1 source merged
+- 도코모 + 2.0.1.3.1 source merged
 - pom.xml version 수정
 
 -------------------------------------------------
 
-chore(6.1.0): NextUpdate.sql DML 추가
+chore(2.1.0): NextUpdate.sql DML 추가
 
 - 에이전트 테이블 인덱스 추가
 - 회사 옵션 테이블 column default 값 변경
@@ -334,7 +334,7 @@ chore(6.1.0): NextUpdate.sql DML 추가
 1. 문서 파일 추가
 
 ```text
-docs(6.1.0): 6.1.0 주요 업데이트 사항 문서 추가
+docs(2.1.0): 2.1.0 주요 업데이트 사항 문서 추가
 
 - oauth2 로직 추가
 - 사용자 인증 추가
@@ -344,11 +344,11 @@ docs(6.1.0): 6.1.0 주요 업데이트 사항 문서 추가
 
 -------------------------------------------------
 
-docs(gooddirect): OTP 연동 API 문서 추가
+docs(apple): OTP 연동 API 문서 추가
 
 -------------------------------------------------
 
-docs(hanafn): 인사연동 테이블 정의서 문서 추가
+docs(google): 인사연동 테이블 정의서 문서 추가
 
 - V_USER_INFO 사원 관련 테이블
 - V_DEPT_INFO 부서 관련 테이블

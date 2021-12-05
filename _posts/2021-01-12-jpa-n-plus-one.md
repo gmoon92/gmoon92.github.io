@@ -27,6 +27,8 @@ JPA의 ORM 기술은 양날의 검과 같다.
 
 이는 JPA의 동작 방식을 이해한다면, JPA 어노테이션과 다양한 방법을 통해 해결할 수 있다. 필자는 일대일 연관 관계를 통해 JPA의 전반적인 메커니즘과 N+1 문제에 대해 소개하려 한다.
 
+> N+1 해결 방법으론 QuickPerf 테스팅 라이브러리를 [QuickPerf 라이브러리 소개 with JPA N+1](https://gmoon92.github.io/spring/jpa/hibernate/n+1/testing/quickperf/2021/12/05/quickperf.html) 참고하자.
+
 # 학습 목표
 
 1. 글로벌 패치 전략

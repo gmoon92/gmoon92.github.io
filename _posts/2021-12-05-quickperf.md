@@ -26,11 +26,12 @@ priority: 1.0
 - `Java Performance 검증`
 - `Hibernate 에서 실제로 쿼리가 몇 번 수행됐는지` 테스트 코드 검증 지원
 
+> QuickPerf is a testing library for Java to quickly evaluate and improve some performance-related properties
+
 QuickPerf 의 활용법은 다양하지만, 특히 N+1이 발생하는 조회 쿼리 튜닝할 때 용이하다.
 
-JPA N+1 이슈에 대한 문서는 [JPA 성능 - N+1 문제와 해결 방법](https://gmoon92.github.io/spring/jpa/hibernate/n+1/2021/01/12/jpa-n-plus-one.html) 를 참고하자.
-
-> QuickPerf is a testing library for Java to quickly evaluate and improve some performance-related properties
+> - JPA N+1 이슈에 대한 문서는 [JPA 성능 - N+1 문제와 해결 방법](https://gmoon92.github.io/spring/jpa/hibernate/n+1/2021/01/12/jpa-n-plus-one.html) 를 참고하자. <br/>
+> - 본 문서의 코드는 [GitHub](https://github.com/gmoon92/Toy/blob/master/testing/quickperf/README.md) 을 참고하자.
 
 ## Dependency
 

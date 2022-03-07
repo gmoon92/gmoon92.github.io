@@ -25,6 +25,8 @@ priority: 1.0
 - Java 8
 - MySql
 
+본 문서의 모든 소스 코드는 **[GitHub](https://github.com/gmoon92/Toy/blob/master/spring-security/spring-security-cors/README.md)** 을 참고해주시기 바랍니다.
+
 ## 학습 목표
 
 - CORS

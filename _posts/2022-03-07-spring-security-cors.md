@@ -222,7 +222,7 @@ java.lang.IllegalArgumentException: When allowCredentials is true, allowedOrigin
 2. CorsProcessor#processRequest
 3. DefaultCorsProcessor#handleInternal
   - CorsConfiguration#checkOrigin
-    - Credential 요청에 대한 Access-Control-Allow-Origin 설정 검증
+     - Credential 요청에 대한 Access-Control-Allow-Origin 설정 검증
   - Allowed-Origin 검증
   - Allowed-Method 검증
   - Allowed-Header 검증

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "MySQL 실행 계회"
+title: "MySQL 실행 계획"
 tags: [Explain, MySQL, DB, Query, SQL, MySQL8]
 categories: [DataBase, MySQL]
 subtitle: "MySQL 8 실행 계획 정리"

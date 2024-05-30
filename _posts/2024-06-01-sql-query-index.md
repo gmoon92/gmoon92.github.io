@@ -106,7 +106,7 @@ MySQL InnoDB는 시퀀셜 접근과 메모리 효율성을 고려하여, B-tree 
     - order by
     - limit
 
-![rule-based-optimization.png](imges/rule-based-optimization.png)
+![rule-based-optimization.png](/md/img/sqlqueryindex/rule-based-optimization.png)
 
 ### Index dive
 

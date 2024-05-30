@@ -1,12 +1,15 @@
 # SITE CONFIGURATION
 baseurl: ""
 url: "https://gmoon92.github.io"
+description: "Moon" # used by search engines
 
 # THEME-SPECIFIC CONFIGURATION
-title: Moon`s Development Blog                          # site's title
-description: ""      # used by search engines
-avatar: assets/marker.png                         # Empty for no avatar in navbar
-favicon: assets/favicon                             # Icon displayed in the tab
+theme_settings:
+  # Meta
+  title: Moon # blog's title
+  avatar: "assets/marker.png"
+  favicon: "assets/favicon"
+  gravatar: # Email MD5 hash
 
 # Header and footer text
 header_text:  <p>Moon`s Development Blog</p> # Change Blog header text

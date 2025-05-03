@@ -31,6 +31,17 @@ layout: default
 </div>
 {% endif %}
 
+<!-- utterances -->
+<div class="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="gmoon92/blog-comments"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</div>
+
 <!-- Post navigation -->
 {% if site.theme_settings.post_navigation %}
   {% include post_nav.html %}

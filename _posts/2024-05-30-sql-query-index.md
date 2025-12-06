@@ -201,7 +201,7 @@ SELECT
 FROM tb_team team0_
          INNER JOIN tb_company company0_ ON team0_.company_id = company0_.id
 WHERE
-  -- loose index scan 설정
+  -- index full scan 설정
   -- 테이블 풀 스캔을 방지하고자 강제 where index range 설정
     (team0_.created_dt BETWEEN '1900-01-01' AND '2099-01-01')
 
